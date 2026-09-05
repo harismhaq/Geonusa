@@ -54,7 +54,6 @@
   <div id="app-splash-screen" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center;" class="bg-radial-gradient text-slate-800 transition-opacity duration-700 ease-in-out select-none">
     <div class="flex flex-col items-center gap-5 text-center px-4 animate-fade-in">
       
-      <!-- Logo Ekstra Besar Tanpa Teks -->
       <div class="relative w-48 h-48 flex items-center justify-center">
         <img src="logo.png" alt="GeoNusa" class="w-48 h-48 object-contain drop-shadow-xl" onerror="this.style.display='none'; document.getElementById('splash-icon-fallback').style.display='flex';" />
         <div id="splash-icon-fallback" class="hidden w-48 h-48 bg-white/90 backdrop-blur-md rounded-3xl border border-sky-200 items-center justify-center shadow-2xl">
@@ -62,7 +61,6 @@
         </div>
       </div>
 
-      <!-- Progress Bar Indikator Loading -->
       <div class="w-48 h-1.5 bg-slate-200/80 rounded-full overflow-hidden shadow-inner">
         <div class="h-full bg-gradient-to-r from-sky-400 to-blue-600 rounded-full animate-progress-bar"></div>
       </div>
@@ -74,7 +72,6 @@
   <div id="welcome-modal" class="hidden fixed inset-0 z-[99998] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300 select-none">
     <div class="bg-white rounded-2xl shadow-2xl border border-slate-100 max-w-lg w-full p-6 relative animate-fade-in flex flex-col items-center text-center">
       
-      <!-- Logo Atas -->
       <div class="w-16 h-16 mb-2 flex items-center justify-center">
         <img src="logo.png" alt="GeoNusa" class="w-16 h-16 object-contain drop-shadow" onerror="this.style.display='none'; document.getElementById('modal-logo-fallback').style.display='flex';" />
         <div id="modal-logo-fallback" class="hidden w-16 h-16 bg-sky-100 rounded-2xl items-center justify-center">
@@ -82,7 +79,6 @@
         </div>
       </div>
 
-      <!-- Judul & Sub-judul Welcome -->
       <h2 class="text-2xl font-black text-slate-800 tracking-tight">
         Selamat Datang di <span class="text-primary">GeoNusa</span>
       </h2>
@@ -90,15 +86,12 @@
         Satu Peta untuk Nusantara
       </p>
 
-      <!-- Label Fitur Utama -->
       <div class="w-full text-left mb-2">
         <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">FITUR UTAMA</span>
       </div>
 
-      <!-- Kartu Fitur (Point Keterangan) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full text-left mb-6">
         
-        <!-- Point 1: Geoportal Hub -->
         <div class="bg-slate-50/80 border border-slate-100 p-3.5 rounded-xl hover:border-sky-200 transition-colors">
           <div class="flex items-center gap-2 mb-1">
             <div class="p-1.5 bg-sky-100 rounded-lg text-primary">
@@ -107,11 +100,10 @@
             <span class="text-xs font-bold text-slate-800">GEOPORTAL HUB</span>
           </div>
           <p class="text-[11px] text-slate-600 leading-relaxed">
-            Layer data geoportal daerah resmi di Kalimantan Barat.
+            Layer data geoportal daerah resmi di Kalimantan Barat dan wilayah lainnya.
           </p>
         </div>
 
-        <!-- Point 2: Tools & Analisis -->
         <div class="bg-slate-50/80 border border-slate-100 p-3.5 rounded-xl hover:border-sky-200 transition-colors">
           <div class="flex items-center gap-2 mb-1">
             <div class="p-1.5 bg-emerald-100 rounded-lg text-emerald-600">
@@ -120,13 +112,12 @@
             <span class="text-xs font-bold text-slate-800">TOOLS & ANALISIS</span>
           </div>
           <p class="text-[11px] text-slate-600 leading-relaxed">
-            Menimpa layer, mengunggah data, mengukur wilayah, serta mengeksport data.
+            Pengaturan layer, upload data spasial, pengukuran jarak/luas, dan cetak peta.
           </p>
         </div>
 
       </div>
 
-      <!-- Tombol Mulai Jelajahi -->
       <button onclick="closeWelcomeModal()" class="w-full py-2.5 bg-gradient-to-r from-primary to-sky-500 hover:from-primary-dark hover:to-primary text-white text-xs font-bold rounded-xl shadow-lg shadow-sky-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer">
         <i data-lucide="arrow-right" class="w-4 h-4"></i> Mulai Jelajahi
       </button>
@@ -140,7 +131,6 @@
     <!-- =============== SIDEBAR =============== -->
     <aside id="sidebar" class="sidebar-panel collapsed w-[360px] bg-white border-r border-gray-200 flex flex-col shrink-0 transition-all duration-300 ease-in-out relative z-[900]">
 
-      <!-- HEADER BRANDING DALAM SIDEBAR -->
       <div class="bg-gradient-to-r from-white via-sky-100 to-blue-800 px-4 py-3 flex items-center justify-center shrink-0 shadow-sm border-b border-sky-200/80 h-24 overflow-hidden">
         <img src="logo.png" alt="GeoNusa" class="max-h-full w-auto max-w-full object-contain drop-shadow-sm" onerror="this.style.display='none'; document.getElementById('sb-logo-fallback').style.display='block';" />
         
@@ -149,7 +139,6 @@
         </div>
       </div>
 
-      <!-- INTERNAL TAB HEADER IN SIDEBAR -->
       <div class="flex border-b border-gray-200 bg-gray-50/80 p-1 shrink-0">
         <button id="tab-geoportal" class="flex-1 py-2 text-xs font-semibold rounded-md text-primary bg-white shadow-sm transition-all flex items-center justify-center gap-1.5" onclick="switchSidebarTab('geoportal')">
           <i data-lucide="database" class="w-3.5 h-3.5"></i> GEOPORTAL HUB
@@ -159,7 +148,6 @@
         </button>
       </div>
 
-      <!-- TAB 1: GEOPORTAL HUB -->
       <div id="sidebar-geoportal" class="flex-1 flex flex-col overflow-hidden">
         <div class="px-4 pt-3 pb-2">
           <h2 class="text-xs font-bold text-gray-700 uppercase tracking-wider">Katalog Geoportal</h2>
@@ -176,35 +164,9 @@
         <div id="layer-tree" class="flex-1 overflow-y-auto px-2 pb-4 custom-scrollbar"></div>
       </div>
 
-      <!-- TAB 2: TOOLS -->
+      <!-- TAB 2: TOOLS & ANALISIS SPASIAL -->
       <div id="sidebar-tools" class="flex-1 flex-col overflow-y-auto px-4 py-3 space-y-4 custom-scrollbar hidden">
-        <div class="bg-slate-50 border border-slate-200 rounded-xl p-3">
-          <div class="text-xs font-bold text-slate-700 mb-1 flex items-center gap-1.5">
-            <i data-lucide="upload-cloud" class="w-4 h-4 text-primary"></i> Upload Data Spasial
-          </div>
-          <p class="text-[11px] text-slate-500 mb-2">Dukungan format file: .zip (SHP), .kml, .kmz, .geojson</p>
-          <input type="file" id="upload-file-input" accept=".zip,.kml,.kmz,.geojson,.json" class="hidden" onchange="handleFileUpload(event)" />
-          <button onclick="document.getElementById('upload-file-input').click()" class="w-full py-2 bg-white border border-slate-300 hover:border-primary text-slate-700 text-xs font-semibold rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-all">
-            <i data-lucide="file-plus" class="w-3.5 h-3.5 text-primary"></i> Pilih File Spasial
-          </button>
-        </div>
-
-        <div class="bg-slate-50 border border-slate-200 rounded-xl p-3">
-          <div class="text-xs font-bold text-slate-700 mb-1 flex items-center gap-1.5">
-            <i data-lucide="ruler" class="w-4 h-4 text-primary"></i> Pengukuran Interaktif
-          </div>
-          <p class="text-[11px] text-slate-500 mb-2.5">Gunakan alat ukur berikut pada peta:</p>
-          <div class="grid grid-cols-2 gap-2">
-            <button onclick="startMeasure('polyline')" class="py-1.5 px-2 bg-white border border-slate-300 hover:bg-primary hover:text-white text-slate-700 text-xs font-medium rounded-lg shadow-sm flex items-center justify-center gap-1 transition-all">
-              <i data-lucide="minus" class="w-3.5 h-3.5"></i> Jarak (Line)
-            </button>
-            <button onclick="startMeasure('polygon')" class="py-1.5 px-2 bg-white border border-slate-300 hover:bg-primary hover:text-white text-slate-700 text-xs font-medium rounded-lg shadow-sm flex items-center justify-center gap-1 transition-all">
-              <i data-lucide="pentagon" class="w-3.5 h-3.5"></i> Luas (Area)
-            </button>
-          </div>
-          <button onclick="clearMeasurements()" class="w-full mt-2 py-1 text-[11px] text-rose-600 hover:underline text-center block">Clear Hasil Ukur</button>
-        </div>
-
+        
         <div class="bg-slate-50 border border-slate-200 rounded-xl p-3">
           <div class="text-xs font-bold text-slate-700 mb-1 flex items-center gap-1.5">
             <i data-lucide="list" class="w-4 h-4 text-primary"></i> Legenda & Layer Aktif
@@ -214,18 +176,8 @@
           </div>
         </div>
 
-        <div class="bg-slate-50 border border-slate-200 rounded-xl p-3">
-          <div class="text-xs font-bold text-slate-700 mb-1 flex items-center gap-1.5">
-            <i data-lucide="printer" class="w-4 h-4 text-primary"></i> Cetak / Ekspor Peta
-          </div>
-          <p class="text-[11px] text-slate-500 mb-2">Simpan tampilan canvas peta ke format gambar JPEG.</p>
-          <button onclick="exportMapJPEG()" class="w-full py-2 bg-primary hover:bg-primary-dark text-white text-xs font-semibold rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-all">
-            <i data-lucide="download" class="w-3.5 h-3.5"></i> Unduh Peta (.JPEG)
-          </button>
-        </div>
       </div>
 
-      <!-- Toggle Sidebar -->
       <button id="sidebar-toggle" onclick="toggleSidebar()" class="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-12 bg-white border border-gray-200 rounded-r-md shadow-md flex items-center justify-center hover:bg-gray-50 transition-colors z-[950]" title="Toggle Sidebar">
         <i data-lucide="chevron-right" class="w-4 h-4 text-gray-600 sidebar-toggle-icon"></i>
       </button>
@@ -246,7 +198,6 @@
 
       <div id="map" class="w-full h-full"></div>
 
-      <!-- FLOATING MAP LEGEND (POJOK KIRI BAWAH) -->
       <div id="floating-legend" class="hidden absolute bottom-6 left-6 z-[800] bg-white/95 backdrop-blur-md p-3 rounded-xl shadow-xl border border-gray-200/80 max-w-xs transition-all">
         <div class="flex items-center justify-between gap-2 mb-2 border-b pb-1.5 border-gray-200">
           <span class="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
@@ -256,27 +207,104 @@
             <i data-lucide="x" class="w-3.5 h-3.5"></i>
           </button>
         </div>
-        <div id="floating-legend-content" class="space-y-2 text-[11px] text-gray-600 max-h-48 overflow-y-auto custom-scrollbar">
-          <!-- Diisi otomatis oleh JS -->
-        </div>
+        <div id="floating-legend-content" class="space-y-2 text-[11px] text-gray-600 max-h-48 overflow-y-auto custom-scrollbar"></div>
       </div>
 
-      <!-- BASEMAP CONTROL (POJOK KANAN BAWAH) -->
-      <div id="floating-basemap-control" class="absolute bottom-16 right-3 z-[800] bg-white/95 backdrop-blur-md p-2 rounded-xl shadow-xl border border-gray-200/80">
-        <div class="text-[10px] font-bold text-gray-400 tracking-wider uppercase mb-1.5 px-1 flex items-center gap-1">
-          <i data-lucide="map" class="w-3 h-3 text-primary"></i> Basemap
+      <!-- FLOATING TOOLBAR KANAN BAWAH (Lengkap dengan Tooltip & Tombol Panduan) -->
+      <div class="absolute bottom-6 right-6 z-[900] flex flex-col space-y-2">
+        
+        <!-- Bantuan / Tutorial -->
+        <div class="relative group flex items-center">
+          <span class="absolute right-14 px-2.5 py-1 bg-slate-800 text-white text-[11px] font-medium rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">Panduan & Tutorial</span>
+          <button onclick="openHelpModal()" class="w-11 h-11 bg-white hover:bg-slate-50 text-slate-700 shadow-lg rounded-xl flex items-center justify-center transition-transform hover:scale-105 active:scale-95 border border-slate-100">
+            <i data-lucide="help-circle" class="w-5 h-5 text-primary"></i>
+          </button>
         </div>
-        <div class="grid grid-cols-2 gap-1.5">
-          <button onclick="changeBasemap('satellite')" data-basemap="satellite" class="basemap-btn active flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 hover:bg-gray-50 transition-all">
+
+        <!-- Ganti Basemap -->
+        <div class="relative group flex items-center">
+          <span class="absolute right-14 px-2.5 py-1 bg-slate-800 text-white text-[11px] font-medium rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">Ganti Basemap</span>
+          <button onclick="const bm = document.getElementById('floating-basemap-modal'); bm.classList.toggle('hidden');" class="w-11 h-11 bg-white hover:bg-slate-50 text-slate-700 shadow-lg rounded-xl flex items-center justify-center transition-transform hover:scale-105 active:scale-95 border border-slate-100">
+            <i data-lucide="image" class="w-5 h-5 text-primary"></i>
+          </button>
+        </div>
+
+        <!-- Upload Data Spasial -->
+        <div class="relative group flex items-center">
+          <span class="absolute right-14 px-2.5 py-1 bg-slate-800 text-white text-[11px] font-medium rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">Upload Data Spasial</span>
+          <button onclick="document.getElementById('upload-file-input').click()" class="w-11 h-11 bg-white hover:bg-slate-50 text-slate-700 shadow-lg rounded-xl flex items-center justify-center transition-transform hover:scale-105 active:scale-95 border border-slate-100">
+            <i data-lucide="cloud-upload" class="w-5 h-5 text-primary"></i>
+          </button>
+        </div>
+        <input type="file" id="upload-file-input" accept=".zip,.kml,.kmz,.geojson,.json" class="hidden" onchange="handleFileUpload(event)" />
+
+        <!-- Cetak Peta -->
+        <div class="relative group flex items-center">
+          <span class="absolute right-14 px-2.5 py-1 bg-slate-800 text-white text-[11px] font-medium rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">Cetak Peta JPEG</span>
+          <button onclick="exportMapJPEG()" class="w-11 h-11 bg-white hover:bg-slate-50 text-slate-700 shadow-lg rounded-xl flex items-center justify-center transition-transform hover:scale-105 active:scale-95 border border-slate-100">
+            <i data-lucide="printer" class="w-5 h-5 text-primary"></i>
+          </button>
+        </div>
+
+        <!-- Tools / Layer Aktif -->
+        <div class="relative group flex items-center">
+          <span class="absolute right-14 px-2.5 py-1 bg-slate-800 text-white text-[11px] font-medium rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">Legenda & Layer Aktif</span>
+          <button onclick="switchSidebarTab('tools'); const sb = document.getElementById('sidebar'); if(sb.classList.contains('collapsed')) toggleSidebar();" class="w-11 h-11 bg-white hover:bg-slate-50 text-slate-700 shadow-lg rounded-xl flex items-center justify-center transition-transform hover:scale-105 active:scale-95 border border-slate-100">
+            <i data-lucide="calculator" class="w-5 h-5 text-primary"></i>
+          </button>
+        </div>
+
+        <!-- Ukur Luas (Area) -->
+        <div class="relative group flex items-center">
+          <span class="absolute right-14 px-2.5 py-1 bg-slate-800 text-white text-[11px] font-medium rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">Ukur Luas (Area)</span>
+          <button onclick="startMeasure('polygon')" class="w-11 h-11 bg-white hover:bg-slate-50 text-slate-700 shadow-lg rounded-xl flex items-center justify-center transition-transform hover:scale-105 active:scale-95 border border-slate-100">
+            <i data-lucide="pentagon" class="w-5 h-5 text-primary"></i>
+          </button>
+        </div>
+
+        <!-- Ukur Jarak (Line) -->
+        <div class="relative group flex items-center">
+          <span class="absolute right-14 px-2.5 py-1 bg-slate-800 text-white text-[11px] font-medium rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">Ukur Jarak (Garis)</span>
+          <button onclick="startMeasure('polyline')" class="w-11 h-11 bg-white hover:bg-slate-50 text-slate-700 shadow-lg rounded-xl flex items-center justify-center transition-transform hover:scale-105 active:scale-95 border border-slate-100">
+            <i data-lucide="ruler" class="w-5 h-5 text-primary"></i>
+          </button>
+        </div>
+
+        <!-- Zoom In / Zoom Out -->
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden flex flex-col border border-slate-100">
+          <div class="relative group flex items-center">
+            <span class="absolute right-14 px-2.5 py-1 bg-slate-800 text-white text-[11px] font-medium rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">Perbesar (Zoom In)</span>
+            <button onclick="map.zoomIn()" class="w-11 h-10 hover:bg-slate-50 text-slate-700 flex items-center justify-center transition-colors border-b border-slate-100">
+              <i data-lucide="plus" class="w-5 h-5"></i>
+            </button>
+          </div>
+          <div class="relative group flex items-center">
+            <span class="absolute right-14 px-2.5 py-1 bg-slate-800 text-white text-[11px] font-medium rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">Perkecil (Zoom Out)</span>
+            <button onclick="map.zoomOut()" class="w-11 h-10 hover:bg-slate-50 text-slate-700 flex items-center justify-center transition-colors">
+              <i data-lucide="minus" class="w-5 h-5"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- MODAL PILIHAN BASEMAP MELAYANG -->
+      <div id="floating-basemap-modal" class="hidden absolute bottom-20 right-20 z-[950] bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-2xl border border-gray-200/80 w-52 animate-fade-in">
+        <div class="text-[10px] font-bold text-gray-400 tracking-wider uppercase mb-2 px-1 flex items-center justify-between">
+          <span class="flex items-center gap-1"><i data-lucide="map" class="w-3 h-3 text-primary"></i> Pilih Basemap</span>
+          <button onclick="document.getElementById('floating-basemap-modal').classList.add('hidden')" class="text-gray-400 hover:text-rose-500 cursor-pointer"><i data-lucide="x" class="w-3 h-3"></i></button>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <button onclick="changeBasemap('satellite')" data-basemap="satellite" class="basemap-btn active flex items-center gap-1.5 px-2.5 py-2 rounded-xl border border-gray-200 text-xs font-medium text-gray-700 hover:bg-gray-50 transition-all">
             <span class="w-2.5 h-2.5 rounded-full bg-blue-900"></span> Satelit
           </button>
-          <button onclick="changeBasemap('osm')" data-basemap="osm" class="basemap-btn flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 hover:bg-gray-50 transition-all">
+          <button onclick="changeBasemap('osm')" data-basemap="osm" class="basemap-btn flex items-center gap-1.5 px-2.5 py-2 rounded-xl border border-gray-200 text-xs font-medium text-gray-700 hover:bg-gray-50 transition-all">
             <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> OSM
           </button>
-          <button onclick="changeBasemap('positron')" data-basemap="positron" class="basemap-btn flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 hover:bg-gray-50 transition-all">
+          <button onclick="changeBasemap('positron')" data-basemap="positron" class="basemap-btn flex items-center gap-1.5 px-2.5 py-2 rounded-xl border border-gray-200 text-xs font-medium text-gray-700 hover:bg-gray-50 transition-all">
             <span class="w-2.5 h-2.5 rounded-full bg-slate-200 border border-slate-400"></span> Light
           </button>
-          <button onclick="changeBasemap('dark')" data-basemap="dark" class="basemap-btn flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-700 hover:bg-gray-50 transition-all">
+          <button onclick="changeBasemap('dark')" data-basemap="dark" class="basemap-btn flex items-center gap-1.5 px-2.5 py-2 rounded-xl border border-gray-200 text-xs font-medium text-gray-700 hover:bg-gray-50 transition-all">
             <span class="w-2.5 h-2.5 rounded-full bg-gray-900"></span> Dark
           </button>
         </div>
@@ -293,7 +321,6 @@
 
   <script src="app.js"></script>
   <script>
-    // Penanganan Penutupan Modal
     function closeWelcomeModal() {
       const modal = document.getElementById('welcome-modal');
       if (modal) {
@@ -301,6 +328,54 @@
         setTimeout(() => {
           modal.classList.add('hidden');
         }, 300);
+      }
+    }
+
+    function openHelpModal() {
+      let modal = document.getElementById('tutorial-modal');
+      if (!modal) {
+        const modalHTML = `
+          <div id="tutorial-modal" class="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-fade-in">
+            <div class="bg-white rounded-2xl shadow-2xl border max-w-lg w-full p-6 relative flex flex-col text-left">
+              <div class="flex items-center justify-between mb-4 border-b pb-3">
+                <div class="flex items-center gap-2">
+                  <div class="p-1.5 bg-sky-100 rounded-lg text-primary">
+                    <i data-lucide="help-circle" class="w-5 h-5"></i>
+                  </div>
+                  <h3 class="text-base font-bold text-slate-800">Panduan & Tutorial GeoNusa</h3>
+                </div>
+                <button onclick="document.getElementById('tutorial-modal').remove()" class="text-slate-400 hover:text-rose-500 cursor-pointer"><i data-lucide="x" class="w-5 h-5"></i></button>
+              </div>
+              <div class="space-y-3 text-xs text-slate-600 max-h-[60vh] overflow-y-auto pr-1">
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                  <strong class="text-slate-800 block font-bold mb-1 flex items-center gap-1.5"><i data-lucide="database" class="w-3.5 h-3.5 text-primary"></i> 1. Geoportal Hub</strong>
+                  Gunakan panel kiri untuk memilih dan menampilkan berbagai layer data spasial resmi dari katalog geoportal daerah secara instan.
+                </div>
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                  <strong class="text-slate-800 block font-bold mb-1 flex items-center gap-1.5"><i data-lucide="image" class="w-3.5 h-3.5 text-primary"></i> 2. Ganti Basemap</strong>
+                  Mengubah latar belakang peta (Satelit, OpenStreetMap, Light Positron, atau Dark Matter) sesuai kebutuhan analisis.
+                </div>
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                  <strong class="text-slate-800 block font-bold mb-1 flex items-center gap-1.5"><i data-lucide="cloud-upload" class="w-3.5 h-3.5 text-primary"></i> 3. Upload Data Spasial</strong>
+                  Unggah berkas vektor pribadi Anda dalam format GeoJSON, KML, KMZ, atau ZIP Shapefile (.zip) langsung ke atas peta.
+                </div>
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                  <strong class="text-slate-800 block font-bold mb-1 flex items-center gap-1.5"><i data-lucide="printer" class="w-3.5 h-3.5 text-primary"></i> 4. Cetak Peta</strong>
+                  Mengekspor tampilan area peta yang aktif saat ini menjadi gambar berformat JPEG berkualitas tinggi.
+                </div>
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                  <strong class="text-slate-800 block font-bold mb-1 flex items-center gap-1.5"><i data-lucide="ruler" class="w-3.5 h-3.5 text-primary"></i> 5. Pengukuran Jarak & Luas</strong>
+                  Gunakan alat ukur garis (polyline) untuk menghitung jarak dan poligon untuk mengukur luas area atau bidang tanah.
+                </div>
+              </div>
+              <div class="mt-5 pt-3 border-t flex justify-end">
+                <button onclick="document.getElementById('tutorial-modal').remove()" class="px-4 py-2 bg-primary hover:bg-primary-dark text-white text-xs font-bold rounded-xl shadow transition-all cursor-pointer">Mengerti</button>
+              </div>
+            </div>
+          </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        if (window.lucide) lucide.createIcons();
       }
     }
   </script>
