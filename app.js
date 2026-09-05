@@ -37,15 +37,15 @@ const GEOPORTAL_SERVERS = [
     url: 'https://geoportal.magelangkab.go.id/geoserver/ows'
   },
   {
+    id: 'magelangkota',
+    name: 'Geoportal Kota Magelang',
+    url: 'https://geoportal.magelangkota.go.id/geoserver/ows'
+  },
+  {
     id: 'jogjakota',
     name: 'Geoportal Kota Yogyakarta',
     url: 'https://geoportal.jogjakota.go.id/geoserver/ows',
     isHeavy: true
-  },
-  {
-    id: 'jatim',
-    name: 'Geoportal Prov. Jawa Timur',
-    url: 'https://geoserver.jatimprov.go.id/geoserver/wms'
   }
 ];
 
@@ -192,7 +192,7 @@ function switchSidebarTab(tab) {
   }
 }
 
-// ─── OTOMATIS FETCH PARALEL SELURUH SERVER GEOPORTAL ────────────────────────
+// ─── OTOMATIS FETCH PARALEL (OPTIMIZED) ──────────────────────────────────────
 async function fetchAllGeoportalCollections() {
   showLoading();
   const container = document.getElementById('layer-tree');
@@ -200,12 +200,24 @@ async function fetchAllGeoportalCollections() {
   container.innerHTML = '<div class="p-3 text-xs text-slate-400">Menghubungkan ke seluruh Geoportal...</div>';
 
   const fetchPromises = GEOPORTAL_SERVERS.map(async (server) => {
+    if (server.isHeavy) {
+      return {
+        server,
+        layersList: [
+          { name: 'pemkot_jogja:Batas_Kecamatan_Kota_Yogyakarta', title: 'Batas Kecamatan Kota Yogyakarta' },
+          { name: 'pemkot_jogja:Jalan_Kota_Yogyakarta', title: 'Jalan Kota Yogyakarta' },
+          { name: 'pemkot_jogja:Sungai_Kota_Yogyakarta', title: 'Sungai Kota Yogyakarta' }
+        ],
+        status: 'success'
+      };
+    }
+
     try {
       const baseUrl = server.url.includes('?') ? server.url + '&' : server.url + '?';
       const capsUrl = `${baseUrl}service=WMS&version=1.1.1&request=GetCapabilities`;
       
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000);
+      const timeoutId = setTimeout(() => controller.abort(), 6000);
 
       const res = await geoFetch(capsUrl, { signal: controller.signal });
       clearTimeout(timeoutId);
@@ -368,13 +380,17 @@ async function loadGeoportalVectorLayer(layerName, wmsUrl, initialColor = '#008b
   });
 
   // Penanganan BBOX / Bounds khusus WMS Tile agar auto-zoom tetap bekerja
-  if (wmsUrl.includes('jogjakota.go.id')) {
+  if (wmsUrl.includes('magelangkota.go.id')) {
     wmsTileLayer.getBounds = function() {
-      return L.latLngBounds([-7.835, 110.345], [-7.765, 110.405]); // BBOX Kota Yogyakarta
+      return L.latLngBounds([-7.50, 110.20], [-7.45, 110.25]); // BBOX Kota Magelang
     };
   } else if (wmsUrl.includes('magelangkab.go.id')) {
     wmsTileLayer.getBounds = function() {
       return L.latLngBounds([-7.62, 110.05], [-7.32, 110.42]); // BBOX Kab. Magelang
+    };
+  } else if (wmsUrl.includes('jogjakota.go.id')) {
+    wmsTileLayer.getBounds = function() {
+      return L.latLngBounds([-7.835, 110.345], [-7.765, 110.405]); // BBOX Kota Yogyakarta
     };
   }
 
