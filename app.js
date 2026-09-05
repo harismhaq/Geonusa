@@ -1,6 +1,6 @@
 /* ==========================================================================
    GeoNusa — WebGIS Geografi Nusantara
-   Application Logic (Direct WFS Vector & Smart WMS Fallback Renderer)
+   Application Logic (Independent Streaming Fetch & Smart WMS Fallback)
    ==========================================================================*/
 
 let map;
@@ -27,6 +27,31 @@ const GEOPORTAL_SERVERS = [
     url: 'https://satupeta.kalbarprov.go.id/geoserver/ows'
   },
   {
+    id: 'kaltimprov',
+    name: 'JIGD Prov. Kalimantan Timur',
+    url: 'https://jigd.kaltimprov.go.id/geoserver/ows'
+  },
+  {
+    id: 'kotimkab',
+    name: 'Geoportal Kab. Kotawaringin Timur',
+    url: 'https://geoportal.kotimkab.go.id/geoserver/wms'
+  },
+  {
+    id: 'mahakamulu',
+    name: 'Geoportal Kab. Mahakam Ulu',
+    url: 'https://geoserver-geoportal.mahakamulukab.go.id/geoserver/wms'
+  },
+  {
+    id: 'sumbar',
+    name: 'Geoportal Prov. Sumatera Barat',
+    url: 'https://geoportal.sumbarprov.go.id/geoserver/wms'
+  },
+  {
+    id: 'bengkuluprov',
+    name: 'Geoportal Prov. Bengkulu',
+    url: 'https://geo.bengkuluprov.go.id/geoserver/palapa/ows'
+  },
+  {
     id: 'jateng',
     name: 'Satu Peta Prov. Jawa Tengah',
     url: 'https://satupeta.jatengprov.go.id/geoserver/palapa/wms'
@@ -42,10 +67,24 @@ const GEOPORTAL_SERVERS = [
     url: 'https://geoportal.magelangkota.go.id/geoserver/ows'
   },
   {
+    id: 'klatenkab',
+    name: 'Geoportal Kab. Klaten',
+    url: 'https://geoportal.klaten.go.id/geoserver/wms'
+  },
+  {
+    id: 'mojokertokota',
+    name: 'Geoportal Kota Mojokerto',
+    url: 'https://geoportal.mojokertokota.go.id/geoserver/ows'
+  },
+  {
+    id: 'bandungkota',
+    name: 'Geoportal Kota Bandung',
+    url: 'https://geodata.bandung.go.id/geoserver/ows'
+  },
+  {
     id: 'jogjakota',
     name: 'Geoportal Kota Yogyakarta',
-    url: 'https://geoportal.jogjakota.go.id/geoserver/ows',
-    isHeavy: true
+    url: 'https://geoportal.jogjakota.go.id/geoserver/ows'
   }
 ];
 
@@ -192,32 +231,37 @@ function switchSidebarTab(tab) {
   }
 }
 
-// ─── OTOMATIS FETCH PARALEL (OPTIMIZED) ──────────────────────────────────────
+// ─── STREAMING FETCH: TAMPIL BERTAHAP TANPA MENUNGGU SERVER LAIN ───────────────
 async function fetchAllGeoportalCollections() {
   showLoading();
   const container = document.getElementById('layer-tree');
   if (!container) return;
-  container.innerHTML = '<div class="p-3 text-xs text-slate-400">Menghubungkan ke seluruh Geoportal...</div>';
+
+  container.innerHTML = GEOPORTAL_SERVERS.map(s => `
+    <div class="layer-folder border-b border-slate-100 py-1" id="folder_wrapper_${s.id}">
+      <div class="folder-header opacity-75">
+        <i data-lucide="loader-2" class="w-4 h-4 animate-spin text-primary shrink-0"></i>
+        <span class="folder-name font-semibold text-slate-700">${escapeBMKGHTML(s.name)}</span>
+        <span class="text-[10px] bg-sky-50 text-sky-600 border border-sky-100 px-2 py-0.5 rounded-full flex items-center gap-1">
+          Memuat data...
+        </span>
+      </div>
+    </div>
+  `).join('');
+
+  if (window.lucide) lucide.createIcons();
+
+  let totalLayersAccumulated = 0;
 
   const fetchPromises = GEOPORTAL_SERVERS.map(async (server) => {
-    if (server.isHeavy) {
-      return {
-        server,
-        layersList: [
-          { name: 'pemkot_jogja:Batas_Kecamatan_Kota_Yogyakarta', title: 'Batas Kecamatan Kota Yogyakarta' },
-          { name: 'pemkot_jogja:Jalan_Kota_Yogyakarta', title: 'Jalan Kota Yogyakarta' },
-          { name: 'pemkot_jogja:Sungai_Kota_Yogyakarta', title: 'Sungai Kota Yogyakarta' }
-        ],
-        status: 'success'
-      };
-    }
+    const wrapper = document.getElementById(`folder_wrapper_${server.id}`);
 
     try {
       const baseUrl = server.url.includes('?') ? server.url + '&' : server.url + '?';
       const capsUrl = `${baseUrl}service=WMS&version=1.1.1&request=GetCapabilities`;
-      
+
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 6000);
+      const timeoutId = setTimeout(() => controller.abort(), 12000);
 
       const res = await geoFetch(capsUrl, { signal: controller.signal });
       clearTimeout(timeoutId);
@@ -240,70 +284,47 @@ async function fetchAllGeoportalCollections() {
         }
       });
 
-      return {
-        server,
-        layersList,
-        status: 'success'
-      };
-    } catch (err) {
-      console.warn(`Timeout / Error [${server.name}]:`, err);
-      return {
-        server,
-        layersList: [],
-        status: 'error'
-      };
-    }
-  });
+      totalLayersAccumulated += layersList.length;
 
-  const results = await Promise.allSettled(fetchPromises);
-
-  let htmlContent = '';
-  let totalLayers = 0;
-
-  results.forEach(res => {
-    if (res.status === 'fulfilled') {
-      const { server, layersList, status } = res.value;
-
-      if (status === 'success') {
-        totalLayers += layersList.length;
-        htmlContent += `
-          <div class="layer-folder border-b border-slate-100 last:border-b-0 py-1">
-            <div class="folder-header" onclick="toggleFolder('folder_${server.id}')">
-              <i data-lucide="chevron-right" class="folder-chevron"></i>
-              <i data-lucide="folder" class="folder-icon opened"></i>
-              <span class="folder-name font-bold text-slate-800">${escapeBMKGHTML(server.name)}</span>
-              <span class="folder-badge">${layersList.length}</span>
-            </div>
-            <div class="folder-children" id="children-folder_${server.id}">
-              ${layersList.length === 0 ? '<div class="px-3 py-1 text-[11px] text-slate-400 italic">Tidak ada layer tersedia.</div>' : 
-                layersList.map(l => `
-                <label class="layer-item" title="${escapeBMKGHTML(l.title)}">
-                  <input type="checkbox" data-layer-id="${l.name}" onchange="toggleGeoportalLayer('${l.name}', this.checked, '${server.url}')" />
-                  <i data-lucide="map" class="layer-icon"></i>
-                  <span class="layer-name">${escapeBMKGHTML(resolveGeoportalLayerName(l.title))}</span>
-                </label>
-              `).join('')}
-            </div>
+      if (wrapper) {
+        wrapper.innerHTML = `
+          <div class="folder-header" onclick="toggleFolder('folder_${server.id}')">
+            <i data-lucide="chevron-right" class="folder-chevron"></i>
+            <i data-lucide="folder" class="folder-icon opened"></i>
+            <span class="folder-name font-bold text-slate-800">${escapeBMKGHTML(server.name)}</span>
+            <span class="folder-badge">${layersList.length}</span>
           </div>
-        `;
-      } else {
-        htmlContent += `
-          <div class="layer-folder py-1 border-b border-slate-100">
-            <div class="folder-header opacity-75">
-              <i data-lucide="alert-circle" class="w-4 h-4 text-amber-500"></i>
-              <span class="folder-name font-semibold text-slate-600">${escapeBMKGHTML(server.name)}</span>
-              <span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">Offline / CORS</span>
-            </div>
+          <div class="folder-children" id="children-folder_${server.id}">
+            ${layersList.length === 0 ? '<div class="px-3 py-1 text-[11px] text-slate-400 italic">Tidak ada layer tersedia.</div>' : 
+              layersList.map(l => `
+              <label class="layer-item" title="${escapeBMKGHTML(l.title)}">
+                <input type="checkbox" data-layer-id="${l.name}" onchange="toggleGeoportalLayer('${l.name}', this.checked, '${server.url}')" />
+                <i data-lucide="map" class="layer-icon"></i>
+                <span class="layer-name">${escapeBMKGHTML(resolveGeoportalLayerName(l.title))}</span>
+              </label>
+            `).join('')}
           </div>
         `;
       }
+    } catch (err) {
+      console.warn(`Timeout / Error [${server.name}]:`, err);
+      if (wrapper) {
+        wrapper.innerHTML = `
+          <div class="folder-header opacity-75">
+            <i data-lucide="alert-circle" class="w-4 h-4 text-amber-500 shrink-0"></i>
+            <span class="folder-name font-semibold text-slate-600">${escapeBMKGHTML(server.name)}</span>
+            <span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">Offline / CORS</span>
+          </div>
+        `;
+      }
+    } finally {
+      if (window.lucide) lucide.createIcons();
     }
   });
 
-  container.innerHTML = htmlContent;
-  if (window.lucide) lucide.createIcons();
-  showToast(`Selesai memuat total ${totalLayers} layer Geoportal!`);
   hideLoading();
+  await Promise.allSettled(fetchPromises);
+  showToast("Seluruh Geoportal selesai dikoneksikan!");
 }
 
 function toggleFolder(id) {
@@ -380,7 +401,39 @@ async function loadGeoportalVectorLayer(layerName, wmsUrl, initialColor = '#008b
   });
 
   // Penanganan BBOX / Bounds khusus WMS Tile agar auto-zoom tetap bekerja
-  if (wmsUrl.includes('magelangkota.go.id')) {
+  if (wmsUrl.includes('kotimkab.go.id')) {
+    wmsTileLayer.getBounds = function() {
+      return L.latLngBounds([-3.30, 112.30], [-1.20, 113.30]); // BBOX Kab. Kotawaringin Timur
+    };
+  } else if (wmsUrl.includes('kaltimprov.go.id')) {
+    wmsTileLayer.getBounds = function() {
+      return L.latLngBounds([-2.50, 113.80], [2.50, 119.00]); // BBOX Prov. Kalimantan Timur
+    };
+  } else if (wmsUrl.includes('mahakamulukab.go.id')) {
+    wmsTileLayer.getBounds = function() {
+      return L.latLngBounds([0.00, 113.80], [1.80, 115.80]); // BBOX Kab. Mahakam Ulu
+    };
+  } else if (wmsUrl.includes('bengkuluprov.go.id')) {
+    wmsTileLayer.getBounds = function() {
+      return L.latLngBounds([-5.50, 101.00], [-2.20, 103.80]); // BBOX Prov. Bengkulu
+    };
+  } else if (wmsUrl.includes('sumbarprov.go.id')) {
+    wmsTileLayer.getBounds = function() {
+      return L.latLngBounds([-3.50, 98.50], [0.95, 101.90]); // BBOX Prov. Sumatera Barat
+    };
+  } else if (wmsUrl.includes('bandung.go.id')) {
+    wmsTileLayer.getBounds = function() {
+      return L.latLngBounds([-6.97, 107.54], [-6.84, 107.72]); // BBOX Kota Bandung
+    };
+  } else if (wmsUrl.includes('mojokertokota.go.id')) {
+    wmsTileLayer.getBounds = function() {
+      return L.latLngBounds([-7.49, 112.41], [-7.44, 112.46]); // BBOX Kota Mojokerto
+    };
+  } else if (wmsUrl.includes('klaten.go.id')) {
+    wmsTileLayer.getBounds = function() {
+      return L.latLngBounds([-7.80, 110.50], [-7.55, 110.75]); // BBOX Kab. Klaten
+    };
+  } else if (wmsUrl.includes('magelangkota.go.id')) {
     wmsTileLayer.getBounds = function() {
       return L.latLngBounds([-7.50, 110.20], [-7.45, 110.25]); // BBOX Kota Magelang
     };
