@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GeoNusa — Geografi Nusantara WebGIS</title>
 
+  <!-- Favicon / Ikon Tab Browser -->
+  <link rel="icon" type="image/png" href="iconatas.png" />
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -66,18 +69,18 @@
   </div>
 
   <!-- ===================== WELCOME POPUP MODAL ===================== -->
-  <div id="welcome-modal" class="hidden fixed inset-0 z-[99998] flex items-center justify-center p-4 bg-slate-900/75 backdrop-blur-md transition-all duration-500 select-none">
-    <div class="relative w-full max-w-3xl bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl shadow-primary/20 border border-white/40 overflow-hidden transform transition-all scale-100 animate-in fade-in zoom-in-95 duration-300 text-left">
+  <div id="welcome-modal" class="hidden fixed inset-0 z-[99998] flex items-center justify-center p-3 sm:p-4 bg-slate-900/75 backdrop-blur-md transition-all duration-500 select-none">
+    <div class="relative w-full max-w-lg sm:max-w-3xl max-h-[90vh] overflow-y-auto custom-scrollbar bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl shadow-primary/20 border border-white/40 transform transition-all scale-100 animate-in fade-in zoom-in-95 duration-300 text-left">
       
       <!-- Aksen Garis Gradasi Mewah di Bagian Atas -->
       <div class="h-2 w-full bg-gradient-to-r from-cyan-500 via-primary to-indigo-600"></div>
 
       <!-- Konten Utama Modal -->
-      <div class="p-6 sm:p-8">
+      <div class="p-5 sm:p-8">
         
         <!-- Logo di Atas & Header Teks -->
         <div class="flex flex-col items-center text-center mb-5">
-          <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/10 to-cyan-500/20 border border-primary/20 flex items-center justify-center shadow-md p-2 bg-white mb-3 overflow-hidden">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-primary/10 to-cyan-500/20 border border-primary/20 flex items-center justify-center shadow-md p-2 bg-white mb-3 overflow-hidden">
             <img src="logo.png" alt="GeoNusa Logo" class="w-full h-full object-contain" onerror="this.onerror=null; this.style.display='none';" />
           </div>
 
@@ -85,7 +88,7 @@
             <span class="w-2 h-2 rounded-full bg-cyan-500 animate-ping"></span>
             Geografi Nusantara
           </div>
-          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight">
+          <h2 class="text-xl sm:text-3xl font-extrabold text-slate-800 tracking-tight">
             Selamat Datang di <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-600">GeoNusa</span>
           </h2>
           <p class="text-slate-500 text-xs sm:text-sm mt-1 max-w-lg">
@@ -161,22 +164,22 @@
 
         <!-- Tombol Aksi Utama & Social Media -->
         <div class="space-y-3">
-          <button onclick="closeWelcomeModal()" class="relative group w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-primary via-cyan-600 to-indigo-600 text-white font-bold text-sm sm:text-base shadow-xl shadow-primary/30 hover:shadow-primary/50 hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 flex items-center justify-center gap-2 overflow-hidden cursor-pointer">
+          <button onclick="closeWelcomeModal()" class="relative group w-full py-3 px-6 rounded-2xl bg-gradient-to-r from-primary via-cyan-600 to-indigo-600 text-white font-bold text-xs sm:text-base shadow-xl shadow-primary/30 hover:shadow-primary/50 hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 flex items-center justify-center gap-2 overflow-hidden cursor-pointer">
             <span class="absolute inset-0 w-full h-full bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
             <span>Mulai Jelajahi Peta</span>
-            <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+            <i data-lucide="arrow-right" class="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform"></i>
           </button>
 
           <!-- Tautan Sosial Media TikTok & Instagram -->
-          <div class="flex flex-col sm:flex-row items-center justify-between pt-3 px-2 gap-3 text-sm text-slate-600">
-            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Ikuti Sosial Media Kami:</span>
-            <div class="flex items-center gap-3.5">
-              <a href="https://www.tiktok.com/@geonusa.id" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-900 hover:text-white text-slate-800 font-bold text-sm sm:text-base transition-all shadow-sm">
-                <svg class="w-4 h-4 sm:w-5 sm:h-5 fill-current" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+          <div class="flex flex-col sm:flex-row items-center justify-between pt-2 px-2 gap-3 text-sm text-slate-600">
+            <span class="text-[11px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider">Ikuti Sosial Media Kami:</span>
+            <div class="flex items-center gap-3">
+              <a href="https://www.tiktok.com/@geonusa.id" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-900 hover:text-white text-slate-800 font-bold text-xs sm:text-sm transition-all shadow-sm">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
                 <span>TikTok</span>
               </a>
-              <a href="https://www.instagram.com/geonusa.id/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-pink-50 hover:bg-gradient-to-r hover:from-purple-600 hover:via-pink-600 hover:to-orange-500 hover:text-white text-pink-600 font-bold text-sm sm:text-base transition-all shadow-sm border border-pink-100">
-                <svg class="w-4 h-4 sm:w-5 sm:h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              <a href="https://www.instagram.com/geonusa.id/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-pink-50 hover:bg-gradient-to-r hover:from-purple-600 hover:via-pink-600 hover:to-orange-500 hover:text-white text-pink-600 font-bold text-xs sm:text-sm transition-all shadow-sm border border-pink-100">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                 <span>Instagram</span>
               </a>
             </div>
@@ -192,7 +195,7 @@
   <div class="flex h-screen w-screen overflow-hidden">
 
     <!-- =============== SIDEBAR =============== -->
-    <aside id="sidebar" class="sidebar-panel collapsed w-[380px] bg-white border-r border-slate-200 shadow-2xl flex flex-col shrink-0 transition-all duration-300 relative z-[900]">
+    <aside id="sidebar" class="sidebar-panel collapsed w-full sm:w-[380px] bg-white border-r border-slate-200 shadow-2xl flex flex-col shrink-0 transition-all duration-300 relative z-[900]">
 
       <div class="bg-gradient-to-r from-sky-50 via-white to-sky-50 px-5 py-4 flex items-center gap-3.5 shrink-0 shadow-sm border-b border-sky-100 h-20 overflow-hidden">
         <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/10 to-cyan-500/20 border border-primary/20 flex items-center justify-center shrink-0 shadow-inner p-2 bg-white">
@@ -306,10 +309,10 @@
 
     <!-- =============== MAP AREA =============== -->
     <main class="flex-1 relative">
-      <div id="floating-search" class="absolute top-4 left-1/2 -translate-x-1/2 z-[800] w-full max-w-md px-4">
+      <div id="floating-search" class="absolute top-3 left-1/2 -translate-x-1/2 z-[800] w-full max-w-sm sm:max-w-md px-3 sm:px-4">
         <div class="relative">
           <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"></i>
-          <input id="map-search" type="text" placeholder="Cari lokasi atau nama daerah..." class="w-full pl-10 pr-10 py-2.5 text-sm bg-white border-0 rounded-xl shadow-lg focus:ring-2 focus:ring-primary/40 outline-none transition-all" onkeydown="if(event.key==='Enter') searchLocation(this.value)" />
+          <input id="map-search" type="text" placeholder="Cari lokasi atau nama daerah..." class="w-full pl-10 pr-10 py-2.5 text-xs sm:text-sm bg-white border-0 rounded-xl shadow-lg focus:ring-2 focus:ring-primary/40 outline-none transition-all" onkeydown="if(event.key==='Enter') searchLocation(this.value)" />
           <button onclick="searchLocation(document.getElementById('map-search').value)" class="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg bg-primary text-white flex items-center justify-center hover:bg-primary-dark transition-colors">
             <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
           </button>
@@ -319,30 +322,30 @@
 
       <div id="map" class="w-full h-full"></div>
 
-<!-- Legenda Mengambang di Peta -->
-      <div id="floating-legend" class="hidden absolute top-4 right-4 z-[800] bg-white/95 backdrop-blur-md p-3 rounded-xl shadow-xl border border-gray-200/80 max-w-xs transition-all w-64">
+      <!-- Legenda Mengambang di Peta -->
+      <div id="floating-legend" class="hidden absolute top-16 right-2 sm:top-16 sm:right-4 z-[800] bg-white/95 backdrop-blur-md p-2.5 sm:p-3 rounded-xl shadow-xl border border-gray-200/80 max-w-[200px] sm:max-w-xs transition-all w-52 sm:w-64">
         <div class="flex items-center justify-between gap-2 mb-2 border-b pb-1.5 border-gray-200">
-          <span class="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
+          <span class="text-[11px] sm:text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
             <i data-lucide="layers" class="w-3.5 h-3.5 text-primary"></i> Keterangan
           </span>
           <button onclick="document.getElementById('floating-legend').classList.add('hidden')" class="text-gray-400 hover:text-rose-500">
             <i data-lucide="x" class="w-3.5 h-3.5"></i>
           </button>
         </div>
-        <div id="floating-legend-content" class="space-y-2 text-[11px] text-gray-600 max-h-48 overflow-y-auto custom-scrollbar"></div>
-      </div> <!-- <-- Tutup div #floating-legend (Baris 32 di editor Anda) -->
+        <div id="floating-legend-content" class="space-y-2 text-[10px] sm:text-[11px] text-gray-600 max-h-40 sm:max-h-48 overflow-y-auto custom-scrollbar"></div>
+      </div>
 
-<!-- KOTAK DONASI / SUPPORT AUTHOR (KECIL & DI POJOK KANAN) -->
-      <div id="floating-donation" class="absolute top-52 right-4 z-[800] bg-white/95 backdrop-blur-md p-2.5 rounded-xl shadow-lg border border-sky-100 max-w-[220px] transition-all">
+      <!-- KOTAK DONASI / SUPPORT AUTHOR (KECIL & DI POJOK KANAN) -->
+      <div id="floating-donation" class="absolute top-[205px] sm:top-[215px] right-2 sm:right-4 z-[800] bg-white/95 backdrop-blur-md p-2 sm:p-2.5 rounded-xl shadow-lg border border-sky-100 w-[190px] sm:max-w-[220px] transition-all">
         <div class="flex items-center justify-between gap-2 mb-1 border-b pb-1 border-gray-100">
-          <span class="text-[11px] font-bold text-gray-800 uppercase tracking-wider flex items-center gap-1">
+          <span class="text-[10px] sm:text-[11px] font-bold text-gray-800 uppercase tracking-wider flex items-center gap-1">
             <i data-lucide="coffee" class="w-3 h-3 text-amber-500"></i> Dukung Author
           </span>
           <button onclick="document.getElementById('floating-donation').classList.add('hidden')" class="text-gray-400 hover:text-rose-500 cursor-pointer">
             <i data-lucide="x" class="w-3 h-3"></i>
           </button>
         </div>
-        <p class="text-[10px] text-slate-600 leading-tight mb-2">
+        <p class="text-[9px] sm:text-[10px] text-slate-600 leading-tight mb-2">
           Dukung author untuk mengembangkan website Geonusa.
         </p>
         <a href="https://saweria.co/geonusaid" target="_blank" rel="noopener noreferrer" class="w-full py-1.5 px-2 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-[10px] shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-1">
@@ -350,66 +353,67 @@
           <span>Donasi Saweria</span>
         </a>
       </div>
+
       <!-- FLOATING TOOLBAR KANAN BAWAH -->
-      <div class="absolute bottom-6 right-6 z-[900] flex flex-col space-y-2">
+      <div class="absolute bottom-4 right-2 sm:bottom-6 sm:right-6 z-[900] flex flex-col space-y-1.5 sm:space-y-2 scale-90 sm:scale-100 origin-bottom-right">
         <div class="relative group flex items-center">
           <span class="absolute right-14 px-2.5 py-1 bg-slate-800 text-white text-[11px] font-medium rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">Panduan & Tutorial</span>
-          <button onclick="openHelpModal()" class="w-11 h-11 bg-white hover:bg-slate-50 text-slate-700 shadow-lg rounded-xl flex items-center justify-center border border-slate-100">
-            <i data-lucide="help-circle" class="w-5 h-5 text-primary"></i>
+          <button onclick="openHelpModal()" class="w-10 h-10 sm:w-11 sm:h-11 bg-white hover:bg-slate-50 text-slate-700 shadow-lg rounded-xl flex items-center justify-center border border-slate-100">
+            <i data-lucide="help-circle" class="w-4 h-4 sm:w-5 sm:h-5 text-primary"></i>
           </button>
         </div>
 
         <div class="relative group flex items-center">
           <span class="absolute right-14 px-2.5 py-1 bg-slate-800 text-white text-[11px] font-medium rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">Ganti Basemap</span>
-          <button onclick="const bm = document.getElementById('floating-basemap-modal'); bm.classList.toggle('hidden');" class="w-11 h-11 bg-white hover:bg-slate-50 text-slate-700 shadow-lg rounded-xl flex items-center justify-center border border-slate-100">
-            <i data-lucide="image" class="w-5 h-5 text-primary"></i>
+          <button onclick="const bm = document.getElementById('floating-basemap-modal'); bm.classList.toggle('hidden');" class="w-10 h-10 sm:w-11 sm:h-11 bg-white hover:bg-slate-50 text-slate-700 shadow-lg rounded-xl flex items-center justify-center border border-slate-100">
+            <i data-lucide="image" class="w-4 h-4 sm:w-5 sm:h-5 text-primary"></i>
           </button>
         </div>
 
         <div class="relative group flex items-center">
           <span class="absolute right-14 px-2.5 py-1 bg-slate-800 text-white text-[11px] font-medium rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">Upload Data Spasial</span>
-          <button onclick="document.getElementById('upload-file-input').click()" class="w-11 h-11 bg-white hover:bg-slate-50 text-slate-700 shadow-lg rounded-xl flex items-center justify-center border border-slate-100">
-            <i data-lucide="cloud-upload" class="w-5 h-5 text-primary"></i>
+          <button onclick="document.getElementById('upload-file-input').click()" class="w-10 h-10 sm:w-11 sm:h-11 bg-white hover:bg-slate-50 text-slate-700 shadow-lg rounded-xl flex items-center justify-center border border-slate-100">
+            <i data-lucide="cloud-upload" class="w-4 h-4 sm:w-5 sm:h-5 text-primary"></i>
           </button>
         </div>
         <input type="file" id="upload-file-input" accept=".zip,.kml,.kmz,.geojson,.json" class="hidden" onchange="handleFileUpload(event)" />
 
         <div class="relative group flex items-center">
           <span class="absolute right-14 px-2.5 py-1 bg-slate-800 text-white text-[11px] font-medium rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">Cetak Peta JPEG</span>
-          <button onclick="exportMapJPEG()" class="w-11 h-11 bg-white hover:bg-slate-50 text-slate-700 shadow-lg rounded-xl flex items-center justify-center border border-slate-100">
-            <i data-lucide="printer" class="w-5 h-5 text-primary"></i>
+          <button onclick="exportMapJPEG()" class="w-10 h-10 sm:w-11 sm:h-11 bg-white hover:bg-slate-50 text-slate-700 shadow-lg rounded-xl flex items-center justify-center border border-slate-100">
+            <i data-lucide="printer" class="w-4 h-4 sm:w-5 sm:h-5 text-primary"></i>
           </button>
         </div>
 
         <div class="relative group flex items-center">
           <span class="absolute right-14 px-2.5 py-1 bg-slate-800 text-white text-[11px] font-medium rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">Legenda & Layer Aktif</span>
-          <button onclick="switchSidebarTab('tools'); const sb = document.getElementById('sidebar'); if(sb.classList.contains('collapsed')) toggleSidebar();" class="w-11 h-11 bg-white hover:bg-slate-50 text-slate-700 shadow-lg rounded-xl flex items-center justify-center border border-slate-100">
-            <i data-lucide="calculator" class="w-5 h-5 text-primary"></i>
+          <button onclick="switchSidebarTab('tools'); const sb = document.getElementById('sidebar'); if(sb.classList.contains('collapsed')) toggleSidebar();" class="w-10 h-10 sm:w-11 sm:h-11 bg-white hover:bg-slate-50 text-slate-700 shadow-lg rounded-xl flex items-center justify-center border border-slate-100">
+            <i data-lucide="calculator" class="w-4 h-4 sm:w-5 sm:h-5 text-primary"></i>
           </button>
         </div>
 
         <div class="relative group flex items-center">
           <span class="absolute right-14 px-2.5 py-1 bg-slate-800 text-white text-[11px] font-medium rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">Ukur Luas (Area)</span>
-          <button onclick="startMeasure('polygon')" class="w-11 h-11 bg-white hover:bg-slate-50 text-slate-700 shadow-lg rounded-xl flex items-center justify-center border border-slate-100">
-            <i data-lucide="pentagon" class="w-5 h-5 text-primary"></i>
+          <button onclick="startMeasure('polygon')" class="w-10 h-10 sm:w-11 sm:h-11 bg-white hover:bg-slate-50 text-slate-700 shadow-lg rounded-xl flex items-center justify-center border border-slate-100">
+            <i data-lucide="pentagon" class="w-4 h-4 sm:w-5 sm:h-5 text-primary"></i>
           </button>
         </div>
 
         <div class="relative group flex items-center">
           <span class="absolute right-14 px-2.5 py-1 bg-slate-800 text-white text-[11px] font-medium rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">Ukur Jarak (Garis)</span>
-          <button onclick="startMeasure('polyline')" class="w-11 h-11 bg-white hover:bg-slate-50 text-slate-700 shadow-lg rounded-xl flex items-center justify-center border border-slate-100">
-            <i data-lucide="ruler" class="w-5 h-5 text-primary"></i>
+          <button onclick="startMeasure('polyline')" class="w-10 h-10 sm:w-11 sm:h-11 bg-white hover:bg-slate-50 text-slate-700 shadow-lg rounded-xl flex items-center justify-center border border-slate-100">
+            <i data-lucide="ruler" class="w-4 h-4 sm:w-5 sm:h-5 text-primary"></i>
           </button>
         </div>
 
         <div class="bg-white shadow-lg rounded-xl overflow-hidden flex flex-col border border-slate-100">
-          <button onclick="map.zoomIn()" class="w-11 h-10 hover:bg-slate-50 text-slate-700 flex items-center justify-center border-b border-slate-100"><i data-lucide="plus" class="w-5 h-5"></i></button>
-          <button onclick="map.zoomOut()" class="w-11 h-10 hover:bg-slate-50 text-slate-700 flex items-center justify-center"><i data-lucide="minus" class="w-5 h-5"></i></button>
+          <button onclick="map.zoomIn()" class="w-10 h-9 sm:w-11 sm:h-10 hover:bg-slate-50 text-slate-700 flex items-center justify-center border-b border-slate-100"><i data-lucide="plus" class="w-4 h-4 sm:w-5 sm:h-5"></i></button>
+          <button onclick="map.zoomOut()" class="w-10 h-9 sm:w-11 sm:h-10 hover:bg-slate-50 text-slate-700 flex items-center justify-center"><i data-lucide="minus" class="w-4 h-4 sm:w-5 sm:h-5"></i></button>
         </div>
       </div>
 
       <!-- MODAL BASEMAP (HANYA SATELIT & OSM) -->
-      <div id="floating-basemap-modal" class="hidden absolute bottom-20 right-20 z-[950] bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-2xl border border-gray-200/80 w-48 animate-fade-in">
+      <div id="floating-basemap-modal" class="hidden absolute bottom-16 right-16 sm:bottom-20 sm:right-20 z-[950] bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-2xl border border-gray-200/80 w-48 animate-fade-in">
         <div class="text-[10px] font-bold text-gray-400 tracking-wider uppercase mb-2 px-1 flex items-center justify-between">
           <span class="flex items-center gap-1"><i data-lucide="map" class="w-3 h-3 text-primary"></i> Pilih Basemap</span>
           <button onclick="document.getElementById('floating-basemap-modal').classList.add('hidden')" class="text-gray-400 hover:text-rose-500 cursor-pointer"><i data-lucide="x" class="w-3 h-3"></i></button>
@@ -429,7 +433,7 @@
     </main>
   </div>
 
-<script src="app.js"></script>
+  <script src="app.js"></script>
   <script>
     // Flag pengaman mutlak agar skrip hanya berjalan sekali
     if (typeof window.hasGeoNusaInitialized === 'undefined') {
@@ -506,3 +510,5 @@
       }
     }
   </script>
+</body>
+</html>

@@ -135,6 +135,15 @@
   right: -24px;
 }
 
+@media (max-width: 640px) {
+  .sidebar-panel:not(.collapsed) {
+    position: absolute;
+    height: 100%;
+    z-index: 999;
+    width: 100% !important;
+  }
+}
+
 /* Layer tree styling */
 .layer-folder {
   margin-bottom: 2px;
