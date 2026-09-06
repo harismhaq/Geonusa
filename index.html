@@ -196,8 +196,8 @@
   <!-- ===================== MAIN CONTENT (FULL HEIGHT) ===================== -->
   <div class="flex h-screen w-screen overflow-hidden">
 
-    <!-- =============== SIDEBAR =============== -->
-    <aside id="sidebar" class="sidebar-panel collapsed w-full sm:w-[380px] bg-white border-r border-slate-200 shadow-2xl flex flex-col shrink-0 transition-all duration-300 relative z-[900]">
+    <!-- =============== SIDEBAR (Lebar 85vw di Mobile agar tidak full menutupi layar) =============== -->
+    <aside id="sidebar" class="sidebar-panel collapsed w-[85vw] sm:w-[380px] max-w-[320px] sm:max-w-none bg-white border-r border-slate-200 shadow-2xl flex flex-col shrink-0 transition-all duration-300 relative z-[900]">
 
       <div class="bg-gradient-to-r from-sky-50 via-white to-sky-50 px-5 py-4 flex items-center justify-between shrink-0 shadow-sm border-b border-sky-100 h-20 overflow-hidden">
         <div class="flex items-center gap-3.5">
@@ -321,7 +321,7 @@
 
     <!-- =============== MAP AREA =============== -->
     <main class="flex-1 relative">
-      <!-- TOMBOL BUKA MENU MENGAMBANG KHUSUS MOBILE (Menggunakan kelas 'flex sm:hidden' agar murni tampil di HP saja) -->
+      <!-- TOMBOL BUKA MENU MENGAMBANG KHUSUS MOBILE -->
       <button id="mobile-menu-btn" onclick="toggleSidebar()" class="flex sm:hidden absolute top-3 left-3 z-[850] bg-white hover:bg-slate-50 px-3.5 py-2.5 rounded-2xl shadow-lg border border-sky-100 items-center gap-2 text-xs font-bold italic text-slate-700 shadow-primary/10">
         <i data-lucide="chevron-right" class="w-4 h-4 text-primary"></i>
         <span>Buka Menu</span>
@@ -454,7 +454,7 @@
       window.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
           const splash = document.getElementById('app-splash-screen');
-          if (splash) {
+          | if (splash) {
             splash.style.opacity = '0';
             setTimeout(() => splash.remove(), 400);
           }
@@ -470,7 +470,7 @@
               }
             });
           }
-          if (window.lucide) lucide.createIcons();
+          | if (window.lucide) lucide.createIcons();
         }, 2000);
       });
     }
@@ -505,7 +505,6 @@
           }
         }
 
-        // Atur kemunculan tombol mobile khusus layar di bawah 640px (HP)
         if (mobileMenuBtn && window.innerWidth < 640) {
           mobileMenuBtn.style.display = isCollapsed ? "flex" : "none";
         }
@@ -515,7 +514,7 @@
 
     function openHelpModal() {
       let modal = document.getElementById('tutorial-modal');
-      if (!modal) {
+      | if (!modal) {
         const modalHTML = `
           <div id="tutorial-modal" class="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-fade-in">
             <div class="bg-white rounded-2xl shadow-2xl border max-w-lg w-full p-6 relative flex flex-col text-left">
