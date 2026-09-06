@@ -303,10 +303,10 @@
         </div>
       </div>
 
-      <!-- Tombol Toggle Sidebar (Tulisan "Buka Menu" miring secara vertikal) -->
-      <button id="sidebar-toggle" onclick="toggleSidebar()" class="absolute -right-8 top-1/2 -translate-y-1/2 py-4 px-1.5 bg-white hover:bg-slate-50 border border-slate-200 rounded-r-2xl shadow-xl flex flex-col items-center gap-2 transition-all duration-300 z-[950] group cursor-pointer text-xs font-bold italic tracking-wide text-slate-700" title="Toggle Sidebar">
-        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-600 group-hover:text-primary transition-colors sidebar-toggle-icon"></i>
-        <span id="sidebar-toggle-text" class="[writing-mode:vertical-lr] rotate-180 uppercase text-[10px]">Buka Menu</span>
+      <!-- Tombol Toggle Sidebar (Grip melayang yang konsisten & ikon berotasi) -->
+      <button id="sidebar-toggle" onclick="toggleSidebar()" class="absolute -right-8 top-1/2 -translate-y-1/2 py-5 px-2 bg-white hover:bg-slate-50 border border-slate-200 border-l-0 rounded-r-2xl shadow-xl flex flex-col items-center justify-center gap-2 transition-all duration-300 z-[950] group cursor-pointer" title="Toggle Sidebar">
+        <i id="sidebar-toggle-icon" data-lucide="chevron-right" class="w-5 h-5 text-slate-600 group-hover:text-primary transition-transform duration-300"></i>
+        <span id="sidebar-toggle-text" class="[writing-mode:vertical-lr] rotate-180 uppercase text-[9px] font-bold italic tracking-wider text-slate-600 group-hover:text-primary transition-colors">Buka Menu</span>
       </button>
     </aside>
 
@@ -471,15 +471,27 @@
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar');
       const toggleText = document.getElementById('sidebar-toggle-text');
+      const toggleIcon = document.getElementById('sidebar-toggle-icon');
+
       if (sidebar) {
         sidebar.classList.toggle('collapsed');
         const isCollapsed = sidebar.classList.contains('collapsed');
+        
         if (toggleText) {
-          // Kosongkan teks saat sidebar terbuka, tampilkan kembali "Buka Menu" saat tertutup
-          toggleText.textContent = isCollapsed ? "Buka Menu" : "";
+          // Tampilkan teks "Buka Menu" saat tertutup, sembunyikan teks saat terbuka
+          toggleText.style.display = isCollapsed ? "inline-block" : "none";
+        }
+
+        if (toggleIcon) {
+          // Putar ikon panah 180 derajat saat tertutup vs terbuka
+          if (isCollapsed) {
+            toggleIcon.classList.remove('rotate-180');
+          } else {
+            toggleIcon.classList.add('rotate-180');
+          }
         }
       }
-      setTimeout(() => { if (map) map.invalidateSize(); }, 300);
+      setTimeout(() => { if (typeof map !== 'undefined' && map) map.invalidateSize(); }, 300);
     }
 
     function openHelpModal() {
