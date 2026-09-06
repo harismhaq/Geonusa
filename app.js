@@ -5,7 +5,7 @@
 
 let map;
 let currentBasemapLayer;
-let currentBasemapName = 'Satelit';
+let currentBasemapName = 'OpenStreetMap';
 const geoportalLayers = new Map();           // cacheKey -> L.Layer
 const layerColors = new Map();               // cacheKey -> hexColor String
 const layerOpacities = new Map();            // cacheKey -> opacity Number (0-1)
@@ -256,6 +256,7 @@ function hexToRgba(hex, opacity) {
   return `rgba(${(num >> 16) & 255}, ${(num >> 8) & 255}, ${num & 255}, ${opacity})`;
 }
 
+// Daftar Basemap (Hanya Satelit & OpenStreetMap)
 const BASEMAPS = {
   satellite: {
     name: 'Satelit',
@@ -266,55 +267,56 @@ const BASEMAPS = {
     name: 'OpenStreetMap',
     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     options: { attribution: '&copy; OpenStreetMap contributors', maxZoom: 19 }
-  },
-  positron: {
-    name: 'Light Positron',
-    url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-    options: { attribution: '&copy; CARTO &copy; OSM', maxZoom: 20 }
-  },
-  dark: {
-    name: 'Dark Matter',
-    url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-    options: { attribution: '&copy; CARTO &copy; OSM', maxZoom: 20 }
   }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
   try {
     initMap();
-    setTimeout(() => { hideSplashScreen(); }, 500);
     fetchAllGeoportalCollections();
     renderSdaHubList();       
     renderBatasHubList();       
     renderTransmigrasiHubList();
     renderKebencanaanHubList(); 
     if (window.lucide) lucide.createIcons();
+
+    // === PENGATUR SPLASH SCREEN & WELCOME MODAL (2 DETIK) ===
+    if (!window.__geonusa_initialized) {
+      window.__geonusa_initialized = true;
+
+      setTimeout(() => {
+        const splash = document.getElementById('app-splash-screen');
+        if (splash) {
+          splash.style.opacity = '0';
+          setTimeout(() => splash.remove(), 400);
+        }
+
+        const modals = document.querySelectorAll('#welcome-modal');
+        if (modals.length > 0) {
+          modals.forEach((m, idx) => {
+            if (idx === 0) {
+              m.classList.remove('hidden');
+              m.classList.add('flex');
+            } else {
+              m.remove(); // Hapus paksa jika ada elemen duplikat
+            }
+          });
+        }
+        if (window.lucide) lucide.createIcons();
+      }, 2000); // Durasi dipercepat menjadi 2 detik
+    }
+
   } catch (err) {
     console.error("Initialization Error:", err);
   }
 });
 
-function hideSplashScreen() {
-  const splash = document.getElementById('app-splash-screen');
-  const modal = document.getElementById('welcome-modal');
-
-  if (splash && splash.style.display !== 'none') {
-    splash.classList.add('splash-hidden');
-    setTimeout(() => {
-      splash.style.display = 'none';
-      if (modal) {
-        modal.classList.remove('hidden');
-        if (window.lucide) lucide.createIcons();
-      }
-    }, 400);
-  }
-}
-
+// Fungsi untuk menutup modal selamat datang saat tombol diklik
 function closeWelcomeModal() {
   const modal = document.getElementById('welcome-modal');
   if (modal) {
-    modal.classList.add('opacity-0');
-    setTimeout(() => { modal.classList.add('hidden'); }, 300);
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
   }
 }
 
@@ -326,7 +328,8 @@ function initMap() {
     attributionControl: true
   });
 
-  changeBasemap('satellite');
+  // Default basemap diubah ke OpenStreetMap (osm)
+  changeBasemap('osm');
   L.control.zoom({ position: 'bottomright' }).addTo(map);
 
   measureLayerGroup = new L.FeatureGroup().addTo(map);
@@ -550,15 +553,29 @@ function renderKebencanaanHubList() {
   const container = document.getElementById('kebencanaan-hub-tree');
   if (!container) return;
 
-  container.innerHTML = KEBENCANAAN_LAYERS.map(l => `
-    <label class="layer-item flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-slate-50 cursor-pointer transition-all">
-      <input type="checkbox" data-hub-key="bencana_${l.id}" onchange="toggleHubLayer('bencana', '${l.id}', this.checked)" class="w-4 h-4 accent-primary rounded cursor-pointer" />
-      <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-rose-500 shrink-0"></i>
-      <span class="text-xs font-medium text-slate-700">${escapeBMKGHTML(l.name)}</span>
-    </label>
-  `).join('');
+  container.innerHTML = `
+    <div class="px-1 pb-2">
+      <input type="text" placeholder="Cari layer kebencanaan..." class="w-full px-3 py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary/30 outline-none transition-all" oninput="filterBencanaLayers(this.value)" />
+    </div>
+    <div id="bencana-layers-list" class="space-y-1 px-1">
+      ${KEBENCANAAN_LAYERS.map(l => `
+        <label class="bencana-layer-item flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-slate-50 cursor-pointer transition-all" title="${escapeBMKGHTML(l.name)}">
+          <input type="checkbox" data-hub-key="bencana_${l.id}" onchange="toggleHubLayer('bencana', '${l.id}', this.checked)" class="w-4 h-4 accent-primary rounded cursor-pointer shrink-0" />
+          <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-rose-500 shrink-0"></i>
+          <span class="text-xs font-medium text-slate-700 truncate flex-1">${escapeBMKGHTML(l.name)}</span>
+        </label>
+      `).join('')}
+    </div>
+  `;
 
   if (window.lucide) lucide.createIcons();
+}
+
+function filterBencanaLayers(query) {
+  const q = query.toLowerCase().trim();
+  document.querySelectorAll('.bencana-layer-item').forEach(item => {
+    item.style.display = item.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
 }
 
 // Penyimpanan cache layer dinamis
@@ -637,7 +654,13 @@ function toggleHubLayer(category, typeOrId, visible) {
         if (isDirectLayerUrl) {
           return `${directFullUrl}/export?bbox=${bbox}&bboxSR=4326&imageSR=4326&size=256,256&f=image&format=png32&transparent=true`;
         }
-        return `${mapServerUrl}/export?bbox=${bbox}&bboxSR=4326&imageSR=4326&size=256,256&f=image&format=png32&transparent=true&layers=${subLayerIndex}`;
+
+        let layerParam = `&layers=${subLayerIndex}`;
+        if (category === 'bencana') {
+          layerParam = '&layers=show:0';
+        }
+
+        return `${mapServerUrl}/export?bbox=${bbox}&bboxSR=4326&imageSR=4326&size=256,256&f=image&format=png32&transparent=true${layerParam}`;
       };
       hubLayersMap.set(layerKey, targetLayer);
     }
@@ -893,14 +916,29 @@ function moveLayerOrder(index, direction) {
 
 function changeLayerColor(cacheKey, newColor) {
   layerColors.set(cacheKey, newColor);
-  updateLegendPreview(cacheKey);
+  
+  const opacity = layerOpacities.has(cacheKey) ? layerOpacities.get(cacheKey) : 0.8;
+  const rgbaColor = hexToRgba(newColor, opacity);
+  
+  document.querySelectorAll(`[data-legend-box="${CSS.escape(cacheKey)}"]`).forEach(box => {
+    box.style.backgroundColor = rgbaColor;
+    box.style.borderColor = newColor;
+  });
+
   applyLayerStyle(cacheKey);
 }
 
 function changeLayerOpacity(cacheKey, newOpacity) {
   const parsedOpacity = parseFloat(newOpacity);
   layerOpacities.set(cacheKey, parsedOpacity);
-  updateLegendPreview(cacheKey);
+  
+  const color = layerColors.get(cacheKey) || '#008bb0';
+  const rgbaColor = hexToRgba(color, parsedOpacity);
+  
+  document.querySelectorAll(`[data-legend-box="${CSS.escape(cacheKey)}"]`).forEach(box => {
+    box.style.backgroundColor = rgbaColor;
+  });
+
   applyLayerStyle(cacheKey);
 }
 
@@ -909,11 +947,10 @@ function updateLegendPreview(cacheKey) {
   const opacity = layerOpacities.has(cacheKey) ? layerOpacities.get(cacheKey) : 0.8;
   const rgbaColor = hexToRgba(color, opacity);
 
-  const floatingBox = document.querySelector(`[data-legend-box="${CSS.escape(cacheKey)}"]`);
-  if (floatingBox) {
-    floatingBox.style.backgroundColor = rgbaColor;
-    floatingBox.style.borderColor = color;
-  }
+  document.querySelectorAll(`[data-legend-box="${CSS.escape(cacheKey)}"]`).forEach(box => {
+    box.style.backgroundColor = rgbaColor;
+    box.style.borderColor = color;
+  });
 }
 
 function applyLayerStyle(cacheKey) {
@@ -990,7 +1027,7 @@ async function updateLegendEditor() {
               <div class="grid grid-cols-2 gap-2 bg-slate-50 p-2 rounded-md border border-slate-100 text-[10px]">
                 <div class="flex items-center justify-between">
                   <span>Warna:</span>
-                  <input type="color" value="${activeColor}" oninput="changeLayerColor('${cacheKey}', this.value)" class="w-6 h-6 rounded cursor-pointer border-0 bg-transparent" />
+                  <input type="color" value="${activeColor}" oninput="changeLayerColor('${cacheKey}', this.value)" onchange="changeLayerColor('${cacheKey}', this.value)" class="w-6 h-6 rounded cursor-pointer border-0 bg-transparent" />
                 </div>
                 <div class="flex items-center justify-between gap-1">
                   <span>Opasitas:</span>
@@ -1050,7 +1087,6 @@ async function updateLegendEditor() {
 
   if (window.lucide) lucide.createIcons();
 
-  // Ambil legenda asli
   activeEntries.forEach(async (cacheKey) => {
     let targetUrl = "";
     let layerNameParam = "";
@@ -1116,7 +1152,7 @@ async function updateLegendEditor() {
         const res = await fetch(legendFetchUrl, { signal: AbortSignal.timeout(5000) });
         if (res.ok) {
           const data = await res.json();
-          if (data && data.layers) {
+          if (data && data.layers && data.layers.length > 0) {
             const filteredLayers = specificLayerId !== null 
               ? data.layers.filter(lyr => String(lyr.layerId) === String(specificLayerId))
               : data.layers;
@@ -1141,18 +1177,27 @@ async function updateLegendEditor() {
             });
             legendHTML += '</div>';
 
-            if (filteredLayers.length > 0) {
+            if (filteredLayers.length > 0 && filteredLayers.some(l => l.legend && l.legend.length > 0)) {
               if (metaEl) metaEl.innerHTML = legendHTML;
               if (floatMetaEl) floatMetaEl.innerHTML = legendHTML;
-            } else {
-              if (metaEl) metaEl.innerHTML = '<span class="text-slate-400 italic">Legenda tidak tersedia untuk layer ini.</span>';
-              if (floatMetaEl) floatMetaEl.innerHTML = '<span class="text-slate-400 italic">Legenda tidak tersedia.</span>';
+              return;
             }
           }
         }
+
+        throw new Error("Gunakan fallback info legenda");
+
       } catch (e) {
-        if (metaEl) metaEl.innerHTML = '<span class="text-slate-400 italic">Gagal memuat legenda.</span>';
-        if (floatMetaEl) floatMetaEl.innerHTML = '<span class="text-slate-400 italic">Gagal memuat legenda.</span>';
+        const fallbackHTML = `
+          <div class="mt-1 space-y-1">
+            <div class="text-[10px] text-slate-600 bg-amber-50 border border-amber-200 p-1.5 rounded">
+              <span class="font-bold block text-amber-800">Informasi Klasifikasi:</span>
+              <span>Visualisasi indeks tingkat bahaya/risiko bersumber langsung dari InaRisk BNPB.</span>
+            </div>
+          </div>
+        `;
+        if (metaEl) metaEl.innerHTML = fallbackHTML;
+        if (floatMetaEl) floatMetaEl.innerHTML = `<span class="text-[10px] text-slate-500 italic">Klasifikasi Risiko InaRisk BNPB</span>`;
       }
     }
   });
