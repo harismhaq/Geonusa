@@ -303,23 +303,19 @@
         </div>
       </div>
 
-      <!-- Tombol Toggle Sidebar -->
-      <button id="sidebar-toggle" onclick="toggleSidebar()" class="absolute -right-3.5 top-1/2 -translate-y-1/2 w-7 h-14 bg-white hover:bg-slate-50 border border-slate-200 rounded-r-2xl shadow-xl flex items-center justify-center transition-all duration-300 z-[950] group cursor-pointer" title="Toggle Sidebar">
+      <!-- Tombol Toggle Sidebar (Tulisan "Buka Menu" miring secara vertikal) -->
+      <button id="sidebar-toggle" onclick="toggleSidebar()" class="absolute -right-8 top-1/2 -translate-y-1/2 py-4 px-1.5 bg-white hover:bg-slate-50 border border-slate-200 rounded-r-2xl shadow-xl flex flex-col items-center gap-2 transition-all duration-300 z-[950] group cursor-pointer text-xs font-bold italic tracking-wide text-slate-700" title="Toggle Sidebar">
         <i data-lucide="chevron-right" class="w-4 h-4 text-slate-600 group-hover:text-primary transition-colors sidebar-toggle-icon"></i>
+        <span id="sidebar-toggle-text" class="[writing-mode:vertical-lr] rotate-180 uppercase text-[10px]">Buka Menu</span>
       </button>
     </aside>
 
     <!-- =============== MAP AREA =============== -->
     <main class="flex-1 relative">
-      <div id="floating-search" class="absolute top-3 left-1/2 -translate-x-1/2 z-[800] w-full max-w-sm sm:max-w-md px-3 sm:px-4">
-        <div class="relative">
-          <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"></i>
-          <input id="map-search" type="text" placeholder="Cari lokasi atau nama daerah..." class="w-full pl-10 pr-10 py-2.5 text-xs sm:text-sm bg-white border-0 rounded-xl shadow-lg focus:ring-2 focus:ring-primary/40 outline-none transition-all" onkeydown="if(event.key==='Enter') searchLocation(this.value)" />
-          <button onclick="searchLocation(document.getElementById('map-search').value)" class="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg bg-primary text-white flex items-center justify-center hover:bg-primary-dark transition-colors">
-            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-          </button>
-        </div>
-        <div id="search-results" class="hidden mt-1 bg-white rounded-xl shadow-lg border border-gray-100 max-h-60 overflow-y-auto"></div>
+      <!-- LOGO GEO-NUSA DI ATAS TENGAH -->
+      <div class="absolute top-3 left-1/2 -translate-x-1/2 z-[800] bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl shadow-lg border border-sky-100 flex items-center gap-2 select-none pointer-events-none">
+        <img src="logo.png" alt="GeoNusa Logo" class="w-6 h-6 object-contain" onerror="this.style.display='none';" />
+        <span class="text-xs font-extrabold text-slate-800 tracking-tight">Geo<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-600">Nusa</span></span>
       </div>
 
       <div id="map" class="w-full h-full"></div>
@@ -437,12 +433,10 @@
 
   <script src="app.js"></script>
   <script>
-    // Flag pengaman mutlak agar skrip hanya berjalan sekali
     if (typeof window.hasGeoNusaInitialized === 'undefined') {
       window.hasGeoNusaInitialized = true;
 
       window.addEventListener('DOMContentLoaded', () => {
-        // Durasi loading screen dipercepat menjadi 2 detik (2000 ms)
         setTimeout(() => {
           const splash = document.getElementById('app-splash-screen');
           if (splash) {
@@ -457,12 +451,12 @@
                 m.classList.remove('hidden');
                 m.classList.add('flex');
               } else {
-                m.remove(); // Hapus elemen duplikat jika ada
+                m.remove();
               }
             });
           }
           if (window.lucide) lucide.createIcons();
-        }, 2000); // Durasi 2 detik
+        }, 2000);
       });
     }
 
@@ -472,6 +466,20 @@
         modal.classList.add('hidden');
         modal.classList.remove('flex');
       }
+    }
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const toggleText = document.getElementById('sidebar-toggle-text');
+      if (sidebar) {
+        sidebar.classList.toggle('collapsed');
+        const isCollapsed = sidebar.classList.contains('collapsed');
+        if (toggleText) {
+          // Kosongkan teks saat sidebar terbuka, tampilkan kembali "Buka Menu" saat tertutup
+          toggleText.textContent = isCollapsed ? "Buka Menu" : "";
+        }
+      }
+      setTimeout(() => { if (map) map.invalidateSize(); }, 300);
     }
 
     function openHelpModal() {
@@ -501,7 +509,8 @@
                   <strong class="text-slate-800 block font-bold mb-1">4. Kawasan Khusus Transmigrasi</strong> Peta transmigrasi.
                 </div>
               </div>
-              <div class="mt-5 pt-3 border-t flex justify-end">
+              <div class="mt-5 pt-3 border-t flex items-center justify-between">
+                <span class="text-[10px] text-slate-400 font-medium">Author: Haris Muhammad Haq, S.P.W.K</span>
                 <button onclick="document.getElementById('tutorial-modal').remove()" class="px-4 py-2 bg-primary hover:bg-primary-dark text-white text-xs font-bold rounded-xl shadow transition-all cursor-pointer">Mengerti</button>
               </div>
             </div>
