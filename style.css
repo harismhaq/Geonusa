@@ -78,12 +78,17 @@
   border-radius: 12px !important;
   box-shadow: 0 4px 20px rgba(0,0,0,0.12) !important;
   padding: 0 !important;
+  max-width: 320px !important; /* Batasi lebar maksimal pop-up agar pas di layar */
 }
 .leaflet-popup-content {
   margin: 0 !important;
   font-family: 'Inter', sans-serif !important;
-  font-size: 12px !important;
-  min-width: 220px;
+  font-size: 11px !important;
+  width: auto !important;
+  max-height: 250px !important;    /* Batasi tinggi pop-up agar bisa di-scroll */
+  overflow-y: auto !important;     /* Tambahkan scroll ke bawah jika data banyak */
+  overflow-x: hidden !important;
+  padding: 4px !important;
 }
 .leaflet-popup-tip {
   box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
