@@ -1,6 +1,6 @@
 /* ==========================================================================
    GeoNusa — WebGIS Geografi Nusantara
-   Application Logic (Full Features: Color & Opacity Editor for All Layers)
+   Application Logic (Full Features: SDA, Batas Wilayah, Transmigrasi, Kebencanaan)
    ==========================================================================*/
 
 let map;
@@ -39,6 +39,111 @@ const GEOPORTAL_SERVERS = [
   { id: 'mojokertokota', name: 'Geoportal Kota Mojokerto', url: 'https://geoportal.mojokertokota.go.id/geoserver/ows' },
   { id: 'bandungkota', name: 'Geoportal Kota Bandung', url: 'https://geodata.bandung.go.id/geoserver/ows' },
   { id: 'jogjakota', name: 'Geoportal Kota Yogyakarta', url: 'https://geoportal.jogjakota.go.id/geoserver/ows' }
+];
+
+// Daftar Sumber Daya Alam & Lingkungan (SIMONTANA & BIG)
+const SDA_LAYERS = [
+  { id: 'simontana_kh', name: 'Peta Kawasan Hutan', type: 'Layer', url: 'https://simontana.kehutanan.go.id/arcgis/rest/services/simontana/kh/MapServer/0' },
+  { id: 'simontana_gambut', name: 'Peta Gambut', type: 'Layer', url: 'https://simontana.kehutanan.go.id/arcgis/rest/services/simontana/gambut/MapServer/0' },
+  { id: 0, name: 'Peta Penutupan Lahan', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/0' },
+  { id: 1, name: 'Peta Air Tanah', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/1' },
+  { id: 2, name: 'Peta Ketersediaan Air', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/2' },
+  { id: 3, name: 'Penggunaan Tanah 10K', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/3' },
+  { id: 4, name: 'Penggunaan Tanah 25K', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/4' },
+  { id: 5, name: 'Penggunaan Tanah 50K', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/5' },
+  { id: 6, name: 'Peta Lahan Gambut', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/6' },
+  { id: 7, name: 'Peta Daerah Aliran Sungai', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/7' },
+  { id: 8, name: 'Peta Geologi', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/8' },
+  { id: 9, name: 'Peta Geologi Geostruktur', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/9' },
+  { id: 10, name: 'Peta Kawasan Rawan Bencana Gunung Api (Titik)', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/10' },
+  { id: 11, name: 'Peta Kawasan Rawan Bencana Gunung Api (Area)', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/11' },
+  { id: 12, name: 'Peta Kawasan Rawan Bencana Gempa Bumi', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/12' },
+  { id: 13, name: 'Peta Zona Kerentanan Gerakan Tanah', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/13' },
+  { id: 14, name: 'Peta Kawasan Rawan Bencana Tsunami', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/14' },
+  { id: 15, name: 'Peta Hidrogeologi Litogi Akuifer', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/15' },
+  { id: 16, name: 'Peta Hidrogeologi Produktivitas Akuifer', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/16' },
+  { id: 17, name: 'Peta Curah Hujan', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/17' },
+  { id: 18, name: 'Peta Hari Hujan', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/18' },
+  { id: 19, name: 'Peta Potensi Energi Angin', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/19' },
+  { id: 20, name: 'Peta Potensi Energi Matahari', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/20' },
+  { id: 21, name: 'Peta Wilayah Pengelolaan Perikanan RI', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/21' },
+  { id: 22, name: 'Peta Jenis dan Kekayaan Perikanan Tangkap WPPNRI', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/22' },
+  { id: 23, name: 'Peta Kawasan Bentang Alam Karst', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/23' },
+  { id: 24, name: 'Peta Sumber Daya Mineral Logam', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/24' },
+  { id: 25, name: 'Peta Sumber Daya Mineral Non Logam', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/25' },
+  { id: 26, name: 'Peta Sumber Daya Batubara', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/26' },
+  { id: 27, name: 'Peta Sumber Daya Panas Bumi', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/27' },
+  { id: 28, name: 'Peta Sistem Lahan Morfologi', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/28' },
+  { id: 29, name: 'Peta Morfometri Bentang Lahan', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/29' },
+  { id: 30, name: 'Potensi Desa', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/30' },
+  { id: 31, name: 'Peta Kawasan Cagar Budaya', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/31' },
+  { id: 32, name: 'Peta Sebaran Lokasi Cagar Budaya', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/32' },
+  { id: 33, name: 'Peta Zonasi Kawasan Konservasi', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/33' },
+  { id: 34, name: 'Peta zonasi kawasan konservasi - Blok Kawasan Konservasi - Skala 1:50.000', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/34' },
+  { id: 35, name: 'Peta Zonasi Kawasan Konservasi Perairan', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/35' },
+  { id: 36, name: 'Peta Lahan baku Sawah Nasional skala minimal 1:50.000', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/36' },
+  { id: 37, name: 'Peta Kesatuan Hidrologis Gambut', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/37' },
+  { id: 38, name: 'Peta Pemantauan Sampah Laut Skala', type: 'Group', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/38' },
+  { id: 39, name: 'Peta Pemantauan Sampah Laut P1', type: 'Sub-Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/39' },
+  { id: 40, name: 'Peta Pemantauan Sampah Laut P2', type: 'Sub-Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/40' },
+  { id: 41, name: 'Peta Terumbu Karang 1:50.000', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/41' },
+  { id: 42, name: 'Peta Cekungan Air Tanah minimal skala 1:250.000', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/42' },
+  { id: 43, name: 'Peta Kerentanan Likuifaksi skala 1:100.000', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/43' },
+  { id: 44, name: 'Peta Patahan Aktif Indonesia skala 1:50.000', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/44' },
+  { id: 45, name: 'Peta Neraca Sumber Daya Air Skala 1:50.000', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/45' },
+  { id: 46, name: 'Peta Kerentanan Pesisir skala 1:250.000 - 50.000', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/46' },
+  { id: 47, name: 'Peta Rawan Kebakaran Hutan dan Lahan skala 1: 250.000', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/47' },
+  { id: 48, name: 'Peta Fungsi Ekosistem Gambut Skala 1:50.000', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/48' },
+  { id: 49, name: 'Peta Lahan Kritis skala 1:50.000', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/49' },
+  { id: 50, name: 'Peta DDDTLH minimal skala 1:250.000', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/50' },
+  { id: 51, name: 'Peta Potensi Perikanan Budidaya skala 1:50.000', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/51' },
+  { id: 52, name: 'Peta lokasi Danau, Situ dan Embung skala 1:50.000', type: 'Group', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/52' },
+  { id: 53, name: 'Danau', type: 'Sub-Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/53' },
+  { id: 54, name: 'Embung', type: 'Sub-Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/54' },
+  { id: 55, name: 'Situ', type: 'Sub-Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/55' },
+  { id: 56, name: 'Peta Lahan Garam Skala 1:25.000', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/56' },
+  { id: 57, name: 'Peta Mangrove Skala 1:25.000', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/57' },
+  { id: 58, name: 'Peta Rawan Banjir Skala 1:50.000', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/58' },
+  { id: 59, name: 'Peta Lahan Sawah yang Dilindungi minimal skala 1:50.000', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/59' },
+  { id: 60, name: 'Peta Seismisitas Gempa Bumi skala 1:50.000 - 1:25.000', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/60' }
+];
+
+// Daftar 22 Layer Batas Wilayah (BIG)
+const BATAS_LAYERS = [
+  { id: 0, name: 'Peta Batas Administrasi Provinsi', type: 'Group / Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer/0' },
+  { id: 1, name: 'Peta Batas Administrasi Kabupaten/Kota (Garis)', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer/1' },
+  { id: 2, name: 'Peta Wilayah Administrasi Kabupaten/Kota (Area)', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer/2' },
+  { id: 3, name: 'Peta Wilayah Administrasi Kecamatan', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer/3' },
+  { id: 4, name: 'Peta Batas Administrasi Desa', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer/4' },
+  { id: 5, name: 'Peta Batas Darat Negara', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer/5' },
+  { id: 6, name: 'Peta Batas Laut Negara', type: 'Group', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer/6' },
+  { id: 7, name: 'Peta Batas Landas Kontinen', type: 'Sub-Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer/7' },
+  { id: 8, name: 'Peta Batas Laut MOU Fisheries', type: 'Sub-Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer/8' },
+  { id: 9, name: 'Peta Batas Teritorial', type: 'Sub-Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer/9' },
+  { id: 10, name: 'Peta Batas ZEE', type: 'Sub-Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer/10' },
+  { id: 11, name: 'Peta Garis Pangkal', type: 'Sub-Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer/11' },
+  { id: 12, name: 'Peta Zona Tambahan', type: 'Sub-Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer/12' },
+  { id: 13, name: 'Peta Sebaran Titik Dasar', type: 'Sub-Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer/13' },
+  { id: 14, name: 'Peta Sebaran Titik Perjanjian Maritim', type: 'Sub-Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer/14' },
+  { id: 15, name: 'Peta Wilayah Kerja dan Pengoperasian Pelabuhan Perikanan (Area)', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer/15' },
+  { id: 16, name: 'Peta Wilayah Kerja dan Pengoperasian Pelabuhan Perikanan (Titik)', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer/16' },
+  { id: 17, name: 'Peta Wilayah Adat di Perairan Laut', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer/17' },
+  { id: 18, name: 'Peta Wilayah Kerja dan Wilayah Penugasan Panas Bumi Indonesia skala 1:50.000', type: 'Group', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer/18' },
+  { id: 19, name: 'Wilayah Kerja Panas Bumi', type: 'Sub-Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer/19' },
+  { id: 20, name: 'Wilayah Penugasan Survei Pendahuluan dan Eksplorasi', type: 'Sub-Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer/20' },
+  { id: 21, name: 'Peta Batas Wilayah Administrasi Kewenangan Pengelolaan Sumberdaya Laut Provinsi Skala 1:250.000 - 1:25.000*', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer/21' }
+];
+
+// Daftar 8 Layer Kawasan Khusus & Transmigrasi (BIG)
+const TRANSMIGRASI_LAYERS = [
+  { id: 0, name: 'Peta Penetapan Kawasan Ekonomi Khusus', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/KAWASAN_KHUSUS_DAN_TRANSMIGRASI/MapServer/0' },
+  { id: 1, name: 'Peta Kawasan Perdagangan Bebas dan Pelabuhan Bebas', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/KAWASAN_KHUSUS_DAN_TRANSMIGRASI/MapServer/1' },
+  { id: 2, name: 'Peta Persebaran Lokasi Transmigrasi', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/KAWASAN_KHUSUS_DAN_TRANSMIGRASI/MapServer/2' },
+  { id: 3, name: 'Peta Persebaran Kawasan Transmigrasi', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/KAWASAN_KHUSUS_DAN_TRANSMIGRASI/MapServer/3' },
+  { id: 4, name: 'Peta Kawasan Industri Eksisting', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/KAWASAN_KHUSUS_DAN_TRANSMIGRASI/MapServer/4' },
+  { id: 5, name: 'Peta Kawasan Permukiman Kumuh skala 1:5.000', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/KAWASAN_KHUSUS_DAN_TRANSMIGRASI/MapServer/5' },
+  { id: 6, name: 'Peta Sebaran Kegiatan Industri skala 1:50.000', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/KAWASAN_KHUSUS_DAN_TRANSMIGRASI/MapServer/6' },
+  { id: 7, name: 'Peta Sebaran Objek Vital Nasional Skala 1:50.000', type: 'Layer', url: 'https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/KAWASAN_KHUSUS_DAN_TRANSMIGRASI/MapServer/7' }
 ];
 
 // Daftar 74 Layer Kebencanaan BNPB / InaRisk dari Excel
@@ -179,7 +284,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initMap();
     setTimeout(() => { hideSplashScreen(); }, 500);
     fetchAllGeoportalCollections();
-    renderPertanahanHubList();   
+    renderSdaHubList();       
+    renderBatasHubList();       
+    renderTransmigrasiHubList();
     renderKebencanaanHubList(); 
     if (window.lucide) lucide.createIcons();
   } catch (err) {
@@ -291,20 +398,26 @@ function changeBasemap(key) {
   });
 }
 
-// Fungsi Navigasi Tab Sidebar
+// Fungsi Navigasi Tab Sidebar (6 Tab)
 function switchSidebarTab(tab) {
   const geoDiv = document.getElementById('sidebar-geoportal');
-  const pertanahanDiv = document.getElementById('sidebar-pertanahan');
+  const sdaDiv = document.getElementById('sidebar-sda');
+  const batasDiv = document.getElementById('sidebar-batas');
+  const transDiv = document.getElementById('sidebar-transmigrasi');
   const bencanaDiv = document.getElementById('sidebar-kebencanaan');
   const toolDiv = document.getElementById('sidebar-tools');
   
   const tabGeo = document.getElementById('tab-geoportal');
-  const tabPertanahan = document.getElementById('tab-pertanahan');
+  const tabSda = document.getElementById('tab-sda');
+  const tabBatas = document.getElementById('tab-batas');
+  const tabTrans = document.getElementById('tab-transmigrasi');
   const tabBencana = document.getElementById('tab-kebencanaan');
   const tabTool = document.getElementById('tab-tools');
 
   if (geoDiv) geoDiv.classList.add('hidden');
-  if (pertanahanDiv) pertanahanDiv.classList.add('hidden');
+  if (sdaDiv) sdaDiv.classList.add('hidden');
+  if (batasDiv) batasDiv.classList.add('hidden');
+  if (transDiv) transDiv.classList.add('hidden');
   if (bencanaDiv) bencanaDiv.classList.add('hidden');
   if (toolDiv) toolDiv.classList.add('hidden');
 
@@ -312,16 +425,24 @@ function switchSidebarTab(tab) {
   const activeClass = "flex-1 py-2 font-semibold rounded-md text-primary bg-white shadow-sm transition-all flex flex-col items-center justify-center gap-0.5";
 
   if (tabGeo) tabGeo.className = inactiveClass;
-  if (tabPertanahan) tabPertanahan.className = inactiveClass;
+  if (tabSda) tabSda.className = inactiveClass;
+  if (tabBatas) tabBatas.className = inactiveClass;
+  if (tabTrans) tabTrans.className = inactiveClass;
   if (tabBencana) tabBencana.className = inactiveClass;
   if (tabTool) tabTool.className = inactiveClass;
 
   if (tab === 'geoportal') {
     if (geoDiv) geoDiv.classList.remove('hidden');
     if (tabGeo) tabGeo.className = activeClass;
-  } else if (tab === 'pertanahan') {
-    if (pertanahanDiv) pertanahanDiv.classList.remove('hidden');
-    if (tabPertanahan) tabPertanahan.className = activeClass;
+  } else if (tab === 'sda') {
+    if (sdaDiv) sdaDiv.classList.remove('hidden');
+    if (tabSda) tabSda.className = activeClass;
+  } else if (tab === 'batas') {
+    if (batasDiv) batasDiv.classList.remove('hidden');
+    if (tabBatas) tabBatas.className = activeClass;
+  } else if (tab === 'transmigrasi') {
+    if (transDiv) transDiv.classList.remove('hidden');
+    if (tabTrans) tabTrans.className = activeClass;
   } else if (tab === 'kebencanaan') {
     if (bencanaDiv) bencanaDiv.classList.remove('hidden');
     if (tabBencana) tabBencana.className = activeClass;
@@ -331,31 +452,100 @@ function switchSidebarTab(tab) {
   }
 }
 
-// Render Daftar Pertanahan Hub
-function renderPertanahanHubList() {
-  const container = document.getElementById('pertanahan-hub-tree');
+// Render Daftar SDA & Lingkungan
+function renderSdaHubList() {
+  const container = document.getElementById('sda-hub-tree');
   if (!container) return;
 
-  const layers = [
-    { id: 'geologi', name: 'Peta Geologi', type: 'geologi' },
-    { id: 'gambut', name: 'Peta Lahan Gambut', type: 'gambut' },
-    { id: 'kawasan_hutan', name: 'Kawasan Hutan (ESDM)', type: 'kawasan_hutan' },
-    { id: 'pippib', name: 'Peta PIPPIB', type: 'pippib' },
-    { id: 'sawah_dilindungi', name: 'Peta Sawah Dilindungi', type: 'sawah_dilindungi' }
-  ];
-
-  container.innerHTML = layers.map(l => `
-    <label class="layer-item flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-slate-50 cursor-pointer transition-all">
-      <input type="checkbox" data-hub-key="pertanahan_${l.type}" onchange="toggleHubLayer('pertanahan', '${l.type}', this.checked)" class="w-4 h-4 accent-primary rounded cursor-pointer" />
-      <i data-lucide="map" class="w-3.5 h-3.5 text-primary shrink-0"></i>
-      <span class="text-xs font-medium text-slate-700">${escapeBMKGHTML(l.name)}</span>
-    </label>
-  `).join('');
+  container.innerHTML = `
+    <div class="px-1 pb-2">
+      <input type="text" placeholder="Cari layer SDA & Lingkungan..." class="w-full px-3 py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary/30 outline-none transition-all" oninput="filterSdaLayers(this.value)" />
+    </div>
+    <div id="sda-layers-list" class="space-y-1 px-1">
+      ${SDA_LAYERS.map(l => `
+        <label class="sda-layer-item flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-slate-50 cursor-pointer transition-all" title="${escapeBMKGHTML(l.name)}">
+          <input type="checkbox" data-hub-key="sda_${l.id}" onchange="toggleHubLayer('sda', '${l.id}', this.checked)" class="w-4 h-4 accent-primary rounded cursor-pointer shrink-0" />
+          <i data-lucide="trees" class="w-3.5 h-3.5 text-primary shrink-0"></i>
+          <span class="text-xs font-medium text-slate-700 truncate flex-1">${escapeBMKGHTML(l.name)}</span>
+          <span class="text-[9px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded shrink-0">${escapeBMKGHTML(l.type)}</span>
+        </label>
+      `).join('')}
+    </div>
+  `;
 
   if (window.lucide) lucide.createIcons();
 }
 
-// Render Daftar Kebencanaan Hub (74 Layer BNPB)
+function filterSdaLayers(query) {
+  const q = query.toLowerCase().trim();
+  document.querySelectorAll('.sda-layer-item').forEach(item => {
+    item.style.display = item.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+// Render Daftar Batas Wilayah (22 Layer)
+function renderBatasHubList() {
+  const container = document.getElementById('batas-hub-tree');
+  if (!container) return;
+
+  container.innerHTML = `
+    <div class="px-1 pb-2">
+      <input type="text" placeholder="Cari layer batas wilayah..." class="w-full px-3 py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary/30 outline-none transition-all" oninput="filterBatasLayers(this.value)" />
+    </div>
+    <div id="batas-layers-list" class="space-y-1 px-1">
+      ${BATAS_LAYERS.map(l => `
+        <label class="batas-layer-item flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-slate-50 cursor-pointer transition-all" title="${escapeBMKGHTML(l.name)}">
+          <input type="checkbox" data-hub-key="batas_${l.id}" onchange="toggleHubLayer('batas', '${l.id}', this.checked)" class="w-4 h-4 accent-primary rounded cursor-pointer shrink-0" />
+          <i data-lucide="map" class="w-3.5 h-3.5 text-primary shrink-0"></i>
+          <span class="text-xs font-medium text-slate-700 truncate flex-1">${escapeBMKGHTML(l.name)}</span>
+          <span class="text-[9px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded shrink-0">${escapeBMKGHTML(l.type)}</span>
+        </label>
+      `).join('')}
+    </div>
+  `;
+
+  if (window.lucide) lucide.createIcons();
+}
+
+function filterBatasLayers(query) {
+  const q = query.toLowerCase().trim();
+  document.querySelectorAll('.batas-layer-item').forEach(item => {
+    item.style.display = item.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+// Render Daftar Kawasan Khusus & Transmigrasi (8 Layer)
+function renderTransmigrasiHubList() {
+  const container = document.getElementById('transmigrasi-hub-tree');
+  if (!container) return;
+
+  container.innerHTML = `
+    <div class="px-1 pb-2">
+      <input type="text" placeholder="Cari layer kawasan khusus..." class="w-full px-3 py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary/30 outline-none transition-all" oninput="filterTransLayers(this.value)" />
+    </div>
+    <div id="trans-layers-list" class="space-y-1 px-1">
+      ${TRANSMIGRASI_LAYERS.map(l => `
+        <label class="trans-layer-item flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-slate-50 cursor-pointer transition-all" title="${escapeBMKGHTML(l.name)}">
+          <input type="checkbox" data-hub-key="transmigrasi_${l.id}" onchange="toggleHubLayer('transmigrasi', '${l.id}', this.checked)" class="w-4 h-4 accent-primary rounded cursor-pointer shrink-0" />
+          <i data-lucide="home" class="w-3.5 h-3.5 text-primary shrink-0"></i>
+          <span class="text-xs font-medium text-slate-700 truncate flex-1">${escapeBMKGHTML(l.name)}</span>
+          <span class="text-[9px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded shrink-0">${escapeBMKGHTML(l.type)}</span>
+        </label>
+      `).join('')}
+    </div>
+  `;
+
+  if (window.lucide) lucide.createIcons();
+}
+
+function filterTransLayers(query) {
+  const q = query.toLowerCase().trim();
+  document.querySelectorAll('.trans-layer-item').forEach(item => {
+    item.style.display = item.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+// Render Daftar Kebencanaan Hub
 function renderKebencanaanHubList() {
   const container = document.getElementById('kebencanaan-hub-tree');
   if (!container) return;
@@ -381,25 +571,35 @@ function toggleHubLayer(category, typeOrId, visible) {
     let mapServerUrl = "";
     let subLayerIndex = "show:0";
     let layerDisplayName = "";
+    let isDirectLayerUrl = false;
+    let directFullUrl = "";
 
-    if (category === 'pertanahan') {
-      if (typeOrId === 'geologi') {
-        mapServerUrl = "https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer";
-        subLayerIndex = "show:8";
-        layerDisplayName = "Peta Geologi";
-      } else if (typeOrId === 'gambut') {
-        mapServerUrl = "https://simontana.kehutanan.go.id/arcgis/rest/services/simontana/gambut/MapServer";
-        layerDisplayName = "Peta Lahan Gambut";
-      } else if (typeOrId === 'kawasan_hutan') {
-        mapServerUrl = "https://geoportal.esdm.go.id/gis1/rest/services/Kawasan_Hutan/MapServer";
-        layerDisplayName = "Kawasan Hutan (ESDM)";
-      } else if (typeOrId === 'pippib') {
-        mapServerUrl = "https://simontana.kehutanan.go.id/arcgis/rest/services/PIPPIB/PIPPIB_Tahun_2023_Periode_I/MapServer";
-        layerDisplayName = "Peta PIPPIB";
-      } else if (typeOrId === 'sawah_dilindungi') {
-        mapServerUrl = "https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer";
-        subLayerIndex = "show:59";
-        layerDisplayName = "Peta Sawah Dilindungi";
+    if (category === 'sda') {
+      const found = SDA_LAYERS.find(l => String(l.id) === String(typeOrId));
+      if (found) {
+        layerDisplayName = found.name;
+        if (String(typeOrId).startsWith('simontana_')) {
+          isDirectLayerUrl = true;
+          directFullUrl = found.url;
+          mapServerUrl = found.url.replace(/\/\d+$/, '');
+        } else {
+          mapServerUrl = "https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer";
+          subLayerIndex = `show:${found.id}`;
+        }
+      }
+    } else if (category === 'batas') {
+      const found = BATAS_LAYERS.find(l => String(l.id) === String(typeOrId));
+      if (found) {
+        mapServerUrl = "https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer";
+        subLayerIndex = `show:${found.id}`;
+        layerDisplayName = found.name;
+      }
+    } else if (category === 'transmigrasi') {
+      const found = TRANSMIGRASI_LAYERS.find(l => String(l.id) === String(typeOrId));
+      if (found) {
+        mapServerUrl = "https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/KAWASAN_KHUSUS_DAN_TRANSMIGRASI/MapServer";
+        subLayerIndex = `show:${found.id}`;
+        layerDisplayName = found.name;
       }
     } else if (category === 'bencana') {
       const found = KEBENCANAAN_LAYERS.find(b => b.id === typeOrId);
@@ -409,20 +609,20 @@ function toggleHubLayer(category, typeOrId, visible) {
       }
     }
 
-    if (!mapServerUrl) return;
+    if (!mapServerUrl && !directFullUrl) return;
 
     let layerKey = `${category}_${typeOrId}`;
     hubLayerNames.set(layerKey, layerDisplayName);
     
-    // Default warna & opasitas
     if (!layerColors.has(layerKey)) layerColors.set(layerKey, '#008bb0');
     if (!layerOpacities.has(layerKey)) layerOpacities.set(layerKey, 0.8);
 
     let targetLayer = hubLayersMap.get(layerKey);
 
     if (!targetLayer) {
-      targetLayer = L.tileLayer(`${mapServerUrl}/tile/{z}/{y}/{x}`, {
-        attribution: '&copy; InaRisk BNPB / BIG / KLHK',
+      const tileBaseUrl = isDirectLayerUrl ? directFullUrl : mapServerUrl;
+      targetLayer = L.tileLayer(`${tileBaseUrl}/tile/{z}/{y}/{x}`, {
+        attribution: '&copy; SIMONTANA / BIG / InaRisk',
         maxZoom: 18,
         transparent: true,
         opacity: layerOpacities.get(layerKey)
@@ -433,6 +633,10 @@ function toggleHubLayer(category, typeOrId, visible) {
         const min = map.unproject(coords.multiplyBy(tileSize), zoom);
         const max = map.unproject(coords.multiplyBy(tileSize).add([tileSize, tileSize]), zoom);
         const bbox = `${min.lng},${min.lat},${max.lng},${max.lat}`;
+        
+        if (isDirectLayerUrl) {
+          return `${directFullUrl}/export?bbox=${bbox}&bboxSR=4326&imageSR=4326&size=256,256&f=image&format=png32&transparent=true`;
+        }
         return `${mapServerUrl}/export?bbox=${bbox}&bboxSR=4326&imageSR=4326&size=256,256&f=image&format=png32&transparent=true&layers=${subLayerIndex}`;
       };
       hubLayersMap.set(layerKey, targetLayer);
@@ -443,6 +647,7 @@ function toggleHubLayer(category, typeOrId, visible) {
       if (!activeLayerKeysOrder.includes(layerKey)) {
         activeLayerKeysOrder.unshift(layerKey);
       }
+      reorderMapLayers();
       showToast("Layer berhasil diaktifkan!");
     } else {
       if (map.hasLayer(targetLayer)) map.removeLayer(targetLayer);
@@ -662,23 +867,13 @@ async function toggleGeoportalLayer(layerName, visible, wmsUrl, serverId) {
 }
 
 function reorderMapLayers() {
-  const total = activeLayerKeysOrder.length;
-  
-  // Urutkan dari elemen paling bawah ke paling atas agar lapisan teratas memiliki z-index tertinggi
   [...activeLayerKeysOrder].reverse().forEach((cacheKey, index) => {
     const layer = geoportalLayers.get(cacheKey) || hubLayersMap.get(cacheKey);
     if (layer && map.hasLayer(layer)) {
-      // Berikan nilai z-index berjenjang secara otomatis
       const zIndexVal = 500 + index * 10;
-      
-      if (typeof layer.setZIndex === 'function') {
-        layer.setZIndex(zIndexVal);
-      }
-      
+      if (typeof layer.setZIndex === 'function') layer.setZIndex(zIndexVal);
       if (typeof layer.bringToFront === 'function') {
-        try {
-          layer.bringToFront();
-        } catch (e) {}
+        try { layer.bringToFront(); } catch (e) {}
       }
     }
   });
@@ -738,9 +933,7 @@ function applyLayerStyle(cacheKey) {
   }
 
   if (hubLayer) {
-    if (typeof hubLayer.setOpacity === 'function') {
-      hubLayer.setOpacity(opacity);
-    }
+    if (typeof hubLayer.setOpacity === 'function') hubLayer.setOpacity(opacity);
   }
 }
 
@@ -751,7 +944,7 @@ function filterLayers(query) {
   });
 }
 
-function updateLegendEditor() {
+async function updateLegendEditor() {
   const container = document.getElementById('legend-editor-list');
   const floatingLegend = document.getElementById('floating-legend');
   const floatingContent = document.getElementById('floating-legend-content');
@@ -767,7 +960,10 @@ function updateLegendEditor() {
     } else {
       container.innerHTML = activeEntries.map((cacheKey, idx) => {
         let cleanName = "";
-        if (cacheKey.includes('::')) {
+        let isGeoportal = cacheKey.includes('::');
+        let isMagelang = cacheKey.includes('magelangkab.go.id');
+
+        if (isGeoportal) {
           const [, layerName] = cacheKey.split('::');
           cleanName = resolveGeoportalLayerName(layerName);
         } else {
@@ -776,6 +972,9 @@ function updateLegendEditor() {
 
         const activeColor = layerColors.get(cacheKey) || '#008bb0';
         const activeOpacity = layerOpacities.has(cacheKey) ? layerOpacities.get(cacheKey) : 0.8;
+        const rgbaColor = hexToRgba(activeColor, activeOpacity);
+        
+        const isColorBoxOnly = (isGeoportal && !isMagelang) || cacheKey.startsWith('user_');
 
         return `
           <div class="p-2.5 bg-white rounded-lg border border-slate-200 text-xs shadow-sm space-y-2">
@@ -784,18 +983,28 @@ function updateLegendEditor() {
               <div class="flex items-center gap-1 shrink-0">
                 <button onclick="moveLayerOrder(${idx}, -1)" ${idx === 0 ? 'disabled class="opacity-30"' : ''}><i data-lucide="chevron-up" class="w-4 h-4"></i></button>
                 <button onclick="moveLayerOrder(${idx}, 1)" ${idx === activeEntries.length - 1 ? 'disabled class="opacity-30"' : ''}><i data-lucide="chevron-down" class="w-4 h-4"></i></button>
-                <button onclick="removeActiveLayerCustom('${cacheKey}')" class="text-rose-500 hover:text-rose-700 ml-1"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
+                <button onclick="removeActiveLayerCustom('${cacheKey}')"><i data-lucide="x" class="w-3.5 h-3.5 text-rose-500"></i></button>
               </div>
             </div>
-            <div class="grid grid-cols-2 gap-2 bg-slate-50 p-2 rounded-md border border-slate-100 text-[10px]">
-              <div class="flex items-center justify-between">
-                <span>Warna:</span>
-                <input type="color" value="${activeColor}" oninput="changeLayerColor('${cacheKey}', this.value)" class="w-6 h-6 rounded cursor-pointer border-0 bg-transparent" />
+            ${isColorBoxOnly ? `
+              <div class="grid grid-cols-2 gap-2 bg-slate-50 p-2 rounded-md border border-slate-100 text-[10px]">
+                <div class="flex items-center justify-between">
+                  <span>Warna:</span>
+                  <input type="color" value="${activeColor}" oninput="changeLayerColor('${cacheKey}', this.value)" class="w-6 h-6 rounded cursor-pointer border-0 bg-transparent" />
+                </div>
+                <div class="flex items-center justify-between gap-1">
+                  <span>Opasitas:</span>
+                  <input type="range" min="0" max="1" step="0.01" value="${activeOpacity}" oninput="changeLayerOpacity('${cacheKey}', this.value)" class="w-16 h-1.5 accent-primary cursor-pointer" />
+                </div>
               </div>
-              <div class="flex items-center justify-between gap-1">
-                <span>Opasitas:</span>
-                <input type="range" min="0" max="1" step="0.01" value="${activeOpacity}" oninput="changeLayerOpacity('${cacheKey}', this.value)" class="w-16 h-1.5 accent-primary cursor-pointer" />
-              </div>
+            ` : ''}
+            <div id="legend_meta_${CSS.escape(cacheKey)}" class="text-[10px] text-slate-500 pt-1 border-t border-slate-100">
+              ${isColorBoxOnly ? `
+                <div class="flex items-center gap-2 mt-1">
+                  <span data-legend-box="${escapeBMKGHTML(cacheKey)}" class="w-4 h-4 rounded border shadow-sm inline-block shrink-0" style="background-color: ${rgbaColor}; border-color: ${activeColor};"></span>
+                  <span class="text-[10px] text-slate-600 font-medium">Simbol Peta</span>
+                </div>
+              ` : '<span class="italic text-slate-400">Memuat legenda asli...</span>'}
             </div>
           </div>
         `;
@@ -810,7 +1019,10 @@ function updateLegendEditor() {
       floatingLegend.classList.remove('hidden');
       floatingContent.innerHTML = activeEntries.map((cacheKey) => {
         let cleanName = "";
-        if (cacheKey.includes('::')) {
+        let isGeoportal = cacheKey.includes('::');
+        let isMagelang = cacheKey.includes('magelangkab.go.id');
+
+        if (isGeoportal) {
           const [, layerName] = cacheKey.split('::');
           cleanName = resolveGeoportalLayerName(layerName);
         } else {
@@ -820,17 +1032,16 @@ function updateLegendEditor() {
         const activeColor = layerColors.get(cacheKey) || '#008bb0';
         const activeOpacity = layerOpacities.has(cacheKey) ? layerOpacities.get(cacheKey) : 0.8;
         const rgbaColor = hexToRgba(activeColor, activeOpacity);
+        const isColorBoxOnly = (isGeoportal && !isMagelang) || cacheKey.startsWith('user_');
 
         return `
           <div class="space-y-1.5 py-1">
             <div class="font-semibold text-slate-800 text-[11px] truncate">${escapeBMKGHTML(cleanName)}</div>
-            <div class="flex items-center justify-between gap-2 px-1">
-              <div class="flex items-center gap-2">
-                <span data-legend-box="${escapeBMKGHTML(cacheKey)}" class="w-4 h-4 rounded border shadow-sm inline-block" style="background-color: ${rgbaColor}; border-color: ${activeColor};"></span>
-                <span class="text-[10px]">Aktif</span>
+            ${isColorBoxOnly ? `
+              <div class="flex items-center gap-1.5 px-1 pt-0.5">
+                <span data-legend-box="${escapeBMKGHTML(cacheKey)}" class="w-4 h-4 rounded border shadow-sm inline-block shrink-0" style="background-color: ${rgbaColor}; border-color: ${activeColor};"></span>
               </div>
-              <input type="color" value="${activeColor}" oninput="changeLayerColor('${cacheKey}', this.value)" class="w-5 h-5 rounded cursor-pointer border-0 bg-transparent" />
-            </div>
+            ` : `<div id="floating_legend_meta_${CSS.escape(cacheKey)}" class="text-[10px] text-slate-500">Memuat simbol...</div>`}
           </div>
         `;
       }).join('<hr class="my-1.5 border-gray-100" />');
@@ -838,13 +1049,118 @@ function updateLegendEditor() {
   }
 
   if (window.lucide) lucide.createIcons();
+
+  // Ambil legenda asli
+  activeEntries.forEach(async (cacheKey) => {
+    let targetUrl = "";
+    let layerNameParam = "";
+    let isGeoportal = cacheKey.includes('::');
+    let isMagelang = cacheKey.includes('magelangkab.go.id');
+
+    if (isGeoportal && isMagelang) {
+      const parts = cacheKey.split('::');
+      targetUrl = parts[0];
+      layerNameParam = parts[1];
+    } else if (cacheKey.startsWith('sda_')) {
+      const sId = cacheKey.replace('sda_', '');
+      const found = SDA_LAYERS.find(l => String(l.id) === String(sId));
+      if (found) targetUrl = found.url.replace(/\/\d+$/, '');
+    } else if (cacheKey.startsWith('batas_')) {
+      const bId = cacheKey.replace('batas_', '');
+      const found = BATAS_LAYERS.find(l => String(l.id) === String(bId));
+      if (found) targetUrl = found.url.replace(/\/\d+$/, '');
+    } else if (cacheKey.startsWith('transmigrasi_')) {
+      const tId = cacheKey.replace('transmigrasi_', '');
+      const found = TRANSMIGRASI_LAYERS.find(l => String(l.id) === String(tId));
+      if (found) targetUrl = found.url.replace(/\/\d+$/, '');
+    } else if (cacheKey.startsWith('bencana_')) {
+      const bId = cacheKey.replace('bencana_', '');
+      const found = KEBENCANAAN_LAYERS.find(b => b.id === bId);
+      if (found) targetUrl = found.url;
+    }
+
+    const metaEl = document.getElementById(`legend_meta_${CSS.escape(cacheKey)}`);
+    const floatMetaEl = document.getElementById(`floating_legend_meta_${CSS.escape(cacheKey)}`);
+
+    if (isMagelang && targetUrl) {
+      const cleanBase = targetUrl.split('?')[0];
+      const legendUrl = `${cleanBase}?service=WMS&version=1.1.1&request=GetLegendGraphic&format=image/png&layer=${encodeURIComponent(layerNameParam)}`;
+      
+      const wmsLegendHTML = `
+        <div class="mt-1">
+          <img src="${legendUrl}" alt="Legenda" class="max-w-full h-auto object-contain border border-slate-200 rounded bg-white p-1" onerror="this.parentElement.innerHTML='<span class=\\'text-slate-400 italic\\'>Legenda standar server.</span>';" />
+        </div>
+      `;
+      if (metaEl) metaEl.innerHTML = wmsLegendHTML;
+      if (floatMetaEl) floatMetaEl.innerHTML = wmsLegendHTML;
+
+    } else if (targetUrl && !isGeoportal) {
+      try {
+        let specificLayerId = null;
+        let legendFetchUrl = `${targetUrl}/legend?f=json`;
+
+        if (cacheKey.startsWith('sda_')) {
+          const sId = cacheKey.replace('sda_', '');
+          if (sId.startsWith('simontana_')) {
+            const found = SDA_LAYERS.find(l => l.id === sId);
+            if (found) legendFetchUrl = `${found.url}/legend?f=json`;
+          } else {
+            specificLayerId = sId;
+          }
+        } else if (cacheKey.startsWith('batas_')) {
+          specificLayerId = cacheKey.replace('batas_', '');
+        } else if (cacheKey.startsWith('transmigrasi_')) {
+          specificLayerId = cacheKey.replace('transmigrasi_', '');
+        }
+
+        const res = await fetch(legendFetchUrl, { signal: AbortSignal.timeout(5000) });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.layers) {
+            const filteredLayers = specificLayerId !== null 
+              ? data.layers.filter(lyr => String(lyr.layerId) === String(specificLayerId))
+              : data.layers;
+
+            let legendHTML = '<div class="space-y-1 mt-1 max-h-40 overflow-y-auto custom-scrollbar pr-1">';
+            
+            filteredLayers.forEach(lyr => {
+              if (lyr.layerName && specificLayerId === null) {
+                legendHTML += `<div class="font-bold text-[10px] text-slate-700 mt-1 pb-0.5 border-b border-gray-100">${escapeBMKGHTML(lyr.layerName)}</div>`;
+              }
+              if (lyr.legend && lyr.legend.length > 0) {
+                lyr.legend.forEach(item => {
+                  const imgSrc = item.imageData ? `data:${item.contentType};base64,${item.imageData}` : '';
+                  legendHTML += `
+                    <div class="flex items-center gap-2 py-0.5">
+                      ${imgSrc ? `<img src="${imgSrc}" class="w-4 h-4 object-contain shrink-0 border border-slate-200 rounded bg-white" />` : ''}
+                      <span class="text-[10px] text-slate-700 leading-tight">${escapeBMKGHTML(item.label || lyr.layerName)}</span>
+                    </div>
+                  `;
+                });
+              }
+            });
+            legendHTML += '</div>';
+
+            if (filteredLayers.length > 0) {
+              if (metaEl) metaEl.innerHTML = legendHTML;
+              if (floatMetaEl) floatMetaEl.innerHTML = legendHTML;
+            } else {
+              if (metaEl) metaEl.innerHTML = '<span class="text-slate-400 italic">Legenda tidak tersedia untuk layer ini.</span>';
+              if (floatMetaEl) floatMetaEl.innerHTML = '<span class="text-slate-400 italic">Legenda tidak tersedia.</span>';
+            }
+          }
+        }
+      } catch (e) {
+        if (metaEl) metaEl.innerHTML = '<span class="text-slate-400 italic">Gagal memuat legenda.</span>';
+        if (floatMetaEl) floatMetaEl.innerHTML = '<span class="text-slate-400 italic">Gagal memuat legenda.</span>';
+      }
+    }
+  });
 }
 
 function removeActiveLayerCustom(cacheKey) {
   const layer = geoportalLayers.get(cacheKey) || hubLayersMap.get(cacheKey);
-  if (layer) {
-    map.removeLayer(layer);
-  }
+  if (layer) map.removeLayer(layer);
   activeLayerKeysOrder = activeLayerKeysOrder.filter(k => k !== cacheKey);
   
   if (cacheKey.includes('::')) {
