@@ -213,7 +213,7 @@
           </div>
         </div>
 
-        <!-- TOMBOL CLOSE MENU UTAMA (SVG Langsung agar pasti muncul di Mobile) -->
+        <!-- TOMBOL CLOSE MENU UTAMA (KHUSUS MOBILE) -->
         <button onclick="toggleSidebar()" class="sm:hidden w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors cursor-pointer" aria-label="Tutup Menu">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
@@ -312,7 +312,7 @@
         </div>
       </div>
 
-      <!-- Tombol Toggle Sidebar Desktop (Menempel di pinggir sidebar) -->
+      <!-- Tombol Toggle Sidebar Desktop -->
       <button id="sidebar-toggle" onclick="toggleSidebar()" class="hidden sm:flex absolute -right-8 top-1/2 -translate-y-1/2 py-5 px-2 bg-white hover:bg-slate-50 border border-slate-200 border-l-0 rounded-r-2xl shadow-xl flex-col items-center justify-center gap-2 transition-all duration-300 z-[950] group cursor-pointer" title="Toggle Sidebar">
         <i id="sidebar-toggle-icon" data-lucide="chevron-right" class="w-5 h-5 text-slate-600 group-hover:text-primary transition-transform duration-300"></i>
         <span id="sidebar-toggle-text" class="[writing-mode:vertical-lr] rotate-180 uppercase text-[9px] font-bold italic tracking-wider text-slate-600 group-hover:text-primary transition-colors">Buka Menu</span>
@@ -321,8 +321,8 @@
 
     <!-- =============== MAP AREA =============== -->
     <main class="flex-1 relative">
-      <!-- TOMBOL BUKA MENU MENGAMBANG HANYA UNTUK MOBILE (Perbaikan agar tidak muncul ganda di PC) -->
-      <button id="mobile-menu-btn" onclick="toggleSidebar()" class="hidden absolute top-3 left-3 z-[850] bg-white hover:bg-slate-50 px-3.5 py-2.5 rounded-2xl shadow-lg border border-sky-100 items-center gap-2 text-xs font-bold italic text-slate-700">
+      <!-- TOMBOL BUKA MENU MENGAMBANG KHUSUS MOBILE (Menggunakan kelas 'flex sm:hidden' agar murni tampil di HP saja) -->
+      <button id="mobile-menu-btn" onclick="toggleSidebar()" class="flex sm:hidden absolute top-3 left-3 z-[850] bg-white hover:bg-slate-50 px-3.5 py-2.5 rounded-2xl shadow-lg border border-sky-100 items-center gap-2 text-xs font-bold italic text-slate-700 shadow-primary/10">
         <i data-lucide="chevron-right" class="w-4 h-4 text-primary"></i>
         <span>Buka Menu</span>
       </button>
@@ -505,8 +505,8 @@
           }
         }
 
-        // Tampilkan/sembunyikan tombol buka menu khusus mobile di pojok kiri atas peta
-        if (mobileMenuBtn) {
+        // Atur kemunculan tombol mobile khusus layar di bawah 640px (HP)
+        if (mobileMenuBtn && window.innerWidth < 640) {
           mobileMenuBtn.style.display = isCollapsed ? "flex" : "none";
         }
       }
