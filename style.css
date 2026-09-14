@@ -78,15 +78,15 @@
   border-radius: 12px !important;
   box-shadow: 0 4px 20px rgba(0,0,0,0.12) !important;
   padding: 0 !important;
-  max-width: 320px !important; /* Batasi lebar maksimal pop-up agar pas di layar */
+  max-width: 320px !important;
 }
 .leaflet-popup-content {
   margin: 0 !important;
   font-family: 'Inter', sans-serif !important;
   font-size: 11px !important;
   width: auto !important;
-  max-height: 250px !important;    /* Batasi tinggi pop-up agar bisa di-scroll */
-  overflow-y: auto !important;     /* Tambahkan scroll ke bawah jika data banyak */
+  max-height: 250px !important;
+  overflow-y: auto !important;
   overflow-x: hidden !important;
   padding: 4px !important;
 }
@@ -125,30 +125,165 @@
   word-break: break-word;
 }
 
-/* Sidebar collapsed state */
-.sidebar-panel.collapsed {
-  width: 0 !important;
-  min-width: 0 !important;
-  overflow: visible !important;
-  border-right: none;
-}
-.sidebar-panel.collapsed > *:not(#sidebar-toggle) {
-  opacity: 0;
-  pointer-events: none;
-}
-.sidebar-panel.collapsed #sidebar-toggle {
-  right: -24px;
+/* ============================================================
+   Floating Glossy Sidebar Panel (Transparent White Glassmorphism)
+   ============================================================ */
+:root {
+  --sidebar-width: 390px;
 }
 
+.sidebar-panel {
+  position: absolute !important;
+  top: 14px !important;
+  left: 14px !important;
+  bottom: 14px !important;
+  width: var(--sidebar-width, 390px) !important;
+  min-width: 240px !important;
+  max-width: min(850px, calc(100vw - 28px)) !important;
+  overflow: visible !important;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), width 0.15s ease-out !important;
+  z-index: 900 !important;
+}
+
+.sidebar-panel.is-resizing {
+  transition: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+/* Handle Drag Resizing di Tepi Kanan Sidebar */
+.sidebar-resizer {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  right: -6px;
+  width: 14px;
+  cursor: col-resize;
+  z-index: 960;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+}
+
+.sidebar-resizer::after {
+  content: '';
+  width: 3.5px;
+  height: 42px;
+  background: rgba(148, 163, 184, 0.4);
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+}
+
+.sidebar-resizer:hover::after,
+.sidebar-panel.is-resizing .sidebar-resizer::after {
+  height: 72px;
+  background: #0284c7;
+  box-shadow: 0 0 10px rgba(2, 132, 199, 0.7);
+}
+
+/* Wadah Kaca Utama Transparan */
+.sidebar-inner {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 24px !important;
+  background: rgba(255, 255, 255, 0.60) !important;
+  backdrop-filter: blur(20px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.75) !important;
+  box-shadow: 
+    0 20px 50px -10px rgba(15, 23, 42, 0.16),
+    0 0 0 1px rgba(255, 255, 255, 0.7) inset,
+    0 2px 6px rgba(0, 0, 0, 0.04) !important;
+  overflow: hidden !important;
+  transition: opacity 0.3s ease !important;
+  position: relative !important;
+}
+
+/* Kilauan Pantulan Cahaya (Glossy Sheen) di Tepi Atas */
+.sidebar-inner::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 100%);
+  pointer-events: none;
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+}
+
+/* Tombol Handle Buka/Tutup di Samping Kanan Sidebar */
+#sidebar-toggle {
+  position: absolute !important;
+  right: -34px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  border-left: none !important;
+  border-radius: 0 16px 16px 0 !important;
+  box-shadow: 4px 6px 18px rgba(0, 0, 0, 0.12) !important;
+  cursor: pointer !important;
+  z-index: 950 !important;
+  transition: all 0.25s ease !important;
+}
+
+#sidebar-toggle:hover {
+  background: rgba(255, 255, 255, 1) !important;
+  transform: translateY(-50%) scale(1.05) !important;
+}
+
+/* Sidebar collapsed state: bergeser ke kiri */
+.sidebar-panel.collapsed {
+  transform: translateX(calc(-100% - 14px)) !important;
+}
+
+.sidebar-panel.collapsed .sidebar-inner {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* ATURAN KHUSUS MOBILE (HP) */
 @media (max-width: 640px) {
-  .sidebar-panel:not(.collapsed) {
-    position: absolute;
-    height: 100%;
-    z-index: 999;
-    width: 100% !important;
+  /* Pengaturan ukuran dan posisi sidebar khusus mobile */
+  .sidebar-panel {
+    top: 10px !important;
+    left: 10px !important;
+    bottom: 10px !important;
+    width: 270px !important;
+    max-width: 270px !important;
+    height: calc(100vh - 20px) !important;
+    max-height: none !important;
+  }
+  .sidebar-inner {
+    border-radius: 20px !important;
+  }
+  #sidebar-toggle {
+    display: none !important;
+  }
+
+  /* Memposisikan seluruh widget waktu/harian (AirVisual, Satelit Harian, & BMKG) ke tengah bawah */
+  #airvisual-floating-time-widget,
+  #daily-floating-time-widget,
+  #bmkg-floating-time-widget,
+  .airvisual-control-container, 
+  div[id*="airvisual"], 
+  .leaflet-control-time-slider {
+    position: fixed !important;
+    left: 50% !important;
+    bottom: 12px !important;
+    transform: translateX(-50%) !important;
+    width: 220px !important;
+    max-width: 220px !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+    z-index: 950 !important;
   }
 }
-
 /* Layer tree styling */
 .layer-folder {
   margin-bottom: 2px;
@@ -286,3 +421,96 @@
   from { opacity: 1; transform: translateX(-50%) translateY(0); }
   to { opacity: 0; transform: translateX(-50%) translateY(20px); }
 }
+``` [cite: 2]
+
+---
+
+### 2. File `airvisual-layer_2.js` (Bagian fungsi `showAirVisualFloatingWidget`) [cite: 3]
+```javascript
+function showAirVisualFloatingWidget(layerTitle) {
+    let existing = document.getElementById('airvisual-floating-time-widget');
+    if (existing) existing.remove();
+
+    var widget = document.createElement('div');
+    widget.id = 'airvisual-floating-time-widget';
+    widget.className = 'absolute bottom-6 left-1/2 -translate-x-1/2 z-[850] bg-white/90 backdrop-blur-md px-4 py-3 rounded-2xl shadow-2xl border border-white/80 flex flex-col items-center gap-2 w-72 sm:w-80 animate-fade-in select-none';
+    widget.innerHTML = `
+      <div class="text-[11px] font-bold text-slate-700 tracking-wide">${layerTitle}</div>
+      <div class="flex items-center justify-between w-full gap-2">
+        <button id="airvisual-prev-btn" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-primary hover:text-white flex items-center justify-center text-slate-700 font-bold shadow-sm transition-all cursor-pointer" title="Status Live">
+          <i data-lucide="chevron-left" class="w-4 h-4"></i>
+        </button>
+        <input type="range" id="airvisual-time-slider" min="0" max="1" value="1" step="1" class="w-full accent-primary cursor-pointer" />
+        <button id="airvisual-next-btn" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-primary hover:text-white flex items-center justify-center text-slate-700 font-bold shadow-sm transition-all cursor-pointer" title="Status Live">
+          <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <div id="airvisual-time-label" class="text-xs font-mono font-extrabold text-primary">${currentWindTime}</div>
+    `;
+
+    document.body.appendChild(widget);
+    if (window.lucide) lucide.createIcons();
+}
+``` [cite: 3]
+
+---
+
+### 3. File `map-core_2.js` (Bagian fungsi `showDailyFloatingTimeWidget`) [cite: 1]
+```javascript
+function showDailyFloatingTimeWidget(layerTitle) {
+  let existing = document.getElementById('daily-floating-time-widget');
+  if (existing) existing.remove();
+
+  var widget = document.createElement('div');
+  widget.id = 'daily-floating-time-widget';
+  widget.className = 'absolute bottom-6 left-1/2 -translate-x-1/2 z-[850] bg-white/90 backdrop-blur-md px-4 py-3 rounded-2xl shadow-2xl border border-white/80 flex flex-col items-center gap-2 w-72 sm:w-80 animate-fade-in select-none';
+  widget.innerHTML = `
+    <div class="text-[11px] font-bold text-slate-700 tracking-wide">${layerTitle} (Harian)</div>
+    <div class="flex items-center justify-between w-full gap-2">
+      <button id="daily-prev-btn" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-primary hover:text-white flex items-center justify-center text-slate-700 font-bold shadow-sm transition-all cursor-pointer" title="Hari Sebelumnya">
+        <i data-lucide="chevron-left" class="w-4 h-4"></i>
+      </button>
+      <input type="range" id="daily-time-slider" min="0" max="0" value="0" step="1" class="w-full accent-primary cursor-pointer" />
+      <button id="daily-next-btn" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-primary hover:text-white flex items-center justify-center text-slate-700 font-bold shadow-sm transition-all cursor-pointer" title="Hari Selanjutnya">
+        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+      </button>
+    </div>
+    <div id="daily-time-label" class="text-xs font-mono font-extrabold text-primary">Memuat tanggal...</div>
+  `;
+
+  document.body.appendChild(widget);
+  if (window.lucide) lucide.createIcons();
+
+  dailyDatesHub = generateDailyDatesArray();
+  currentDailyDateIndex = dailyDatesHub.length - 1;
+
+  let slider = document.getElementById('daily-time-slider');
+  slider.max = dailyDatesHub.length - 1;
+  slider.value = currentDailyDateIndex;
+
+  slider.addEventListener('input', function() {
+    currentDailyDateIndex = parseInt(this.value);
+    applySelectedDailyDate();
+  });
+
+  document.getElementById('daily-prev-btn').addEventListener('click', function() {
+    if (currentDailyDateIndex > 0) {
+      currentDailyDateIndex--;
+      slider.value = currentDailyDateIndex;
+      applySelectedDailyDate();
+    }
+  });
+
+  document.getElementById('daily-next-btn').addEventListener('click', function() {
+    if (currentDailyDateIndex < dailyDatesHub.length - 1) {
+      currentDailyDateIndex++;
+      slider.value = currentDailyDateIndex;
+      applySelectedDailyDate();
+    }
+  });
+
+  applySelectedDailyDate();
+}
+``` [cite: 1]
+
+Setelah dicopy-paste, silakan *save* dan *hard refresh* browser HP Anda.
