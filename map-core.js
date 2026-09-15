@@ -172,8 +172,8 @@ function formatReadableDate(dateStr) {
     if (parts.length < 3) return dateStr;
     
     let year = parseInt(parts[0], 10);
-    let month = parseInt(parts[1], 10) - 1; // Diperbaiki: mengambil indeks ke-1 untuk bulan
-    let day = parseInt(parts[2], 10);       // Diperbaiki: mengambil indeks ke-2 untuk hari
+    let month = parseInt(parts[1], 10) - 1;
+    let day = parseInt(parts[2], 10);
     
     let d = new Date(year, month, day);
     if (isNaN(d.getTime())) return dateStr;
@@ -402,8 +402,8 @@ function getBmkgLegendHtml() {
       <div class="font-bold text-slate-700 mb-1">Skala Suhu / Intensitas Awan (IR/EH):</div>
       <div class="h-3 w-full rounded bg-gradient-to-r from-blue-900 via-cyan-400 via-yellow-200 to-red-600 shadow-inner"></div>
       <div class="flex justify-between text-[9px] text-slate-500 font-medium px-0.5">
-        <span>Sangat Dingin (Puncak Awan Tinggi)</span>
         <span>Hangat (Permukaan)</span>
+        <span>Sangat Dingin (Puncak Awan Tinggi)</span>
       </div>
     </div>
   `;

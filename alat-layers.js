@@ -1,4 +1,4 @@
-  /* ==========================================================================
+/* ==========================================================================
     GeoNusa — Layers & Hub Manager (alat-layers.js)
     ==========================================================================*/
 
@@ -65,13 +65,11 @@
         ${SDA_LAYERS.map(l => `
           <label class="sda-layer-item flex items-center gap-2.5 py-2 px-1 hover:bg-white/30 rounded-lg cursor-pointer transition-all" title="${escapeBMKGHTML(l.name)}">
             <input type="checkbox" data-hub-key="sda_${l.id}" onchange="toggleHubLayer('sda', '${l.id}', this.checked)" class="w-4 h-4 accent-primary rounded cursor-pointer shrink-0" />
-            <i data-lucide="trees" class="w-3.5 h-3.5 text-primary shrink-0"></i>
             <span class="text-xs font-bold text-slate-700 truncate flex-1">${escapeBMKGHTML(l.name)}</span>
           </label>
         `).join('')}
       </div>
     `;
-    if (window.lucide) lucide.createIcons();
   }
 
   function filterSdaLayers(query) {
@@ -93,13 +91,11 @@
         ${BATAS_LAYERS.map(l => `
           <label class="batas-layer-item flex items-center gap-2.5 py-2 px-1 hover:bg-white/30 rounded-lg cursor-pointer transition-all" title="${escapeBMKGHTML(l.name)}">
             <input type="checkbox" data-hub-key="batas_${l.id}" onchange="toggleHubLayer('batas', '${l.id}', this.checked)" class="w-4 h-4 accent-primary rounded cursor-pointer shrink-0" />
-            <i data-lucide="map" class="w-3.5 h-3.5 text-primary shrink-0"></i>
             <span class="text-xs font-bold text-slate-700 truncate flex-1">${escapeBMKGHTML(l.name)}</span>
           </label>
         `).join('')}
       </div>
     `;
-    if (window.lucide) lucide.createIcons();
   }
 
   function filterBatasLayers(query) {
@@ -121,13 +117,11 @@
         ${TRANSMIGRASI_LAYERS.map(l => `
           <label class="trans-layer-item flex items-center gap-2.5 py-2 px-1 hover:bg-white/30 rounded-lg cursor-pointer transition-all" title="${escapeBMKGHTML(l.name)}">
             <input type="checkbox" data-hub-key="transmigrasi_${l.id}" onchange="toggleHubLayer('transmigrasi', '${l.id}', this.checked)" class="w-4 h-4 accent-primary rounded cursor-pointer shrink-0" />
-            <i data-lucide="home" class="w-3.5 h-3.5 text-primary shrink-0"></i>
             <span class="text-xs font-bold text-slate-700 truncate flex-1">${escapeBMKGHTML(l.name)}</span>
           </label>
         `).join('')}
       </div>
     `;
-    if (window.lucide) lucide.createIcons();
   }
 
   function filterTransLayers(query) {
@@ -148,14 +142,12 @@
       <div id="bencana-layers-list" class="space-y-1 px-1">
         ${KEBENCANAAN_LAYERS.map(l => `
           <label class="bencana-layer-item flex items-center gap-2.5 py-2 px-1 hover:bg-white/30 rounded-lg cursor-pointer transition-all" title="${escapeBMKGHTML(l.name)}">
-            <input type="checkbox" data-hub-key="bencana_${l.id}" onchange="toggleHubLayer('bencana', '${l.id}', this.checked)" class="w-4 h-4 accent-primary rounded cursor-pointer shrink-0" />
-            <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-rose-500 shrink-0"></i>
+            <input type="checkbox" data-hub-key="bencana_${l.id}" onchange="toggleHubLayer('bencana', '${l.id}', this.checked)" class="w-4 h-4 accent-rose-500 rounded cursor-pointer shrink-0" />
             <span class="text-xs font-bold text-slate-700 truncate flex-1">${escapeBMKGHTML(l.name)}</span>
           </label>
         `).join('')}
       </div>
     `;
-    if (window.lucide) lucide.createIcons();
   }
 
   function filterBencanaLayers(query) {
@@ -180,7 +172,6 @@
         ${KEHUTANAN_LAYERS.map(l => `
           <label class="kehutanan-layer-item flex items-center gap-2.5 py-2 px-1 hover:bg-white/30 rounded-lg cursor-pointer transition-all" title="${escapeBMKGHTML(l.name)}">
             <input type="checkbox" data-hub-key="kehutanan_${l.id}" onchange="toggleHubLayer('kehutanan', '${l.id}', this.checked)" class="w-4 h-4 accent-emerald-600 rounded cursor-pointer shrink-0" />
-            <i data-lucide="trees" class="w-3.5 h-3.5 text-green-600 shrink-0"></i>
             <span class="text-xs font-bold text-slate-700 truncate flex-1">${escapeBMKGHTML(l.name)}</span>
           </label>
         `).join('')}
@@ -211,7 +202,6 @@
         ${PERIZINAN_PERTANAHAN_LAYERS.map(l => `
           <label class="perizinan-layer-item flex items-center gap-2.5 py-2 px-1 hover:bg-white/30 rounded-lg cursor-pointer transition-all" title="${escapeBMKGHTML(l.name)}">
             <input type="checkbox" data-hub-key="perizinan_${l.id}" onchange="toggleHubLayer('perizinan', '${l.id}', this.checked)" class="w-4 h-4 accent-amber-600 rounded cursor-pointer shrink-0" />
-            <i data-lucide="file-check" class="w-3.5 h-3.5 text-amber-600 shrink-0"></i>
             <span class="text-xs font-bold text-slate-700 truncate flex-1">${escapeBMKGHTML(l.name)}</span>
           </label>
         `).join('')}
@@ -242,7 +232,6 @@
         ${SARANA_PRASARANA_LAYERS.map(l => `
           <label class="sarana-layer-item flex items-center gap-2.5 py-2 px-1 hover:bg-white/30 rounded-lg cursor-pointer transition-all" title="${escapeBMKGHTML(l.name)}">
             <input type="checkbox" data-hub-key="sarana_${l.id}" onchange="toggleHubLayer('sarana', '${l.id}', this.checked)" class="w-4 h-4 accent-cyan-600 rounded cursor-pointer shrink-0" />
-            <i data-lucide="building-2" class="w-3.5 h-3.5 text-cyan-600 shrink-0"></i>
             <span class="text-xs font-bold text-slate-700 truncate flex-1">${escapeBMKGHTML(l.name)}</span>
           </label>
         `).join('')}
@@ -397,14 +386,13 @@
 
     container.innerHTML = GEOPORTAL_SERVERS.map(s => `
       <div class="layer-folder border-b border-slate-100 py-1" id="folder_wrapper_${s.id}">
-        <div class="folder-header opacity-75 py-2 px-1 rounded-lg">
-          <i data-lucide="loader-2" class="w-4 h-4 animate-spin text-primary shrink-0"></i>
+        <div class="folder-header opacity-75 py-2 px-1 rounded-lg flex items-center gap-2">
+          <span class="text-xs font-mono text-slate-400">&gt;</span>
           <span class="folder-name font-bold text-slate-700 text-xs">${escapeBMKGHTML(s.name)}</span>
-          <span class="text-[9px] bg-sky-50 text-sky-600 border border-sky-100 px-1.5 py-0.5 rounded-full">Memuat...</span>
+          <span class="text-[9px] bg-sky-50 text-sky-600 border border-sky-100 px-1.5 py-0.5 rounded-full ml-auto">Memuat...</span>
         </div>
       </div>
     `).join('');
-    if (window.lucide) lucide.createIcons();
 
     const fetchPromises = GEOPORTAL_SERVERS.map(async (server) => {
       const wrapper = document.getElementById(`folder_wrapper_${server.id}`);
@@ -433,18 +421,16 @@
 
         if (wrapper) {
           wrapper.innerHTML = `
-            <div class="folder-header py-2 px-1 hover:bg-white/30 rounded-lg cursor-pointer transition-all" onclick="toggleFolder('folder_${server.id}')">
-              <i data-lucide="chevron-right" class="folder-chevron w-4 h-4 text-slate-500"></i>
-              <i data-lucide="folder" class="folder-icon opened w-4 h-4 text-primary"></i>
+            <div class="folder-header py-2 px-1 hover:bg-white/30 rounded-lg cursor-pointer transition-all flex items-center gap-2" onclick="toggleFolder('folder_${server.id}')">
+              <span class="folder-chevron text-xs font-mono text-slate-500 transition-transform duration-200 inline-block">&gt;</span>
               <span class="folder-name font-bold text-slate-800 text-xs truncate flex-1">${escapeBMKGHTML(server.name)}</span>
               <span class="text-[9px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded-md font-semibold">${layersList.length}</span>
             </div>
-            <div class="folder-children pl-4 space-y-1 mt-1" id="children-folder_${server.id}">
+            <div class="folder-children pl-4 space-y-1 mt-1 hidden" id="children-folder_${server.id}">
               ${layersList.length === 0 ? '<div class="px-2 py-1 text-[11px] text-slate-400 italic">Tidak ada layer.</div>' : 
                 layersList.map(l => `
                 <label class="layer-item flex items-center gap-2.5 py-2 px-1 hover:bg-white/30 rounded-lg cursor-pointer transition-all" title="${escapeBMKGHTML(l.title)}">
                   <input type="checkbox" data-layer-id="${l.name}" onchange="toggleGeoportalLayer('${l.name}', this.checked, '${server.url}', '${server.id}')" class="w-4 h-4 accent-primary rounded cursor-pointer shrink-0" />
-                  <i data-lucide="map" class="w-3.5 h-3.5 text-primary shrink-0"></i>
                   <span class="layer-name text-xs font-bold text-slate-700 truncate flex-1">${escapeBMKGHTML(resolveGeoportalLayerName(l.title))}</span>
                 </label>
               `).join('')}
@@ -454,15 +440,12 @@
       } catch (err) {
         if (wrapper) {
           wrapper.innerHTML = `
-            <div class="folder-header opacity-75 py-2 px-1 rounded-lg">
-              <i data-lucide="alert-circle" class="w-4 h-4 text-amber-500 shrink-0"></i>
+            <div class="folder-header opacity-75 py-2 px-1 rounded-lg flex items-center justify-between">
               <span class="folder-name font-bold text-slate-600 text-xs">${escapeBMKGHTML(server.name)}</span>
               <span class="text-[9px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full font-semibold">Offline</span>
             </div>
           `;
         }
-      } finally {
-        if (window.lucide) lucide.createIcons();
       }
     });
 
@@ -473,8 +456,13 @@
   function toggleFolder(id) {
     const children = document.getElementById('children-' + id);
     const header = children ? children.previousElementSibling : null;
-    if (children) children.classList.toggle('expanded');
-    if (header) header.classList.toggle('expanded');
+    if (children) children.classList.toggle('hidden');
+    if (header) {
+      const chevron = header.querySelector('.folder-chevron');
+      if (chevron) {
+        chevron.style.transform = children.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(90deg)';
+      }
+    }
   }
 
   async function loadGeoportalVectorLayer(layerName, wmsUrl, initialColor = '#008bb0', initialOpacity = 0.35) {
