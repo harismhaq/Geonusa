@@ -379,7 +379,7 @@
     }
   }
 
-  async function fetchAllGeoportalCollections() {
+async function fetchAllGeoportalCollections() {
     showLoading();
     const container = document.getElementById('layer-tree');
     if (!container) return;
@@ -421,7 +421,7 @@
 
         if (wrapper) {
           wrapper.innerHTML = `
-            <div class="folder-header py-2 px-1 hover:bg-white/30 rounded-lg cursor-pointer transition-all flex items-center gap-2" onclick="toggleFolder('folder_${server.id}')">
+            <div class="folder-header py-2 px-1 hover:bg-white/30 rounded-lg cursor-pointer transition-all flex items-center gap-2" onclick="toggleFolder('${server.id}')">
               <span class="folder-chevron text-xs font-mono text-slate-500 transition-transform duration-200 inline-block">&gt;</span>
               <span class="folder-name font-bold text-slate-800 text-xs truncate flex-1">${escapeBMKGHTML(server.name)}</span>
               <span class="text-[9px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded-md font-semibold">${layersList.length}</span>
@@ -453,11 +453,15 @@
     await Promise.allSettled(fetchPromises);
   }
 
-  function toggleFolder(id) {
-    const children = document.getElementById('children-' + id);
+  function toggleFolder(serverId) {
+    const children = document.getElementById('children-folder_' + serverId);
     const header = children ? children.previousElementSibling : null;
-    if (children) children.classList.toggle('hidden');
+    if (children) {
+      children.classList.toggle('hidden');
+      children.classList.toggle('expanded');
+    }
     if (header) {
+      header.classList.toggle('expanded');
       const chevron = header.querySelector('.folder-chevron');
       if (chevron) {
         chevron.style.transform = children.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(90deg)';
