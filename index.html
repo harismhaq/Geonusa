@@ -40,6 +40,21 @@
     #slider-image {
       transition: opacity 0.35s ease-in-out, transform 0.35s ease-in-out;
     }
+    .no-copy-link {
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      word-break: break-all;
+    }
+    /* Menghilangkan panah bawaan browser pada tag details */
+    details > summary {
+      list-style: none;
+    }
+    details > summary::-webkit-details-marker {
+      display: none;
+    }
   </style>
 </head>
 <body class="font-['Inter'] bg-slate-50 text-slate-800 antialiased selection:bg-cyan-100 selection:text-primary">
@@ -59,20 +74,15 @@
         <a href="#tentang" class="hover:text-primary transition-colors">Tentang Sistem</a>
       </nav>
       
-      <!-- Tombol Navigasi Kanan (Sosial Media + Support Author) -->
       <div class="flex items-center gap-2">
-        <!-- TikTok -->
         <a href="https://www.tiktok.com/@geonusa.id" target="_blank" rel="noopener noreferrer" class="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-900 hover:text-white text-slate-800 font-bold text-xs transition-all shadow-sm">
           <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
           <span>TikTok</span>
         </a>
-        <!-- Instagram -->
         <a href="https://www.instagram.com/geonusa.id/" target="_blank" rel="noopener noreferrer" class="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-pink-50 hover:bg-gradient-to-r hover:from-purple-600 hover:via-pink-600 hover:to-orange-500 hover:text-white text-pink-600 font-bold text-xs transition-all shadow-sm border border-pink-100">
           <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
           <span>Instagram</span>
         </a>
-        
-        <!-- Support Author -->
         <a href="https://saweria.co/geonusaid" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-bold rounded-xl shadow-md transition-all flex items-center gap-2">
           <i data-lucide="coffee" class="w-4 h-4 fill-current"></i>
           <span>Support/Request Data</span>
@@ -84,8 +94,6 @@
   <!-- HERO SECTION -->
   <section class="contour-bg min-h-screen pt-24 pb-12 flex items-center justify-center overflow-hidden border-b border-slate-200">
     <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center w-full relative z-10">
-      
-      <!-- Teks Kiri -->
       <div class="space-y-6 text-left">
         <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
           Eksplorasi Data Spasial Nusantara dalam <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-600">Satu Peta</span>
@@ -94,7 +102,6 @@
           Mempermudah dalam mengakses data spasial di Indonesia.
         </p>
         <div class="flex items-center gap-3 pt-2">
-          <!-- DIARAHKAN KE MAP.HTML -->
           <a href="map.html" class="px-7 py-4 bg-gradient-to-r from-primary to-cyan-600 hover:shadow-xl hover:shadow-primary/30 text-white text-sm sm:text-base font-bold rounded-2xl transition-all flex items-center gap-2">
             <i data-lucide="compass" class="w-5 h-5"></i>
             <span>Mulai Eksplorasi Peta</span>
@@ -106,212 +113,70 @@
         </div>
       </div>
       
-      <!-- Galeri Slider Gambar -->
       <div class="relative w-full">
-        <div class="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-200/80 bg-slate-50 h-[380px] sm:h-[430px] lg:h-[460px] w-full flex items-center justify-center p-2.5">
+        <div id="slider-container" class="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-200/80 bg-slate-50 h-[380px] sm:h-[430px] lg:h-[460px] w-full flex items-center justify-center p-2.5">
           <img id="slider-image" src="g1.png" alt="GeoNusa Preview" class="w-full h-full object-contain opacity-100 scale-100" />
-          
           <button onclick="prevSlide()" class="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-slate-900/70 hover:bg-primary text-white flex items-center justify-center transition-all shadow-lg cursor-pointer backdrop-blur-xs z-20">
             <i data-lucide="chevron-left" class="w-6 h-6"></i>
           </button>
-          
           <button onclick="nextSlide()" class="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-slate-900/70 hover:bg-primary text-white flex items-center justify-center transition-all shadow-lg cursor-pointer backdrop-blur-xs z-20">
             <i data-lucide="chevron-right" class="w-6 h-6"></i>
           </button>
         </div>
       </div>
-
     </div>
   </section>
 
-  <!-- FITUR UTAMA -->
-  <section id="fitur" class="py-24 bg-white border-t border-slate-200">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="text-center max-w-xl mx-auto space-y-3 mb-16">
-        <h2 class="text-xs font-bold uppercase tracking-widest text-primary">Katalog Data Spasial</h2>
-        <h3 class="text-2xl md:text-3xl font-extrabold text-slate-800">11 Menu GeoNusa</h3>
-        <p class="text-slate-500 text-xs md:text-sm">Geonusa bersumber dari data open source aktif.</p>
-      </div>
-
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-        <!-- 1. Geoportal -->
-        <div class="p-4 bg-slate-50/85 hover:bg-cyan-50/50 border border-slate-200/80 rounded-2xl space-y-2 transition-all text-left group">
-          <div class="w-9 h-9 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-primary group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all">
-            <i data-lucide="database" class="w-4 h-4"></i>
-          </div>
-          <h4 class="font-bold text-slate-800 text-xs group-hover:text-primary transition-colors">Geoportal</h4>
-          <p class="text-[10px] text-slate-500 leading-tight">Katalog data spasial bersumber dari Geoportal tiap daerah.</p>
-        </div>
-        <!-- 2. SDA -->
-        <div class="p-4 bg-slate-50/85 hover:bg-emerald-50/50 border border-slate-200/80 rounded-2xl space-y-2 transition-all text-left group">
-          <div class="w-9 h-9 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-emerald-600 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all">
-            <i data-lucide="leaf" class="w-4 h-4"></i>
-          </div>
-          <h4 class="font-bold text-slate-800 text-xs group-hover:text-emerald-700 transition-colors">SDA</h4>
-          <p class="text-[10px] text-slate-500 leading-tight">Sumber Daya Alam & Lingkungan.</p>
-        </div>
-        <!-- 3. Kehutanan -->
-        <div class="p-4 bg-slate-50/85 hover:bg-green-50/50 border border-slate-200/80 rounded-2xl space-y-2 transition-all text-left group">
-          <div class="w-9 h-9 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-green-600 group-hover:scale-110 group-hover:bg-green-600 group-hover:text-white transition-all">
-            <i data-lucide="trees" class="w-4 h-4"></i>
-          </div>
-          <h4 class="font-bold text-slate-800 text-xs group-hover:text-green-700 transition-colors">Kehutanan</h4>
-          <p class="text-[10px] text-slate-500 leading-tight">Peta & layer tematik kehutanan.</p>
-        </div>
-        <!-- 4. Cuaca & Iklim -->
-        <div class="p-4 bg-slate-50/85 hover:bg-sky-50/50 border border-slate-200/80 rounded-2xl space-y-2 transition-all text-left group">
-          <div class="w-9 h-9 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-sky-500 group-hover:scale-110 group-hover:bg-sky-500 group-hover:text-white transition-all">
-            <i data-lucide="cloud-sun" class="w-4 h-4"></i>
-          </div>
-          <h4 class="font-bold text-slate-800 text-xs group-hover:text-sky-600 transition-colors">Cuaca & Iklim</h4>
-          <p class="text-[10px] text-slate-500 leading-tight">Citra satelit cuaca & titik panas.</p>
-        </div>
-        <!-- 5. Satelit -->
-        <div class="p-4 bg-slate-50/85 hover:bg-indigo-50/50 border border-slate-200/80 rounded-2xl space-y-2 transition-all text-left group">
-          <div class="w-9 h-9 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-indigo-600 group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition-all">
-            <i data-lucide="satellite" class="w-4 h-4"></i>
-          </div>
-          <h4 class="font-bold text-slate-800 text-xs group-hover:text-indigo-700 transition-colors">Satelit</h4>
-          <p class="text-[10px] text-slate-500 leading-tight">Citra satelit pengamatan global.</p>
-        </div>
-        <!-- 6. Perizinan -->
-        <div class="p-4 bg-slate-50/85 hover:bg-amber-50/50 border border-slate-200/80 rounded-2xl space-y-2 transition-all text-left group">
-          <div class="w-9 h-9 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-amber-600 group-hover:scale-110 group-hover:bg-amber-600 group-hover:text-white transition-all">
-            <i data-lucide="file-check" class="w-4 h-4"></i>
-          </div>
-          <h4 class="font-bold text-slate-800 text-xs group-hover:text-amber-700 transition-colors">Perizinan</h4>
-          <p class="text-[10px] text-slate-500 leading-tight">Peta konsesi, HGU, dan pertanahan.</p>
-        </div>
-        <!-- 7. Batas -->
-        <div class="p-4 bg-slate-50/85 hover:bg-blue-50/50 border border-slate-200/80 rounded-2xl space-y-2 transition-all text-left group">
-          <div class="w-9 h-9 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-blue-600 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all">
-            <i data-lucide="map" class="w-4 h-4"></i>
-          </div>
-          <h4 class="font-bold text-slate-800 text-xs group-hover:text-blue-700 transition-colors">Batas</h4>
-          <p class="text-[10px] text-slate-500 leading-tight">Peta batas administrasi wilayah.</p>
-        </div>
-        <!-- 8. Transmigrasi -->
-        <div class="p-4 bg-slate-50/85 hover:bg-purple-50/50 border border-slate-200/80 rounded-2xl space-y-2 transition-all text-left group">
-          <div class="w-9 h-9 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-purple-600 group-hover:scale-110 group-hover:bg-purple-600 group-hover:text-white transition-all">
-            <i data-lucide="home" class="w-4 h-4"></i>
-          </div>
-          <h4 class="font-bold text-slate-800 text-xs group-hover:text-purple-700 transition-colors">Transmigrasi</h4>
-          <p class="text-[10px] text-slate-500 leading-tight">Kawasan khusus transmigrasi.</p>
-        </div>
-        <!-- 9. Bencana -->
-        <div class="p-4 bg-slate-50/85 hover:bg-rose-50/50 border border-slate-200/80 rounded-2xl space-y-2 transition-all text-left group">
-          <div class="w-9 h-9 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-rose-500 group-hover:scale-110 group-hover:bg-rose-500 group-hover:text-white transition-all">
-            <i data-lucide="shield-alert" class="w-4 h-4"></i>
-          </div>
-          <h4 class="font-bold text-slate-800 text-xs group-hover:text-rose-600 transition-colors">Bencana</h4>
-          <p class="text-[10px] text-slate-500 leading-tight">Indeks bahaya & risiko (InaRisk BNPB).</p>
-        </div>
-        <!-- 10. Sarana -->
-        <div class="p-4 bg-slate-50/85 hover:bg-teal-50/50 border border-slate-200/80 rounded-2xl space-y-2 transition-all text-left group">
-          <div class="w-9 h-9 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-teal-600 group-hover:scale-110 group-hover:bg-teal-600 group-hover:text-white transition-all">
-            <i data-lucide="building-2" class="w-4 h-4"></i>
-          </div>
-          <h4 class="font-bold text-slate-800 text-xs group-hover:text-teal-700 transition-colors">Sarana</h4>
-          <p class="text-[10px] text-slate-500 leading-tight">Fasilitas umum & infrastruktur.</p>
-        </div>
-        <!-- 11. Tools -->
-        <div class="p-4 bg-slate-50/85 hover:bg-orange-50/50 border border-slate-200/80 rounded-2xl space-y-2 transition-all text-left group">
-          <div class="w-9 h-9 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center justify-center text-orange-600 group-hover:scale-110 group-hover:bg-orange-600 group-hover:text-white transition-all">
-            <i data-lucide="wrench" class="w-4 h-4"></i>
-          </div>
-          <h4 class="font-bold text-slate-800 text-xs group-hover:text-orange-700 transition-colors">Tools</h4>
-          <p class="text-[10px] text-slate-500 leading-tight">Ukur, upload file & legenda.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-<!-- SUMBER DATA -->
+  <!-- SUMBER DATA -->
   <section id="sumber" class="py-20 bg-slate-100/80 border-t border-slate-200">
-    <div class="max-w-7xl mx-auto px-6 space-y-8">
+    <div class="max-w-4xl mx-auto px-6 space-y-8">
       <div class="text-center space-y-2">
         <h2 class="text-xs font-bold uppercase tracking-widest text-primary">Metadata</h2>
         <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-800">Direktori Metadata API Rest</h3>
         <p class="text-sm text-slate-500">Daftar Metadata API Rest setiap data geospasial.</p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-xs">
+      <div class="space-y-4 text-xs">
         
         <!-- 1. Geoportal Daerah -->
-        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3 flex flex-col justify-between">
-          <div class="font-bold text-slate-900 text-sm border-b pb-1">1. GEOPORTAL DAERAH (14 Server)</div>
-          <div class="space-y-2 max-h-64 overflow-y-auto custom-scrollbar pr-1">
-            <a href="https://geoportal.pontianak.go.id/geoserver/ows" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">Geoportal Kota Pontianak</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://geoportal.pontianak.go.id/geoserver/ows</div>
-            </a>
-            <a href="https://satupeta.kalbarprov.go.id/geoserver/ows" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">Satu Peta Prov. Kalbar</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://satupeta.kalbarprov.go.id/geoserver/ows</div>
-            </a>
-            <a href="https://jigd.kaltimprov.go.id/geoserver/ows" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">JIGD Prov. Kalimantan Timur</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://jigd.kaltimprov.go.id/geoserver/ows</div>
-            </a>
-            <a href="https://geoportal.kotimkab.go.id/geoserver/wms" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">Geoportal Kab. Kotawaringin Timur</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://geoportal.kotimkab.go.id/geoserver/wms</div>
-            </a>
-            <a href="https://geoserver-geoportal.mahakamulukab.go.id/geoserver/wms" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">Geoportal Kab. Mahakam Ulu</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://geoserver-geoportal.mahakamulukab.go.id/geoserver/wms</div>
-            </a>
-            <a href="https://geoportal.sumbarprov.go.id/geoserver/wms" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">Geoportal Prov. Sumatera Barat</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://geoportal.sumbarprov.go.id/geoserver/wms</div>
-            </a>
-            <a href="https://geo.bengkuluprov.go.id/geoserver/palapa/ows" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">Geoportal Prov. Bengkulu</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://geo.bengkuluprov.go.id/geoserver/palapa/ows</div>
-            </a>
-            <a href="https://satupeta.jatengprov.go.id/geoserver/palapa/wms" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">Satu Peta Prov. Jawa Tengah</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://satupeta.jatengprov.go.id/geoserver/palapa/wms</div>
-            </a>
-            <a href="https://geoportal.magelangkab.go.id/geoserver/ows" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">Geoportal Kab. Magelang</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://geoportal.magelangkab.go.id/geoserver/ows</div>
-            </a>
-            <a href="https://geoportal.magelangkota.go.id/geoserver/ows" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">Geoportal Kota Magelang</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://geoportal.magelangkota.go.id/geoserver/ows</div>
-            </a>
-            <a href="https://geoportal.klaten.go.id/geoserver/wms" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">Geoportal Kab. Klaten</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://geoportal.klaten.go.id/geoserver/wms</div>
-            </a>
-            <a href="https://geoportal.mojokertokota.go.id/geoserver/ows" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">Geoportal Kota Mojokerto</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://geoportal.mojokertokota.go.id/geoserver/ows</div>
-            </a>
-            <a href="https://geodata.bandung.go.id/geoserver/ows" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">Geoportal Kota Bandung</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://geodata.bandung.go.id/geoserver/ows</div>
-            </a>
-            <a href="https://geoportal.jogjakota.go.id/geoserver/ows" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">Geoportal Kota Yogyakarta</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://geoportal.jogjakota.go.id/geoserver/ows</div>
-            </a>
+        <details class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm group">
+          <summary class="font-bold text-slate-900 text-sm cursor-pointer flex items-center justify-between select-none w-full">
+            <span>1. GEOPORTAL DAERAH (14 Server)</span>
+            <span class="text-primary text-xs font-medium flex items-center gap-1.5">
+              <span class="text-slate-600 font-normal">Buka Detail</span>
+              <span class="inline-block group-open:rotate-180 transition-transform duration-200">▼</span>
+            </span>
+          </summary>
+          <div class="space-y-2 mt-4 pt-3 border-t max-h-96 overflow-y-auto custom-scrollbar pr-1">
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">Geoportal Kota Pontianak</div><div class="text-[10px] text-primary font-mono">https://geoportal.pontianak.go.id/geoserver/ows</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">Satu Peta Prov. Kalbar</div><div class="text-[10px] text-primary font-mono">https://satupeta.kalbarprov.go.id/geoserver/ows</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">JIGD Prov. Kalimantan Timur</div><div class="text-[10px] text-primary font-mono">https://jigd.kaltimprov.go.id/geoserver/ows</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">Geoportal Kab. Kotawaringin Timur</div><div class="text-[10px] text-primary font-mono">https://geoportal.kotimkab.go.id/geoserver/wms</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">Geoportal Kab. Mahakam Ulu</div><div class="text-[10px] text-primary font-mono">https://geoserver-geoportal.mahakamulukab.go.id/geoserver/wms</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">Geoportal Prov. Sumatera Barat</div><div class="text-[10px] text-primary font-mono">https://geoportal.sumbarprov.go.id/geoserver/wms</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">Geoportal Prov. Bengkulu</div><div class="text-[10px] text-primary font-mono">https://geo.bengkuluprov.go.id/geoserver/palapa/ows</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">Satu Peta Prov. Jawa Tengah</div><div class="text-[10px] text-primary font-mono">https://satupeta.jatengprov.go.id/geoserver/palapa/wms</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">Geoportal Kab. Magelang</div><div class="text-[10px] text-primary font-mono">https://geoportal.magelangkab.go.id/geoserver/ows</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">Geoportal Kota Magelang</div><div class="text-[10px] text-primary font-mono">https://geoportal.magelangkota.go.id/geoserver/ows</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">Geoportal Kab. Klaten</div><div class="text-[10px] text-primary font-mono">https://geoportal.klaten.go.id/geoserver/wms</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">Geoportal Kota Mojokerto</div><div class="text-[10px] text-primary font-mono">https://geoportal.mojokertokota.go.id/geoserver/ows</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">Geoportal Kota Bandung</div><div class="text-[10px] text-primary font-mono">https://geodata.bandung.go.id/geoserver/ows</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">Geoportal Kota Yogyakarta</div><div class="text-[10px] text-primary font-mono">https://geoportal.jogjakota.go.id/geoserver/ows</div></div>
           </div>
-        </div>
+        </details>
 
-        <!-- 2. SDA & Lingkungan (0 - 60) -->
-        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3 flex flex-col justify-between">
-          <div class="font-bold text-slate-900 text-sm border-b pb-1">2. SDA & LINGKUNGAN (61 Layer)</div>
-          <div class="space-y-2 max-h-64 overflow-y-auto custom-scrollbar pr-1">
-            <a href="https://simontana.kehutanan.go.id/arcgis/rest/services/simontana/kh/MapServer/0" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">Peta Kawasan Hutan (SIMONTANA)</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://simontana.kehutanan.go.id/arcgis/rest/services/simontana/kh/MapServer/0</div>
-            </a>
-            <a href="https://simontana.kehutanan.go.id/arcgis/rest/services/simontana/gambut/MapServer/0" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">Peta Gambut (SIMONTANA)</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://simontana.kehutanan.go.id/arcgis/rest/services/simontana/gambut/MapServer/0</div>
-            </a>
+        <!-- 2. SDA & Lingkungan -->
+        <details class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm group">
+          <summary class="font-bold text-slate-900 text-sm cursor-pointer flex items-center justify-between select-none w-full">
+            <span>2. SDA & LINGKUNGAN (61 Layer)</span>
+            <span class="text-primary text-xs font-medium flex items-center gap-1.5">
+              <span class="text-slate-600 font-normal">Buka Detail</span>
+              <span class="inline-block group-open:rotate-180 transition-transform duration-200">▼</span>
+            </span>
+          </summary>
+          <div class="space-y-2 mt-4 pt-3 border-t max-h-96 overflow-y-auto custom-scrollbar pr-1">
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">Peta Kawasan Hutan (SIMONTANA)</div><div class="text-[10px] text-primary font-mono">https://simontana.kehutanan.go.id/arcgis/rest/services/simontana/kh/MapServer/0</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">Peta Gambut (SIMONTANA)</div><div class="text-[10px] text-primary font-mono">https://simontana.kehutanan.go.id/arcgis/rest/services/simontana/gambut/MapServer/0</div></div>
             <script>
               const sdaNames = [
                 "Peta Penutupan Lahan", "Peta Air Tanah", "Peta Ketersediaan Air", "Peta Penggunaan Tanah 10K", "Peta Penggunaan Tanah 25K", 
@@ -331,20 +196,26 @@
                 let url = `https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SUMBER_DAYA_ALAM_DAN_LINGKUNGAN/MapServer/${i}`;
                 let name = sdaNames[i] || `Layer SDA & Lingkungan #${i}`;
                 document.write(`
-                  <a href="${url}" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50 mb-2">
+                  <div class="bg-slate-50 p-2 rounded-lg border no-copy-link mb-2">
                     <div class="font-bold text-slate-800">${name}</div>
-                    <div class="text-[10px] text-primary font-mono truncate">${url}</div>
-                  </a>
+                    <div class="text-[10px] text-primary font-mono">${url}</div>
+                  </div>
                 `);
               }
             </script>
           </div>
-        </div>
+        </details>
 
-        <!-- 3. Kehutanan (0 - 14) -->
-        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3 flex flex-col justify-between">
-          <div class="font-bold text-slate-900 text-sm border-b pb-1">3. KEHUTANAN (15 Layer)</div>
-          <div class="space-y-2 max-h-64 overflow-y-auto custom-scrollbar pr-1">
+        <!-- 3. Kehutanan -->
+        <details class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm group">
+          <summary class="font-bold text-slate-900 text-sm cursor-pointer flex items-center justify-between select-none w-full">
+            <span>3. KEHUTANAN (15 Layer)</span>
+            <span class="text-primary text-xs font-medium flex items-center gap-1.5">
+              <span class="text-slate-600 font-normal">Buka Detail</span>
+              <span class="inline-block group-open:rotate-180 transition-transform duration-200">▼</span>
+            </span>
+          </summary>
+          <div class="space-y-2 mt-4 pt-3 border-t max-h-96 overflow-y-auto custom-scrollbar pr-1">
             <script>
               const kehutananNames = [
                 "Penetapan Kawasan Hutan", "Kawasan Hutan Dengan Tujuan Khusus (KHDTK)", "Hutan Tanaman Rakyat (HTR)", "Hutan Adat", "Neraca Sumber Daya Hutan Fungsi Kawasan", 
@@ -355,88 +226,85 @@
                 let url = `https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/KEHUTANAN/MapServer/${i}`;
                 let name = kehutananNames[i] || `Layer Kehutanan #${i}`;
                 document.write(`
-                  <a href="${url}" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50 mb-2">
+                  <div class="bg-slate-50 p-2 rounded-lg border no-copy-link mb-2">
                     <div class="font-bold text-slate-800">${name}</div>
-                    <div class="text-[10px] text-primary font-mono truncate">${url}</div>
-                  </a>
+                    <div class="text-[10px] text-primary font-mono">${url}</div>
+                  </div>
                 `);
               }
             </script>
           </div>
-        </div>
+        </details>
 
         <!-- 4. Cuaca, Iklim & Hotspot -->
-        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3 flex flex-col justify-between">
-          <div class="font-bold text-slate-900 text-sm border-b pb-1">4. CUACA, IKLIM & HOTSPOT</div>
-          <div class="space-y-2 max-h-64 overflow-y-auto custom-scrollbar pr-1">
-            <a href="https://opsroom.sipongidata.my.id/api/opsroom/indoHotspot" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">Sipongi Karhutla Hotspot API</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://opsroom.sipongidata.my.id/api/opsroom/indoHotspot</div>
-            </a>
-            <a href="https://api.open-meteo.com/v1/forecast" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">Open-Meteo Wind Forecast API</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://api.open-meteo.com/v1/forecast</div>
-            </a>
-            <a href="https://osm.airvisual.net/cog/pm25/tiles/" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">AirVisual PM2.5 COG Tiles</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://osm.airvisual.net/cog/pm25/tiles/</div>
-            </a>
-            <a href="https://satellite.bmkg.go.id/" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">BMKG Satellite Server</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://satellite.bmkg.go.id/</div>
-            </a>
+        <details class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm group">
+          <summary class="font-bold text-slate-900 text-sm cursor-pointer flex items-center justify-between select-none w-full">
+            <span>4. CUACA, IKLIM & HOTSPOT</span>
+            <span class="text-primary text-xs font-medium flex items-center gap-1.5">
+              <span class="text-slate-600 font-normal">Buka Detail</span>
+              <span class="inline-block group-open:rotate-180 transition-transform duration-200">▼</span>
+            </span>
+          </summary>
+          <div class="space-y-2 mt-4 pt-3 border-t max-h-96 overflow-y-auto custom-scrollbar pr-1">
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">Sipongi Karhutla Hotspot API</div><div class="text-[10px] text-primary font-mono">https://opsroom.sipongidata.my.id/api/opsroom/indoHotspot</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">Open-Meteo Wind Forecast API</div><div class="text-[10px] text-primary font-mono">https://api.open-meteo.com/v1/forecast</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">AirVisual PM2.5 COG Tiles</div><div class="text-[10px] text-primary font-mono">https://osm.airvisual.net/cog/pm25/tiles/</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">BMKG Satellite Server</div><div class="text-[10px] text-primary font-mono">https://satellite.bmkg.go.id/</div></div>
           </div>
-        </div>
+        </details>
 
         <!-- 5. Satelit Global -->
-        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3 flex flex-col justify-between">
-          <div class="font-bold text-slate-900 text-sm border-b pb-1">5. SATELIT PENGAMATAN GLOBAL</div>
-          <div class="space-y-2 max-h-64 overflow-y-auto custom-scrollbar pr-1">
-            <a href="https://gibs.earthdata.nasa.gov/" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">NASA GIBS WMTS</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://gibs.earthdata.nasa.gov/</div>
-            </a>
-            <a href="https://modis.arcgis.com/arcgis/rest/services/MODIS/ImageServer" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">MODIS ArcGIS ImageServer</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://modis.arcgis.com/arcgis/rest/services/MODIS/ImageServer</div>
-            </a>
-            <a href="https://modis.arcgis.com/arcgis/rest/services/VIIRS/ImageServer" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">VIIRS ArcGIS ImageServer</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://modis.arcgis.com/arcgis/rest/services/VIIRS/ImageServer</div>
-            </a>
-            <a href="https://gis.nnvl.noaa.gov/arcgis/rest/services/" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">NOAA NNVL & GOES Server</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://gis.nnvl.noaa.gov/arcgis/rest/services/</div>
-            </a>
-            <a href="https://tiles.maps.eox.at/" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">Sentinel-2 EOX Tiles</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://tiles.maps.eox.at/</div>
-            </a>
+        <details class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm group">
+          <summary class="font-bold text-slate-900 text-sm cursor-pointer flex items-center justify-between select-none w-full">
+            <span>5. SATELIT PENGAMATAN GLOBAL</span>
+            <span class="text-primary text-xs font-medium flex items-center gap-1.5">
+              <span class="text-slate-600 font-normal">Buka Detail</span>
+              <span class="inline-block group-open:rotate-180 transition-transform duration-200">▼</span>
+            </span>
+          </summary>
+          <div class="space-y-2 mt-4 pt-3 border-t max-h-96 overflow-y-auto custom-scrollbar pr-1">
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">NASA GIBS WMTS</div><div class="text-[10px] text-primary font-mono">https://gibs.earthdata.nasa.gov/</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">MODIS ArcGIS ImageServer</div><div class="text-[10px] text-primary font-mono">https://modis.arcgis.com/arcgis/rest/services/MODIS/ImageServer</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">VIIRS ArcGIS ImageServer</div><div class="text-[10px] text-primary font-mono">https://modis.arcgis.com/arcgis/rest/services/VIIRS/ImageServer</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">NOAA NNVL & GOES Server</div><div class="text-[10px] text-primary font-mono">https://gis.nnvl.noaa.gov/arcgis/rest/services/</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">Sentinel-2 EOX Tiles</div><div class="text-[10px] text-primary font-mono">https://tiles.maps.eox.at/</div></div>
           </div>
-        </div>
+        </details>
 
-        <!-- 6. Perizinan & Pertanahan (0 - 60) -->
-        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3 flex flex-col justify-between">
-          <div class="font-bold text-slate-900 text-sm border-b pb-1">6. PERIZINAN & PERTANAHAN (61 Layer)</div>
-          <div class="space-y-2 max-h-64 overflow-y-auto custom-scrollbar pr-1">
+        <!-- 6. Perizinan & Pertanahan -->
+        <details class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm group">
+          <summary class="font-bold text-slate-900 text-sm cursor-pointer flex items-center justify-between select-none w-full">
+            <span>6. PERIZINAN & PERTANAHAN (61 Layer)</span>
+            <span class="text-primary text-xs font-medium flex items-center gap-1.5">
+              <span class="text-slate-600 font-normal">Buka Detail</span>
+              <span class="inline-block group-open:rotate-180 transition-transform duration-200">▼</span>
+            </span>
+          </summary>
+          <div class="space-y-2 mt-4 pt-3 border-t max-h-96 overflow-y-auto custom-scrollbar pr-1">
             <script>
               for(let i=0; i<=60; i++) {
                 let url = `https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/PERIZINAN_DAN_PERTANAHAN/MapServer/${i}`;
                 document.write(`
-                  <a href="${url}" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50 mb-2">
+                  <div class="bg-slate-50 p-2 rounded-lg border no-copy-link mb-2">
                     <div class="font-bold text-slate-800">Perizinan & Pertanahan Layer #${i}</div>
-                    <div class="text-[10px] text-primary font-mono truncate">${url}</div>
-                  </a>
+                    <div class="text-[10px] text-primary font-mono">${url}</div>
+                  </div>
                 `);
               }
             </script>
           </div>
-        </div>
+        </details>
 
-        <!-- 7. Batas Wilayah (0 - 21) -->
-        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3 flex flex-col justify-between">
-          <div class="font-bold text-slate-900 text-sm border-b pb-1">7. BATAS WILAYAH (22 Layer)</div>
-          <div class="space-y-2 max-h-64 overflow-y-auto custom-scrollbar pr-1">
+        <!-- 7. Batas Wilayah -->
+        <details class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm group">
+          <summary class="font-bold text-slate-900 text-sm cursor-pointer flex items-center justify-between select-none w-full">
+            <span>7. BATAS WILAYAH (22 Layer)</span>
+            <span class="text-primary text-xs font-medium flex items-center gap-1.5">
+              <span class="text-slate-600 font-normal">Buka Detail</span>
+              <span class="inline-block group-open:rotate-180 transition-transform duration-200">▼</span>
+            </span>
+          </summary>
+          <div class="space-y-2 mt-4 pt-3 border-t max-h-96 overflow-y-auto custom-scrollbar pr-1">
             <script>
               const batasNames = [
                 "Batas Administrasi Provinsi", "Batas Provinsi Garis", "Batas Kabupaten Kota Area", "Batas Kabupaten Kota Garis", "Batas Kecamatan", 
@@ -449,20 +317,26 @@
                 let url = `https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/BATAS_WILAYAH/MapServer/${i}`;
                 let name = batasNames[i] || `Batas Wilayah Layer #${i}`;
                 document.write(`
-                  <a href="${url}" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50 mb-2">
+                  <div class="bg-slate-50 p-2 rounded-lg border no-copy-link mb-2">
                     <div class="font-bold text-slate-800">${name}</div>
-                    <div class="text-[10px] text-primary font-mono truncate">${url}</div>
-                  </a>
+                    <div class="text-[10px] text-primary font-mono">${url}</div>
+                  </div>
                 `);
               }
             </script>
           </div>
-        </div>
+        </details>
 
-        <!-- 8. Transmigrasi (0 - 7) -->
-        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3 flex flex-col justify-between">
-          <div class="font-bold text-slate-900 text-sm border-b pb-1">8. TRANSMIGRASI (8 Layer)</div>
-          <div class="space-y-2 max-h-64 overflow-y-auto custom-scrollbar pr-1">
+        <!-- 8. Transmigrasi -->
+        <details class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm group">
+          <summary class="font-bold text-slate-900 text-sm cursor-pointer flex items-center justify-between select-none w-full">
+            <span>8. TRANSMIGRASI (8 Layer)</span>
+            <span class="text-primary text-xs font-medium flex items-center gap-1.5">
+              <span class="text-slate-600 font-normal">Buka Detail</span>
+              <span class="inline-block group-open:rotate-180 transition-transform duration-200">▼</span>
+            </span>
+          </summary>
+          <div class="space-y-2 mt-4 pt-3 border-t max-h-96 overflow-y-auto custom-scrollbar pr-1">
             <script>
               const transNames = [
                 "Penetapan Kawasan Ekonomi Khusus (KEK)", "Kawasan Perdagangan Bebas dan Pelabuhan Bebas", "Persebaran Lokasi Transmigrasi", "Kawasan Transmigrasi", "Kawasan Industri Eksisting", 
@@ -472,98 +346,91 @@
                 let url = `https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/KAWASAN_KHUSUS_DAN_TRANSMIGRASI/MapServer/${i}`;
                 let name = transNames[i] || `Kawasan Khusus Layer #${i}`;
                 document.write(`
-                  <a href="${url}" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50 mb-2">
+                  <div class="bg-slate-50 p-2 rounded-lg border no-copy-link mb-2">
                     <div class="font-bold text-slate-800">${name}</div>
-                    <div class="text-[10px] text-primary font-mono truncate">${url}</div>
-                  </a>
+                    <div class="text-[10px] text-primary font-mono">${url}</div>
+                  </div>
                 `);
               }
             </script>
           </div>
-        </div>
+        </details>
 
         <!-- 9. Kebencanaan / InaRisk -->
-        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3 flex flex-col justify-between">
-          <div class="font-bold text-slate-900 text-sm border-b pb-1">9. KEBENCANAAN / INARISK (BNPB Server)</div>
-          <div class="space-y-2 max-h-64 overflow-y-auto custom-scrollbar pr-1">
-            <a href="https://gis.bnpb.go.id/server/rest/services/inarisk/Arah_jalur_evakuasi/MapServer" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">Arah Jalur Evakuasi Bencana</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://gis.bnpb.go.id/server/rest/services/inarisk/Arah_jalur_evakuasi/MapServer</div>
-            </a>
-            <a href="https://gis.bnpb.go.id/server/rest/services/inarisk/Faults_new/MapServer" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">Sesar / Patahan Aktif (Faults)</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://gis.bnpb.go.id/server/rest/services/inarisk/Faults_new/MapServer</div>
-            </a>
-            <a href="https://gis.bnpb.go.id/server/rest/services/inarisk/ZRB_Multibahaya/MapServer" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">ZRB Multibahaya BNPB</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://gis.bnpb.go.id/server/rest/services/inarisk/ZRB_Multibahaya/MapServer</div>
-            </a>
-            <a href="https://gis.bnpb.go.id/server/rest/services/inarisk/" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50">
-              <div class="font-bold text-slate-800">Root Direktori InaRisk BNPB</div>
-              <div class="text-[10px] text-primary font-mono truncate">https://gis.bnpb.go.id/server/rest/services/inarisk/</div>
-            </a>
+        <details class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm group">
+          <summary class="font-bold text-slate-900 text-sm cursor-pointer flex items-center justify-between select-none w-full">
+            <span>9. KEBENCANAAN / INARISK (BNPB Server)</span>
+            <span class="text-primary text-xs font-medium flex items-center gap-1.5">
+              <span class="text-slate-600 font-normal">Buka Detail</span>
+              <span class="inline-block group-open:rotate-180 transition-transform duration-200">▼</span>
+            </span>
+          </summary>
+          <div class="space-y-2 mt-4 pt-3 border-t max-h-96 overflow-y-auto custom-scrollbar pr-1">
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">Arah Jalur Evakuasi Bencana</div><div class="text-[10px] text-primary font-mono">https://gis.bnpb.go.id/server/rest/services/inarisk/Arah_jalur_evakuasi/MapServer</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">Sesar / Patahan Aktif (Faults)</div><div class="text-[10px] text-primary font-mono">https://gis.bnpb.go.id/server/rest/services/inarisk/Faults_new/MapServer</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">ZRB Multibahaya BNPB</div><div class="text-[10px] text-primary font-mono">https://gis.bnpb.go.id/server/rest/services/inarisk/ZRB_Multibahaya/MapServer</div></div>
+            <div class="bg-slate-50 p-2 rounded-lg border no-copy-link"><div class="font-bold text-slate-800">Root Direktori InaRisk BNPB</div><div class="text-[10px] text-primary font-mono">https://gis.bnpb.go.id/server/rest/services/inarisk/</div></div>
           </div>
-        </div>
+        </details>
 
-        <!-- 10. Sarana & Prasarana (0 - 47) -->
-        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3 flex flex-col justify-between">
-          <div class="font-bold text-slate-900 text-sm border-b pb-1">10. SARANA & PRASARANA (48 Layer)</div>
-          <div class="space-y-2 max-h-64 overflow-y-auto custom-scrollbar pr-1">
+        <!-- 10. Sarana & Prasarana -->
+        <details class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm group">
+          <summary class="font-bold text-slate-900 text-sm cursor-pointer flex items-center justify-between select-none w-full">
+            <span>10. SARANA & PRASARANA (48 Layer)</span>
+            <span class="text-primary text-xs font-medium flex items-center gap-1.5">
+              <span class="text-slate-600 font-normal">Buka Detail</span>
+              <span class="inline-block group-open:rotate-180 transition-transform duration-200">▼</span>
+            </span>
+          </summary>
+          <div class="space-y-2 mt-4 pt-3 border-t max-h-96 overflow-y-auto custom-scrollbar pr-1">
             <script>
               for(let i=0; i<=47; i++) {
                 let url = `https://kspservices.big.go.id/satupeta/rest/services/PUBLIK/SARANA_PRASARANA/MapServer/${i}`;
                 document.write(`
-                  <a href="${url}" target="_blank" class="block bg-slate-50 p-2 rounded-lg border hover:bg-cyan-50/50 mb-2">
+                  <div class="bg-slate-50 p-2 rounded-lg border no-copy-link mb-2">
                     <div class="font-bold text-slate-800">Sarana Prasarana Layer #${i}</div>
-                    <div class="text-[10px] text-primary font-mono truncate">${url}</div>
-                  </a>
+                    <div class="text-[10px] text-primary font-mono">${url}</div>
+                  </div>
                 `);
               }
             </script>
           </div>
-        </div>
+        </details>
 
         <!-- 11. Basemap Utama -->
-        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3 flex flex-col justify-between">
-          <div class="font-bold text-slate-900 text-sm border-b pb-1">11. BASEMAP & ENGINE</div>
-          <div class="space-y-2 text-slate-600 font-mono max-h-64 overflow-y-auto custom-scrollbar pr-1 text-[10px]">
-            <div class="bg-slate-50 p-2 rounded border">
+        <details class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm group">
+          <summary class="font-bold text-slate-900 text-sm cursor-pointer flex items-center justify-between select-none w-full">
+            <span>11. BASEMAP & ENGINE</span>
+            <span class="text-primary text-xs font-medium flex items-center gap-1.5">
+              <span class="text-slate-600 font-normal">Buka Detail</span>
+              <span class="inline-block group-open:rotate-180 transition-transform duration-200">▼</span>
+            </span>
+          </summary>
+          <div class="space-y-2 mt-4 pt-3 border-t text-slate-600 font-mono max-h-96 overflow-y-auto custom-scrollbar pr-1 text-[10px]">
+            <div class="bg-slate-50 p-2 rounded border no-copy-link">
               <div class="font-bold text-slate-800 font-sans">OpenStreetMap Tiles</div>
-              <div class="truncate text-primary">https://tile.openstreetmap.org/{z}/{x}/{y}.png</div>
+              <div class="text-primary">https://tile.openstreetmap.org/{z}/{x}/{y}.png</div>
             </div>
-            <div class="bg-slate-50 p-2 rounded border">
+            <div class="bg-slate-50 p-2 rounded border no-copy-link">
               <div class="font-bold text-slate-800 font-sans">Esri World Imagery</div>
-              <div class="truncate text-primary">https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}</div>
+              <div class="text-primary">https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}</div>
             </div>
-            <div class="bg-slate-50 p-2 rounded border">
+            <div class="bg-slate-50 p-2 rounded border no-copy-link">
               <div class="font-bold text-slate-800 font-sans">Esri Dark Gray Canvas</div>
-              <div class="truncate text-primary">https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}</div>
+              <div class="text-primary">https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}</div>
             </div>
           </div>
-        </div>
+        </details>
 
       </div>
     </div>
   </section>
-  <!-- TENTANG -->
+
+  <!-- TENTANG & FOOTER -->
   <section id="tentang" class="py-16 bg-white border-t border-slate-200">
     <div class="max-w-3xl mx-auto px-6 text-center space-y-4">
       <h3 class="font-bold text-slate-800 text-sm">Tentang Pengembang</h3>
-      <p class="text-xs text-slate-600">
-        Berikan Saran dan Masukan di Sosial Media Kami.
-      </p>
-      
-      <div class="flex items-center justify-center gap-3 pt-2">
-        <a href="https://www.tiktok.com/@geonusa.id" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-900 hover:text-white text-slate-800 font-bold text-xs sm:text-sm transition-all shadow-sm">
-          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
-          <span>TikTok</span>
-        </a>
-        <a href="https://www.instagram.com/geonusa.id/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-pink-50 hover:bg-gradient-to-r hover:from-purple-600 hover:via-pink-600 hover:to-orange-500 hover:text-white text-pink-600 font-bold text-xs sm:text-sm transition-all shadow-sm border border-pink-100">
-          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-          <span>Instagram</span>
-        </a>
-      </div>
-
+      <p class="text-xs text-slate-600">Berikan Saran dan Masukan di Sosial Media Kami.</p>
       <div class="pt-2">
         <span class="inline-block px-3 py-1 bg-slate-50 border border-slate-200 rounded-full text-xs font-semibold text-slate-700 shadow-sm">
           Author: Haris Muhammad Haq, S.P.W.K
@@ -572,7 +439,6 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer class="py-8 bg-slate-900 text-slate-400 text-xs border-t border-slate-800">
     <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-2">
@@ -585,21 +451,19 @@
     </div>
   </footer>
 
-  <!-- Skrip Animasi Slider -->
   <script>
     const images = ['g1.png', 'g2.png', 'g3.png', 'g4.png', 'g5.png', 'g6.png', 'g7.png', 'g8.png', 'g9.png', 'g10.png', 'g11.png'];
     let currentIndex = 0;
+    let slideInterval;
 
     function updateSlide() {
       const imgElement = document.getElementById('slider-image');
       if (imgElement) {
         imgElement.style.opacity = '0';
         imgElement.style.transform = 'scale(0.97)';
-        
         setTimeout(() => {
           currentIndex = (currentIndex + images.length) % images.length;
           imgElement.src = images[currentIndex];
-          
           imgElement.style.opacity = '1';
           imgElement.style.transform = 'scale(1)';
         }, 200);
@@ -609,15 +473,35 @@
     function nextSlide() {
       currentIndex++;
       updateSlide();
+      resetTimer();
     }
 
     function prevSlide() {
       currentIndex--;
       updateSlide();
+      resetTimer();
+    }
+
+    function startTimer() {
+      slideInterval = setInterval(() => {
+        currentIndex++;
+        updateSlide();
+      }, 2000);
+    }
+
+    function resetTimer() {
+      clearInterval(slideInterval);
+      startTimer();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       if (window.lucide) lucide.createIcons();
+      startTimer();
+      const container = document.getElementById('slider-container');
+      if (container) {
+        container.addEventListener('mouseenter', () => clearInterval(slideInterval));
+        container.addEventListener('mouseleave', () => startTimer());
+      }
     });
   </script>
 </body>
