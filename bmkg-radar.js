@@ -174,3 +174,17 @@
   });
 
 })();
+// Otomatis aktifkan layer Radar CMax BMKG sebagai default saat peta dimuat
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      // Centang checkbox di sidebar secara otomatis jika ada
+      let radarCheckbox = document.getElementById('toggleBmkgRadarCmax');
+      if (radarCheckbox) {
+        radarCheckbox.checked = true;
+      }
+      // Panggil fungsi toggle untuk memuat layer dan widgetnya ke peta
+      if (typeof window.toggleBmkgRadarCmax === 'function') {
+        window.toggleBmkgRadarCmax(true);
+      }
+    }, 600); // Penundaan 600ms memastikan peta utama (Leaflet) sudah siap sepenuhnya
+  });
