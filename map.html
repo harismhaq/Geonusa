@@ -258,10 +258,18 @@
             <h2 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Cuaca, Iklim & Titik Panas</h2>
             <p class="text-[11px] text-slate-600 mt-0.5">Kontrol citra satelit cuaca & pemantauan hotspot</p>
           </div>
+
+          
           <div class="space-y-1 px-1">
             <label class="flex items-center gap-2.5 py-2 px-1 hover:bg-white/30 rounded-lg cursor-pointer transition-all">
               <input type="checkbox" id="toggleHotspotLayer" class="accent-rose-600 w-4 h-4 rounded cursor-pointer" />
               <span class="text-xs font-bold text-slate-700">Titik Panas (Hotspot) </span>
+            </label>
+
+                    <!-- BARIS PALING ATAS: RADAR CMAX BMKG -->
+            <label class="flex items-center gap-2.5 py-2 px-1 hover:bg-white/30 rounded-lg cursor-pointer transition-all">
+              <input type="checkbox" id="toggleBmkgRadarCmax" class="accent-sky-600 w-4 h-4 rounded cursor-pointer" onchange="toggleBmkgRadarCmax(this.checked)" />
+              <span class="text-xs font-bold text-slate-700">Radar CMax BMKG (Reflektifitas)</span>
             </label>
 
             <label class="flex items-center gap-2.5 py-2 px-1 hover:bg-white/30 rounded-lg cursor-pointer transition-all">
@@ -598,6 +606,7 @@
   <script src="modis-viirs.js"></script>
   <script src="hotspot.js"></script>
   <script src="airvisual-layer.js"></script>
+  <script src="bmkg-radar.js"></script>
   <script>
     // Skrip Interaktif Tarik Resizer Sidebar (Support Mouse & Touch HP) [cite: 3]
 document.addEventListener('DOMContentLoaded', () => {
