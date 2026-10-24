@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeoNusa — Studio</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#008bb0','primary-dark':'#0b4a75',accent:'#00b0d8'}}}}</script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/shpjs@4.0.4/dist/shp.min.js"></script>
+<script src="https://unpkg.com/@tmcw/togeojson@5.8.1/dist/togeojson.umd.js"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body class="h-screen w-screen overflow-hidden bg-slate-100 text-slate-800 antialiased">
+<div id="app" class="relative h-screen w-screen overflow-hidden">
+  <main id="mainArea" class="w-full h-full relative">
+    <div id="map" class="w-full h-full"></div>
+    <div id="userPill" class="absolute top-3 right-3 z-[800] glass rounded-2xl px-2 py-1.5"></div>
+    <input type="file" id="fileInput" accept=".geojson,.json,.kml,.zip,.shp,.dbf,.shx,.cpg" multiple class="hidden">
+  </main>
+</div>
+<script src="supabase-config.js"></script>
+<script src="common.js"></script>
+<script>
+const BOX = 'w-full px-2.5 py-2 bg-white/80 border border-slate-200 rounded-xl text-[11px] focus:outline-none focus:border-primary';
+mountSidebar('Studio Peta', `
+ <div class="px-4 pt-3 pb-3 border-b border-white/30 shrink-0 space-y-2">
+  <button onclick="newProject()" class="w-full py-2.5 bg-gradient-to-r from-primary to-accent hover:opacity-90 text-white text-xs font-bold rounded-xl shadow-sm flex items-center justify-center gap-1.5"><i data-lucide="plus-circle" class="w-4 h-4"></i><span>Buat Postingan Baru</span></button>
+  <label class="text-[10px] font-bold text-slate-500 block">Postingan Anda</label><div id="projDd" class="relative">
+   <button type="button" onclick="toggleDd()" class="w-full flex items-center gap-2.5 px-3 py-2.5 bg-white/85 border border-slate-200 rounded-xl text-xs font-bold text-left hover:border-primary transition-colors"><span id="projDot" class="w-2 h-2 rounded-full shrink-0 bg-slate-300"></span><span id="projName" class="flex-1 truncate">Pilih postingan</span><span id="projChev" class="transition-transform"><i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i></span></button>
+   <div id="projList" class="hidden absolute left-0 right-0 top-full mt-1.5 z-50 bg-white rounded-2xl shadow-xl border border-slate-100 p-1.5 max-h-64 overflow-y-auto custom-scrollbar"></div></div>
+  <p class="text-[10px] text-slate-500 leading-snug">Setiap postingan punya studio sendiri (bisa berisi banyak layer). Buat postingan baru untuk peta yang berbeda.</p></div>
+ <div class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
+  <div id="projBox"></div>
+  <div class="flex items-center justify-between"><p class="font-extrabold text-sm">Layer <span id="cnt" class="text-[11px] font-normal text-slate-500"></span></p><button onclick="pick()" class="px-3 py-2 bg-primary hover:bg-primary-dark text-white text-xs font-bold rounded-xl inline-flex items-center gap-1.5"><i data-lucide="upload" class="w-3.5 h-3.5"></i><span>Unggah</span></button></div>
+  <div id="list" class="space-y-2"></div>
+ </div>
+ <p class="px-5 py-2 text-[10px] text-slate-500 border-t border-white/30">Format: GeoJSON, KML, atau Shapefile. Untuk Shapefile, blok file <b>.shp, .dbf, .shx</b> (dan .cpg bila ada) saja — <b>jangan sertakan .prj</b>. Pastikan data sudah berkoordinat <b>WGS84 (EPSG:4326)</b>. Maks 5 MB per layer.</p>`);
+initMap();
+
+const MAX_BYTES = 5 * 1024 * 1024, DEF = '#008bb0', PAL = ['#008bb0', '#e11d48', '#16a34a', '#d97706', '#9333ea', '#0284c7', '#db2777', '#65a30d'];
+const CATS = ['Lingkungan', 'Kehutanan', 'Bencana', 'Infrastruktur', 'Pertanian', 'Perkotaan', 'Sosial-Ekonomi', 'Batas Wilayah', 'Lainnya'];
+let projects = [], cur = null, layers = [];
+const findL = id => layers.find(l => l.id === id), vis = l => l.is_visible !== false;
+
+const propKeys = g => Object.keys(feats(g)[0]?.properties || {});
+const uniq = (g, k) => [...new Set(feats(g).filter(f => f.properties?.[k] !== undefined).map(f => String(f.properties[k])))];
+
+/* ---- layer di peta ---- */
+function createLeaf(l) {
+  const a = l.d.attr, op = () => l.opacity ?? .7, pt = { pointToLayer: (f, ll) => L.circleMarker(ll, { radius: 5 }), onEachFeature: (f, ly) => { if (!/Polygon/.test(f.geometry?.type)) ly.bindPopup(() => popupHTML([{ name: l.name, props: f.properties, c: colorOf(l, f) }]), POP); } };
+  if (!a) return L.geoJSON(l.geojson, { ...pt, style: () => lyrStyle(l.color || DEF, op()) });
+  const cm = l.d.colorMap; let n = Object.keys(cm).length;
+  return L.geoJSON(l.geojson, { ...pt, style: f => { const v = String(f.properties?.[a] ?? 'Lainnya'); if (!cm[v]) cm[v] = cm.__else || PAL[n++ % 8]; return lyrStyle(cm[v], op()); } });
+}
+function setOpacity(id, v) { const l = findL(id); l.opacity = v / 100; $('op-' + id).textContent = v + '%'; l.leaf.setStyle(l.leaf.options.style); }
+const mkLayer = r => { const l = { ...r, d: { attr: r.style_attr || '', colorMap: r.style_colormap || {} } }; l.leaf = createLeaf(l); return l; };
+function redraw() { layers.forEach(l => map.removeLayer(l.leaf)); layers.filter(vis).forEach(l => l.leaf.addTo(map)); }
+function rebuild(l) { map.removeLayer(l.leaf); l.leaf = createLeaf(l); redraw(); }
+function fitAll() { const g = L.featureGroup(layers.filter(vis).map(l => l.leaf)); if (g.getLayers().length && g.getBounds().isValid()) fitTo(g.getBounds()); }
+const zoomL = id => { try { fitTo(findL(id).leaf.getBounds()); } catch {} };
+
+/* ---- postingan (proyek) ---- */
+const formFrom = p => ({ title: p.title, caption: p.caption || '', tags: (p.tags || []).join(', '), dl: p.allow_download ?? true, cat: p.category || '', region: p.region || '', year: p.data_year || '', src: p.source || '', crs: p.crs || 'EPSG:4326', fmt: p.data_format || 'GeoJSON' });
+async function load() {
+  layers.forEach(l => map.removeLayer(l.leaf)); layers = []; projects = []; cur = null;
+  if (!user) return render();
+  const { data, error } = await sb.from('posts').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
+  if (error) return toast(error.message, 'error');
+  projects = data; projects.length ? await openProject(projects[0].id) : await newProject(true);
+}
+async function newProject(silent) {
+  const { data, error } = await sb.from('posts').insert({ user_id: user.id, title: 'Postingan Baru', published: false }).select().single();
+  if (error) return toast(error.message, 'error');
+  projects.unshift(data); await openProject(data.id); if (!silent) toast('Studio baru dibuat. Unggah layer pertama Anda.', 'ok');
+}
+async function openProject(id) {
+  layers.forEach(l => map.removeLayer(l.leaf)); layers = []; cur = projects.find(p => p.id === id); if (!cur) return render();
+  cur.d = cur.d || formFrom(cur);
+  const { data, error } = await sb.from('spatial_layers').select('*').eq('post_id', id).order('sort_order').order('created_at');
+  if (error) return toast(error.message, 'error');
+  layers = data.map(mkLayer); redraw(); render(); fitAll();
+}
+function renderDd() {
+  const pub = cur?.published;
+  $('projName').textContent = cur ? cur.d.title : 'Pilih postingan'; $('projDot').className = 'w-2 h-2 rounded-full shrink-0 ' + (!cur ? 'bg-slate-300' : pub ? 'bg-emerald-500' : 'bg-amber-400');
+  $('projList').innerHTML = projects.length ? projects.map(p => `<button type="button" onclick="pickProject('${p.id}');toggleDd(false)" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs text-left transition-colors ${p.id === cur?.id ? 'bg-primary/10 text-primary' : 'text-slate-700 hover:bg-slate-50'}"><span class="w-2 h-2 rounded-full shrink-0 ${p.published ? 'bg-emerald-500' : 'bg-amber-400'}"></span><span class="flex-1 truncate font-semibold">${esc(p.id === cur?.id ? cur.d.title : p.title)}</span><span class="text-[10px] font-semibold ${p.published ? 'text-emerald-600' : 'text-amber-600'}">${p.published ? 'Diposting' : 'Draf'}</span></button>`).join('') : '<p class="p-3 text-xs text-slate-400 text-center">Belum ada postingan</p>';
+}
+function toggleDd(v) { const l = $('projList'), open = v ?? l.classList.contains('hidden'); l.classList.toggle('hidden', !open); $('projChev').classList.toggle('rotate-180', open); }
+document.addEventListener('click', e => { if (!e.target.closest('#projDd')) toggleDd(false); });
+const pickProject = v => v === '__new' ? newProject() : openProject(v);
+const upd = (k, v) => { cur.d[k] = v; };
+const mf = (k, ph, t = 'text') => `<input type="${t}" value="${esc(cur.d[k])}" oninput="upd('${k}',this.value)" placeholder="${ph}" class="${BOX}">`;
+function renderProject() {
+  const d = cur.d;
+  $('projBox').innerHTML = `<div class="bg-white/80 p-3.5 rounded-2xl border border-white space-y-2 text-xs">
+   <div class="flex items-center justify-between"><p class="font-extrabold text-sm">Detail Postingan</p><span class="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md ${cur.published ? 'bg-sky-100 text-sky-700' : 'bg-slate-200 text-slate-600'}"><i data-lucide="${cur.published ? 'globe-2' : 'file-pen-line'}" class="w-3 h-3"></i>${cur.published ? 'Diposting' : 'Draf'}</span></div>
+   <input value="${esc(d.title)}" oninput="upd('title',this.value)" placeholder="Judul postingan" class="${BOX}">
+   <textarea rows="2" maxlength="300" oninput="upd('caption',this.value)" placeholder="Tulis caption / deskripsi peta..." class="${BOX} resize-none">${esc(d.caption)}</textarea>
+   <input value="${esc(d.tags)}" oninput="upd('tags',this.value)" placeholder="Tag (mis. hutan, banjir)" class="${BOX}">
+   <div class="grid grid-cols-2 gap-1.5 p-2 rounded-xl bg-slate-50/80 border border-slate-200"><p class="col-span-2 text-[10px] font-bold text-slate-600">Metadata Peta</p>
+    <select onchange="upd('cat',this.value)" class="${BOX}"><option value="">Kategori...</option>${CATS.map(c => `<option ${d.cat === c ? 'selected' : ''}>${c}</option>`).join('')}</select>
+    ${mf('region', 'Wilayah (mis. Kalimantan Barat)')}${mf('year', 'Tahun data', 'number')}${mf('src', 'Sumber (mis. BIG)')}${mf('crs', 'CRS (EPSG:4326)')}
+    <select onchange="upd('fmt',this.value)" class="${BOX}">${['GeoJSON', 'KML', 'Shapefile'].map(f => `<option ${d.fmt === f ? 'selected' : ''}>${f}</option>`).join('')}</select></div>
+   <label class="flex items-center gap-2 text-[11px]"><input type="checkbox" ${d.dl ? 'checked' : ''} onchange="upd('dl',this.checked)"> Izinkan orang lain mengunduh data</label>
+   <div class="flex gap-1.5 flex-wrap items-center pt-1 border-t border-slate-100">
+    <button onclick="saveProject(true)" class="px-3 py-1.5 bg-primary hover:bg-primary-dark text-white rounded-lg font-bold text-[11px]">${cur.published ? 'Simpan Perubahan' : 'Posting ke Sosmed'}</button>
+    ${cur.published ? '<button onclick="unpost()" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 rounded-lg text-[11px] font-semibold">Tarik ke Draf</button>' : '<button onclick="saveProject(false)" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 rounded-lg text-[11px] font-semibold">Simpan Draf</button>'}
+    <button onclick="delProject()" class="ml-auto px-2 py-1.5 text-rose-600 hover:bg-rose-50 rounded-lg text-[11px]">Hapus</button></div></div>`;
+}
+async function saveProject(pub) {
+  const d = cur.d, willPub = pub ?? cur.published;
+  if (willPub && !layers.some(vis)) return toast('Tampilkan minimal satu layer sebelum memposting.', 'error');
+  const tags = [...new Set(d.tags.split(',').map(t => t.trim().toLowerCase()).filter(Boolean))].slice(0, 8);
+  const row = { title: d.title.trim() || 'Tanpa Judul', caption: d.caption.trim(), tags, allow_download: d.dl, category: d.cat || null, region: String(d.region).trim() || null, data_year: d.year ? +d.year : null, source: String(d.src).trim() || null, crs: String(d.crs).trim() || null, data_format: d.fmt, published: willPub, updated_at: new Date().toISOString() };
+  if (willPub) Object.assign(row, (await renderPreviewImage(layers.filter(vis))) || {});
+  const ups = await Promise.all(layers.map((l, i) => sb.from('spatial_layers').update({ sort_order: i, is_visible: vis(l), color: l.color || DEF, opacity: l.opacity ?? .7, style_attr: l.d.attr || null, style_colormap: l.d.colorMap || {} }).eq('id', l.id)));
+  const bad = ups.find(u => u.error); if (bad) return toast(bad.error.message, 'error');
+  const r = await sb.from('posts').update(row).eq('id', cur.id).select().single(); if (r.error) return toast(r.error.message, 'error');
+  const was = cur.published; Object.assign(cur, r.data); render(); toast(willPub && !was ? 'Peta diposting ke Sosmed' : 'Perubahan disimpan', 'ok');
+}
+async function unpost() { if (confirm('Tarik ke draf? Postingan hilang dari Sosmed (suka & komentar tetap tersimpan).')) { await saveProject(false); toast('Postingan ditarik ke draf', 'ok'); } }
+async function delProject() {
+  if (!confirm('Hapus postingan ini beserta semua layer, suka, dan komentarnya?')) return;
+  const { error } = await sb.from('posts').delete().eq('id', cur.id); if (error) return toast(error.message, 'error');
+  projects = projects.filter(p => p.id !== cur.id); toast('Postingan dihapus', 'ok'); projects.length ? await openProject(projects[0].id) : await newProject(true);
+}
+
+/* ---- daftar layer ---- */
+const layerCard = (l, i) => {
+  const uv = l.d.attr ? uniq(l.geojson, l.d.attr) : [];
+  return `<div class="bg-white/80 p-3 rounded-2xl border border-white space-y-2 text-xs ${vis(l) ? '' : 'opacity-60'}">
+   <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full shrink-0 ring-1 ring-black/5" style="background:${l.d.attr ? '#94a3b8' : l.color || DEF}"></span><button onclick="zoomL('${l.id}')" class="font-bold truncate text-left hover:text-primary flex-1">${esc(l.name)}</button>
+    <button onclick="toggleVis('${l.id}')" title="${vis(l) ? 'Sembunyikan layer' : 'Tampilkan layer'}" class="w-7 h-7 rounded-lg flex items-center justify-center text-slate-500 hover:text-primary hover:bg-slate-100 transition"><i data-lucide="${vis(l) ? 'eye' : 'eye-off'}" class="w-4 h-4"></i></button>
+    <button onclick="move('${l.id}',-1)" ${i === 0 ? 'disabled' : ''} class="w-7 h-7 rounded-lg flex items-center justify-center text-slate-500 hover:text-primary hover:bg-slate-100 transition disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-slate-500" title="Naik"><i data-lucide="chevron-up" class="w-4 h-4"></i></button><button onclick="move('${l.id}',1)" ${i === layers.length - 1 ? 'disabled' : ''} class="w-7 h-7 rounded-lg flex items-center justify-center text-slate-500 hover:text-primary hover:bg-slate-100 transition disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-slate-500" title="Turun"><i data-lucide="chevron-down" class="w-4 h-4"></i></button>
+    <button onclick="delL('${l.id}')" class="w-7 h-7 rounded-lg flex items-center justify-center text-rose-500 hover:text-rose-700 hover:bg-rose-50 transition" title="Hapus layer"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>
+   <div class="flex items-center gap-2"><select onchange="changeAttr('${l.id}',this.value)" class="${BOX}"><option value="">Warna standar</option>${propKeys(l.geojson).map(k => `<option value="${esc(k)}" ${l.d.attr === k ? 'selected' : ''}>Warnai: ${esc(k)}</option>`).join('')}</select>
+    ${l.d.attr ? '' : `<input type="color" value="${l.color || DEF}" onchange="setColor('${l.id}',this.value)" class="w-8 h-7 shrink-0 rounded cursor-pointer border border-slate-300">`}</div>
+   <label class="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg border border-dashed border-slate-300 text-[11px] font-semibold text-slate-600 hover:border-primary hover:text-primary cursor-pointer" title="Di QGIS: Layer Properties → Style → Save Style → format SLD (simbologi Categorized)"><i data-lucide="palette" class="w-3.5 h-3.5"></i>Impor simbologi SLD (QGIS)<input type="file" accept=".sld,.xml" class="hidden" onchange="importSld('${l.id}',this)"></label>
+   <label class="flex items-center gap-2 text-[11px] text-slate-600"><span class="shrink-0">Opasitas warna</span><input type="range" min="10" max="100" value="${Math.round((l.opacity ?? .7) * 100)}" oninput="setOpacity('${l.id}',this.value)" class="flex-1 accent-primary"><span id="op-${l.id}" class="w-9 text-right">${Math.round((l.opacity ?? .7) * 100)}%</span></label>
+   ${uv.length ? `<div class="space-y-1 max-h-28 overflow-y-auto custom-scrollbar p-2 bg-slate-50/80 rounded-xl border border-slate-200">${uv.map((v, k) => `<div class="flex items-center justify-between gap-2 text-[11px]"><span class="truncate" title="${esc(v)}">${esc(v)}</span><input type="color" value="${l.d.colorMap[v] || DEF}" onchange="changeColor('${l.id}',${k},this.value)" class="w-7 h-6 rounded cursor-pointer border border-slate-300"></div>`).join('')}</div>` : ''}</div>`;
+};
+function render() {
+  renderDd();
+  if (!user || !cur) { $('projBox').innerHTML = ''; $('cnt').textContent = ''; $('list').innerHTML = '<div class="p-6 text-center text-xs space-y-3"><p class="text-slate-600">Masuk untuk mengunggah dan memposting peta.</p><button onclick="openAuth()" class="px-4 py-2 bg-primary text-white font-bold rounded-xl">Daftar / Masuk</button></div>'; return; }
+  renderProject(); $('cnt').textContent = `(${layers.length})`;
+  $('list').innerHTML = layers.length ? layers.map(layerCard).join('') : '<p class="p-4 text-center text-xs text-slate-500">Studio ini masih kosong. Unggah layer pertama Anda.</p>';
+  icons();
+}
+const renderLayers = () => { $('cnt').textContent = `(${layers.length})`; $('list').innerHTML = layers.map(layerCard).join(''); icons(); };
+function toggleVis(id) { const l = findL(id); l.is_visible = !vis(l); redraw(); renderLayers(); }
+function move(id, dir) { const i = layers.findIndex(l => l.id === id), j = i + dir; if (j < 0 || j >= layers.length) return; [layers[i], layers[j]] = [layers[j], layers[i]]; redraw(); renderLayers(); }
+function changeAttr(id, k) { const l = findL(id); l.d.attr = k; l.d.colorMap = k ? Object.fromEntries(uniq(l.geojson, k).map((v, i) => [v, PAL[i % 8]])) : {}; rebuild(l); renderLayers(); }
+function changeColor(id, k, c) { const l = findL(id); l.d.colorMap[uniq(l.geojson, l.d.attr)[k]] = c; rebuild(l); }
+function setColor(id, c) { const l = findL(id); l.color = c; rebuild(l); renderLayers(); }
+async function delL(id) {
+  if (!confirm('Hapus layer ini dari postingan?')) return;
+  const { error } = await sb.from('spatial_layers').delete().eq('id', id); if (error) return toast(error.message, 'error');
+  map.removeLayer(findL(id).leaf); layers = layers.filter(l => l.id !== id); renderLayers(); toast('Layer dihapus. Klik Simpan agar pratinjau diperbarui.', 'ok');
+}
+
+/* ---- unggah ---- */
+/* ---- Impor SLD (QGIS): Categorized/nilai unik & simbol tunggal ---- */
+function parseSld(text) {
+  const doc = new DOMParser().parseFromString(text, 'text/xml');
+  if (doc.getElementsByTagName('parsererror').length) throw new Error('Berkas SLD tidak valid (XML rusak).');
+  const q = (n, el = doc) => [...el.getElementsByTagNameNS('*', n)];
+  const rules = q('Rule'); if (!rules.length) throw new Error('Tidak ada aturan (Rule) di berkas SLD ini.');
+  const param = (el, name) => [...el.getElementsByTagName('*')].find(x => /^(Css|Svg)Parameter$/.test(x.localName) && x.getAttribute('name') === name)?.textContent.trim();
+  const hex = c => { if (!c) return null; if (/^#[0-9a-f]{3}$/i.test(c)) c = '#' + [...c.slice(1)].map(x => x + x).join(''); return /^#[0-9a-f]{6}$/i.test(c) ? c.toLowerCase() : null; };
+  const out = { map: {}, prop: null, els: null, single: null, opacity: null, ranges: 0, skipped: 0 };
+  rules.forEach(rule => {
+    const col = hex(param(rule, 'fill')) || hex(param(rule, 'stroke')), op = parseFloat(param(rule, 'fill-opacity'));
+    if (out.opacity == null && !isNaN(op)) out.opacity = op;
+    if (q('ElseFilter', rule).length) { if (col) out.els = col; return; }
+    const filt = q('Filter', rule)[0];
+    if (!filt) { if (col && out.single == null) out.single = col; return; }
+    if (['PropertyIsBetween', 'PropertyIsGreaterThan', 'PropertyIsGreaterThanOrEqualTo', 'PropertyIsLessThan', 'PropertyIsLessThanOrEqualTo'].some(n => q(n, filt).length)) { out.ranges++; return; }
+    const eqs = q('PropertyIsEqualTo', filt); if (!eqs.length || !col) { out.skipped++; return; }
+    eqs.forEach(e => { const pn = q('PropertyName', e)[0]?.textContent.trim(), lit = q('Literal', e)[0]?.textContent.trim(); if (pn == null || lit == null) return; out.prop = out.prop || pn; if (pn === out.prop) out.map[lit] = col; });
+  });
+  return out;
+}
+async function importSld(id, inp) {
+  const f = inp.files[0]; inp.value = ''; if (!f) return; const l = findL(id);
+  try {
+    if (f.size > 1024 * 1024) throw new Error('Berkas SLD terlalu besar (maks 1 MB).');
+    const r = parseSld(await f.text()), msgs = [];
+    if (r.prop) {
+      const keys = propKeys(l.geojson), attr = keys.find(k => k === r.prop) || keys.find(k => k.toLowerCase() === r.prop.toLowerCase());
+      if (!attr) throw new Error(`Kolom "${r.prop}" dari SLD tidak ada di data. Kolom tersedia: ${keys.join(', ') || '-'}.`);
+      const vals = uniq(l.geojson, attr), norm = x => String(x).trim().toLowerCase(), lc = Object.fromEntries(Object.entries(r.map).map(([k, c]) => [norm(k), c]));
+      const cm = {}; let hit = 0;
+      vals.forEach((v, i) => { const c = r.map[v] || lc[norm(v)]; if (c) { cm[v] = c; hit++; } else cm[v] = r.els || PAL[i % 8]; });
+      if (r.els) cm.__else = r.els;
+      l.d.attr = attr; l.d.colorMap = cm; msgs.push(`${hit} dari ${vals.length} nilai unik cocok`);
+      if (hit < vals.length) msgs.push(r.els ? 'sisanya memakai warna "lainnya"' : 'sisanya memakai warna cadangan');
+    } else if (r.single) { l.d.attr = ''; l.d.colorMap = {}; l.color = r.single; msgs.push('simbol tunggal diterapkan'); }
+    else throw new Error(r.ranges ? 'SLD ini bertingkat (graduated/rentang) dan belum didukung. Gunakan simbologi Categorized (nilai unik) di QGIS.' : 'Tidak ada aturan yang dapat dibaca dari SLD ini.');
+    if (r.opacity != null) l.opacity = Math.min(1, Math.max(.1, r.opacity));
+    if (r.ranges) msgs.push(`${r.ranges} aturan rentang diabaikan`); if (r.skipped) msgs.push(`${r.skipped} aturan tak dikenali dilewati`);
+    rebuild(l); renderLayers(); toast('SLD diterapkan: ' + msgs.join('; ') + '. Klik Simpan.', 'ok');
+  } catch (e) { console.error(e); toast(e.message || 'Gagal membaca SLD.', 'error'); }
+}
+
+function pick() { if (!user) return openAuth(); $('fileInput').click(); }
+
+function shpKey(f) {
+  const path = f.webkitRelativePath || f.name;
+  return path.replace(/\.(shp|dbf|prj|shx|cpg)$/i, '').toLowerCase();
+}
+
+async function parseShpFiles(files) {
+  const byKey = new Map();
+  for (const f of files) {
+    const ext = f.name.split('.').pop().toLowerCase();
+    if (!['shp','dbf','prj','shx','cpg'].includes(ext)) continue;
+    const key = shpKey(f);
+    if (!byKey.has(key)) byKey.set(key, {});
+    byKey.get(key)[ext] = f;
+  }
+
+  const groups = [...byKey.entries()].filter(([, g]) => g.shp);
+  if (!groups.length) throw new Error('Tidak ditemukan file .shp. Pilih file .shp beserta pendampingnya (.dbf, .shx, .cpg) — tanpa .prj.');
+
+  return Promise.all(groups.map(async ([key, g]) => {
+    const totalSize = Object.values(g).reduce((sum, f) => sum + f.size, 0);
+    if (totalSize > MAX_BYTES) throw new Error(`Ukuran Shapefile "${g.shp.name}" melebihi 5 MB.`);
+
+    const [shpBuf, dbfBuf, prjBuf, cpgBuf] = await Promise.all([
+      g.shp.arrayBuffer(),
+      g.dbf ? g.dbf.arrayBuffer() : null,
+      null,   // .prj sengaja diabaikan: data harus sudah WGS84
+      g.cpg ? g.cpg.arrayBuffer() : null
+    ]);
+
+    const geometries = shp.parseShp(shpBuf, prjBuf || undefined);
+    const properties = dbfBuf ? shp.parseDbf(dbfBuf, cpgBuf || undefined) : [];
+    const geojson = shp.combine([geometries, properties]);
+
+    if (!geojson?.features?.length) throw new Error(`Shapefile "${g.shp.name}" tidak berisi fitur.`);
+    const f0 = feats(geojson)[0]; let c0 = f0?.geometry?.coordinates; while (Array.isArray(c0) && Array.isArray(c0[0])) c0 = c0[0];
+    if (Array.isArray(c0) && (Math.abs(c0[0]) > 180 || Math.abs(c0[1]) > 90)) throw new Error(`Koordinat "${g.shp.name}" bukan WGS84 (EPSG:4326). Ubah dulu ke EPSG:4326 di QGIS/ArcGIS, lalu unggah tanpa .prj.`);
+    return {
+      geojson,
+      name: g.shp.name.replace(/\.shp$/i, ''),
+      format: 'Shapefile',
+      missingDbf: !g.dbf
+    };
+  }));
+}
+
+async function parseRegularFile(f) {
+  const n = f.name.toLowerCase();
+  if (f.size > MAX_BYTES) throw new Error(`Ukuran "${f.name}" melebihi 5 MB.`);
+
+  if (n.endsWith('.zip')) {
+    const r = await shp(await f.arrayBuffer());
+    const list = Array.isArray(r) ? r : [r];
+    return list.map((geojson, i) => ({
+      geojson,
+      name: geojson.fileName || (list.length > 1 ? `${f.name.replace(/\.zip$/i, '')} ${i + 1}` : f.name.replace(/\.zip$/i, '')),
+      format: 'Shapefile'
+    }));
+  }
+
+  const t = await f.text();
+  return [{
+    geojson: n.endsWith('.kml')
+      ? toGeoJSON.kml(new DOMParser().parseFromString(t, 'text/xml'))
+      : JSON.parse(t),
+    name: f.name.replace(/\.[^/.]+$/, ''),
+    format: n.endsWith('.kml') ? 'KML' : 'GeoJSON'
+  }];
+}
+
+$('fileInput').addEventListener('change', async e => {
+  const files = [...e.target.files];
+  e.target.value = '';
+  if (!files.length || !cur) return;
+
+  try {
+    const shpFiles = files.filter(f => /\.(shp|dbf|prj|shx|cpg)$/i.test(f.name));
+    const regularFiles = files.filter(f => /\.(geojson|json|kml|zip)$/i.test(f.name));
+    const results = [];
+
+    if (shpFiles.length) results.push(...await parseShpFiles(shpFiles));
+    for (const f of regularFiles) results.push(...await parseRegularFile(f));
+
+    if (!results.length) throw new Error('Format file tidak didukung. Pilih GeoJSON/KML/ZIP atau blok file Shapefile (.shp, .dbf, .shx, .cpg — tanpa .prj).');
+
+    let added = 0;
+    const warnings = [];
+
+    for (const item of results) {
+      const geojson = item.geojson;
+      if (!geojson?.type || !(geojson.features?.length || geojson.coordinates || geojson.geometry)) {
+        warnings.push(`${item.name}: data spasial tidak valid`);
+        continue;
+      }
+
+      const { data, error } = await sb.from('spatial_layers').insert({
+        user_id: user.id,
+        post_id: cur.id,
+        name: item.name,
+        geojson,
+        color: PAL[layers.length % 8],
+        sort_order: layers.length
+      }).select().single();
+
+      if (error) {
+        warnings.push(`${item.name}: ${error.message}`);
+        continue;
+      }
+
+      const l = mkLayer(data);
+      layers.push(l);
+      added++;
+
+      if (item.missingDbf) warnings.push(`${item.name}: file .dbf tidak ditemukan, atribut tidak ikut terbaca.`);
+      if (cur.d.title === 'Postingan Baru' && added === 1) cur.d.title = item.name;
+    }
+
+    if (!added) throw new Error(warnings.join(' | ') || 'Tidak ada layer yang berhasil ditambahkan.');
+
+    cur.d.fmt = results.some(r => r.format === 'Shapefile') ? 'Shapefile' : results[0].format;
+    redraw();
+    render();
+    zoomL(layers[layers.length - 1].id);
+
+    const msg = `${added} layer berhasil ditambahkan.` + (warnings.length ? ` ${warnings.join(' ')}` : '');
+    toast(msg, warnings.length ? 'error' : 'ok');
+  } catch (err) {
+    console.error(err);
+    toast(err.message || 'Gagal memproses berkas.', 'error');
+  }
+});
+
+
+map.on('click', e => showFeaturePopup(map, e.latlng, layers.filter(vis).map(l => ({ name: l.name, gj: l.geojson, colorFor: f => colorOf(l, f) }))));   // klik poligon → detail atribut
+onAuth(load);
+(async () => { icons(); await bootAuth(); })();
+</script>
+</body>
+</html> 

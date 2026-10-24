@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panduan Penggunaan — GeoNusa</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#008bb0','primary-dark':'#0b4a75',accent:'#00b0d8'}}}}</script>
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}body{font-family:'Inter',sans-serif}.sec{scroll-margin-top:5rem}
+.sec h2{font-size:1.35rem;font-weight:800;color:#0f172a;display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem}
+.sec h3{font-size:1rem;font-weight:800;color:#0b4a75;margin:1.4rem 0 .3rem}.sec p,.sec li{font-size:.875rem;line-height:1.65;color:#334155}.sec p{margin:.4rem 0}
+.sec ul.l{list-style:disc;padding-left:1.25rem;display:grid;gap:.25rem;margin:.4rem 0}
+.steps{counter-reset:s;display:grid;gap:.6rem;margin:.7rem 0;list-style:none;padding:0}
+.steps>li{counter-increment:s;position:relative;padding:.75rem .9rem .75rem 3rem;background:#fff;border:1px solid #e2e8f0;border-radius:1rem}
+.steps>li::before{content:counter(s);position:absolute;left:.8rem;top:.7rem;width:1.7rem;height:1.7rem;border-radius:9999px;background:#008bb0;color:#fff;font-weight:800;font-size:.8rem;display:flex;align-items:center;justify-content:center}
+.tip,.warn,.note{border-radius:1rem;padding:.7rem 1rem;font-size:.82rem;line-height:1.6;margin:.8rem 0;border:1px solid}
+.tip{background:#ecfeff;border-color:#a5f3fc;color:#155e75}.warn{background:#fffbeb;border-color:#fde68a;color:#92400e}.note{background:#f8fafc;border-color:#e2e8f0;color:#475569}
+.k{display:inline-block;padding:.02rem .45rem;border-radius:.5rem;background:#e0f2f7;color:#0b4a75;font-weight:700;font-size:.78rem}
+.tb{width:100%;border-collapse:separate;border-spacing:0;font-size:.82rem;margin:.7rem 0;background:#fff;border:1px solid #e2e8f0;border-radius:1rem;overflow:hidden}
+.tb th{background:#f1f5f9;text-align:left;padding:.55rem .8rem;font-weight:800;color:#0b4a75}.tb td{padding:.55rem .8rem;border-top:1px solid #e2e8f0;vertical-align:top;color:#334155}
+details{background:#fff;border:1px solid #e2e8f0;border-radius:1rem;padding:.7rem 1rem;margin:.5rem 0}details summary{cursor:pointer;font-weight:700;font-size:.875rem;color:#0f172a}details p{margin-top:.5rem}
+#toc a.on{background:#e0f2f7;color:#0b4a75;font-weight:800}
+</style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+<header class="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-slate-200">
+  <div class="max-w-6xl mx-auto h-14 px-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-2.5"><div class="w-9 h-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center p-1 overflow-hidden"><img src="logo-sidebar.png" alt="GeoNusa" class="w-full h-full object-contain"></div><span class="text-lg font-extrabold tracking-tight">Geo<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-600">Nusa</span></span><span class="hidden sm:inline text-[10px] font-bold text-sky-800 tracking-wider uppercase ml-1">Panduan</span></a>
+    <div class="flex items-center gap-2 text-xs font-bold"><a href="index.html" class="px-3 py-1.5 text-primary hover:bg-slate-100 rounded-xl">Beranda</a><a href="studio.html" class="px-3 py-1.5 bg-primary hover:bg-primary-dark text-white rounded-xl">Buka Studio</a></div>
+  </div>
+</header>
+
+<div class="max-w-6xl mx-auto px-4 py-6 lg:flex lg:gap-8">
+  <aside class="lg:w-64 shrink-0 mb-6 lg:mb-0">
+    <nav id="toc" class="lg:sticky lg:top-20 bg-white border border-slate-200 rounded-2xl p-3 text-xs">
+      <p class="px-2 pb-2 font-extrabold text-slate-500 uppercase tracking-wider text-[10px]">Daftar isi</p>
+      <div class="grid gap-0.5 max-h-[60vh] overflow-y-auto">
+        <a href="#kenalan" class="px-2 py-1.5 rounded-lg hover:bg-slate-50">1. Mengenal GeoNusa</a><a href="#akun" class="px-2 py-1.5 rounded-lg hover:bg-slate-50">2. Membuat akun &amp; masuk</a>
+        <a href="#tampilan" class="px-2 py-1.5 rounded-lg hover:bg-slate-50">3. Mengenal tampilan &amp; menu</a><a href="#beranda" class="px-2 py-1.5 rounded-lg hover:bg-slate-50">4. Beranda (feed)</a>
+        <a href="#detail" class="px-2 py-1.5 rounded-lg hover:bg-slate-50">5. Halaman detail peta</a><a href="#profil" class="px-2 py-1.5 rounded-lg hover:bg-slate-50">6. Profil &amp; pengikut</a>
+        <a href="#studio" class="px-2 py-1.5 rounded-lg hover:bg-slate-50">7. Studio: posting pertama</a><a href="#menu-studio" class="px-2 py-1.5 rounded-lg hover:bg-slate-50">8. Studio: semua menu</a>
+        <a href="#kelola" class="px-2 py-1.5 rounded-lg hover:bg-slate-50">9. Mengelola postingan</a><a href="#data" class="px-2 py-1.5 rounded-lg hover:bg-slate-50">10. Menyiapkan data &amp; SLD</a>
+        <a href="#unduh" class="px-2 py-1.5 rounded-lg hover:bg-slate-50">11. Mengunduh data (ZIP)</a><a href="#tips" class="px-2 py-1.5 rounded-lg hover:bg-slate-50">12. Tips &amp; etika</a>
+        <a href="#faq" class="px-2 py-1.5 rounded-lg hover:bg-slate-50">13. Masalah umum (FAQ)</a><a href="#istilah" class="px-2 py-1.5 rounded-lg hover:bg-slate-50">14. Glosarium</a>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="flex-1 min-w-0 space-y-10">
+    <section class="rounded-3xl bg-gradient-to-r from-primary to-accent text-white p-6 sm:p-8 shadow-lg">
+      <p class="text-[11px] font-bold uppercase tracking-wider text-white/80">Panduan pengguna baru</p>
+      <h1 class="text-2xl sm:text-3xl font-extrabold mt-1">Cara memakai GeoNusa, dari nol</h1>
+      <p class="text-sm text-white/90 mt-2 max-w-2xl">GeoNusa adalah media sosial untuk peta: Anda bisa melihat, menyukai, dan mengunduh peta orang lain, serta membuat dan membagikan peta Anda sendiri. Tidak perlu paham GIS untuk mulai.</p>
+      <div class="grid sm:grid-cols-3 gap-3 mt-5 text-sm">
+        <div class="bg-white/15 rounded-2xl p-3"><b>1. Daftar</b><br><span class="text-white/90 text-xs">Buat akun gratis (bagian 2).</span></div>
+        <div class="bg-white/15 rounded-2xl p-3"><b>2. Buat di Studio</b><br><span class="text-white/90 text-xs">Unggah data, atur warna (bagian 7).</span></div>
+        <div class="bg-white/15 rounded-2xl p-3"><b>3. Posting</b><br><span class="text-white/90 text-xs">Peta Anda tampil di Beranda.</span></div>
+      </div>
+    </section>
+
+    <section id="kenalan" class="sec">
+      <h2><i data-lucide="compass" class="w-6 h-6 text-primary"></i>1. Mengenal GeoNusa</h2>
+      <p>GeoNusa punya tiga area utama. Anda berpindah di antaranya lewat menu di atas dan bawah layar.</p>
+      <table class="tb"><tr><th>Area</th><th>Untuk apa?</th><th>Perlu login?</th></tr>
+        <tr><td><b>Beranda</b></td><td>Menjelajah peta yang diposting pengguna lain: melihat, mencari, menyukai, berkomentar, menyimpan, mengunduh.</td><td>Melihat dan mengunduh: tidak. Suka, komentar, simpan: ya.</td></tr>
+        <tr><td><b>Studio</b></td><td>Tempat membuat peta: mengunggah data, mengatur warna, menulis keterangan, lalu memposting.</td><td>Ya</td></tr>
+        <tr><td><b>Profil</b></td><td>Halaman pribadi kreator: foto, bio, daftar peta, pengikut. Juga tempat peta tersimpan Anda.</td><td>Melihat profil orang: tidak. Profil sendiri: ya.</td></tr></table>
+      <h3>Alur singkatnya</h3>
+      <p><span class="k">Data peta</span> → <span class="k">Studio</span> (unggah &amp; atur) → <span class="k">Posting ke Sosmed</span> → tampil di <span class="k">Beranda</span> → orang lain menyukai, berkomentar, atau mengunduh.</p>
+      <div class="note"><b>Satu postingan = satu "studio".</b> Setiap postingan punya ruang kerja sendiri dan boleh berisi <b>banyak layer</b> (lapisan peta) yang ditumpuk. Mau membuat peta yang berbeda? Buat postingan baru.</div>
+    </section>
+
+    <section id="akun" class="sec">
+      <h2><i data-lucide="user-plus" class="w-6 h-6 text-primary"></i>2. Membuat akun dan masuk</h2>
+      <h3>Mendaftar</h3>
+      <ol class="steps">
+        <li>Klik tombol <span class="k">Daftar / Masuk</span> di pojok kanan atas.</li>
+        <li>Anda dibawa ke <b>halaman masuk</b> khusus. Pilih tab <span class="k">Daftar</span>.</li>
+        <li>Isi <b>Nama lengkap / instansi</b> (ini nama yang tampil di postingan Anda), <b>Email</b>, <b>Password</b> (minimal 6 karakter), dan ulangi password.</li>
+        <li>Klik <span class="k">Daftar</span>. Jika muncul pesan <i>"Cek email Anda untuk konfirmasi akun"</i>, buka email Anda dan klik tautan konfirmasi dulu.</li>
+      </ol>
+      <h3>Masuk dan keluar</h3>
+      <ul class="l"><li>Klik <span class="k">Daftar / Masuk</span>, isi email dan password, lalu klik <span class="k">Masuk</span>. Setelah berhasil, Anda otomatis kembali ke halaman sebelumnya.</li><li>Tersedia juga <span class="k">Lanjutkan dengan Google</span> bila sudah diaktifkan oleh pengelola situs.</li><li>Untuk keluar, klik ikon panah keluar di sebelah nama Anda (pojok kanan atas).</li></ul>
+      <div class="warn">Fitur <b>lupa/reset password belum tersedia</b> di versi ini. Simpan password Anda baik-baik.</div>
+    </section>
+
+    <section id="tampilan" class="sec">
+      <h2><i data-lucide="layout-dashboard" class="w-6 h-6 text-primary"></i>3. Mengenal tampilan dan menu</h2>
+      <h3>Pojok kanan atas</h3>
+      <table class="tb"><tr><th>Tombol</th><th>Fungsi</th></tr>
+        <tr><td><span class="k">Panduan</span></td><td>Membuka halaman panduan ini.</td></tr>
+        <tr><td><span class="k">Studio</span> / <span class="k">Beranda</span></td><td>Pindah antara Beranda dan Studio.</td></tr>
+        <tr><td>Foto + nama Anda</td><td>Membuka profil Anda.</td></tr>
+        <tr><td>Ikon panah keluar</td><td>Keluar dari akun.</td></tr></table>
+      <h3>Menu bawah (seperti Instagram)</h3>
+      <p>Tampil di Beranda, Profil, dan halaman detail peta. Di Studio tidak ada, karena peta memenuhi layar.</p>
+      <table class="tb"><tr><th>Menu</th><th>Fungsi</th></tr>
+        <tr><td><i data-lucide="home" class="inline w-4 h-4"></i> <b>Beranda</b></td><td>Kembali ke daftar postingan.</td></tr>
+        <tr><td><i data-lucide="search" class="inline w-4 h-4"></i> <b>Cari</b></td><td>Menggulir ke atas dan mengaktifkan kotak pencarian.</td></tr>
+        <tr><td><i data-lucide="plus-square" class="inline w-4 h-4"></i> <b>Buat</b></td><td>Membuka Studio untuk membuat postingan.</td></tr>
+        <tr><td><i data-lucide="bookmark" class="inline w-4 h-4"></i> <b>Tersimpan</b></td><td>Peta yang Anda simpan (tab <i>Tersimpan</i> di profil).</td></tr>
+        <tr><td><i data-lucide="user" class="inline w-4 h-4"></i> <b>Profil</b></td><td>Profil Anda.</td></tr></table>
+      <p>Menu <b>Buat, Tersimpan,</b> dan <b>Profil</b> akan meminta Anda masuk bila belum login.</p>
+    </section>
+
+    <section id="beranda" class="sec">
+      <h2><i data-lucide="home" class="w-6 h-6 text-primary"></i>4. Beranda: menjelajah peta</h2>
+      <p>Beranda menampilkan postingan terbaru (30 postingan teratas). Setiap kartu berisi:</p>
+      <ul class="l"><li><b>Kreator</b> (foto, nama, tanggal). Klik nama untuk membuka profilnya.</li><li><b>Thumbnail peta</b>: gambar ringkas peta. Klik untuk membuka detail.</li><li><b>Baris tombol</b>: suka, komentar, bagikan, simpan, unduh.</li><li><b>Jumlah suka, judul, keterangan, tag</b>, dan tautan komentar.</li></ul>
+      <h3>Berinteraksi</h3>
+      <table class="tb"><tr><th>Tombol</th><th>Cara pakai</th></tr>
+        <tr><td><i data-lucide="heart" class="inline w-4 h-4"></i> <b>Suka</b></td><td>Klik ikon hati (hati berubah merah). Klik lagi untuk batal. Pintasan: <b>klik dua kali pada thumbnail</b>. Perlu login.</td></tr>
+        <tr><td><i data-lucide="message-square" class="inline w-4 h-4"></i> <b>Komentar</b></td><td>Membuka halaman detail tempat Anda menulis komentar.</td></tr>
+        <tr><td><i data-lucide="share-2" class="inline w-4 h-4"></i> <b>Bagikan</b></td><td>Menyalin tautan peta. Tempel di WhatsApp, email, dll. Orang bisa membukanya tanpa login.</td></tr>
+        <tr><td><i data-lucide="bookmark" class="inline w-4 h-4"></i> <b>Simpan</b></td><td>Menyimpan peta ke daftar pribadi Anda (hanya Anda yang melihat). Perlu login.</td></tr>
+        <tr><td><i data-lucide="download" class="inline w-4 h-4"></i> <b>Unduh</b></td><td>Mengunduh data peta sebagai ZIP Shapefile (bagian 11). Hanya muncul jika kreator mengizinkan.</td></tr></table>
+      <h3>Mencari peta</h3>
+      <ol class="steps"><li>Ketik kata di kotak <span class="k">Cari peta, tag, atau kreator...</span>. Pencarian mencocokkan judul, keterangan, tag, dan nama kreator.</li><li>Atau klik salah satu <b>tag</b> (misalnya <span class="k">#kehutanan</span>) di bawah kotak pencarian atau di kartu. Klik <span class="k">Semua</span> untuk menampilkan semuanya lagi.</li></ol>
+      <div class="note">Pencarian menyaring postingan yang sedang dimuat di halaman (30 terbaru).</div>
+    </section>
+
+    <section id="detail" class="sec">
+      <h2><i data-lucide="map" class="w-6 h-6 text-primary"></i>5. Halaman detail peta</h2>
+      <p>Buka dengan mengklik thumbnail, tombol komentar, atau lewat tautan yang dibagikan. Di komputer, peta besar ada di kiri dan informasi di kanan. Di ponsel, peta di atas dan informasi di bawah. Tutup dengan tombol <b>✕</b> di pojok atau tombol <span class="k">Esc</span>.</p>
+      <h3>Menggunakan peta</h3>
+      <ul class="l"><li><b>Geser</b> peta dengan menyeret. <b>Zoom</b> dengan tombol <b>+ / −</b>, roda mouse, atau cubit dua jari.</li><li><b>Klik sebuah poligon</b> (area) untuk melihat <b>atribut</b>-nya: kartu kecil berisi data fitur itu (misalnya nama, luas, fungsi). Jika beberapa layer bertumpuk di titik itu, semuanya ditampilkan dalam satu kartu. Untuk garis dan titik, klik langsung pada garis atau titiknya.</li></ul>
+      <h3>Panel "Layer &amp; Legenda" (kiri bawah peta)</h3>
+      <ul class="l"><li>Klik judul panel untuk membuka atau melipatnya.</li><li><b>Kotak centang</b> di samping nama layer: tampilkan atau sembunyikan layer itu.</li><li><b>Kotak warna + nama</b>: arti setiap warna (legenda).</li><li><b>Slider Opasitas</b>: geser untuk membuat layer lebih transparan atau lebih pekat. Ini hanya mengubah tampilan Anda, tidak mengubah data kreator.</li></ul>
+      <h3>Panel informasi (kanan)</h3>
+      <ul class="l"><li>Foto dan nama kreator (klik untuk ke profilnya), tanggal, judul, keterangan.</li><li><span class="k">Info peta</span>: klik untuk membuka kategori, wilayah, tahun data, sumber, CRS, dan format.</li><li>Tag (klik untuk mencari tag itu di Beranda).</li><li><b>Komentar</b>: tulis di kolom <span class="k">Tambahkan komentar...</span> lalu klik <span class="k">Kirim</span> (maks. 500 karakter). Komentar milik Anda punya tautan <span class="k">hapus</span>.</li><li>Tombol di bawah: suka, komentar, simpan, bagikan, unduh.</li></ul>
+    </section>
+
+    <section id="profil" class="sec">
+      <h2><i data-lucide="user" class="w-6 h-6 text-primary"></i>6. Profil dan pengikut</h2>
+      <h3>Melihat profil orang lain</h3>
+      <p>Klik nama atau foto kreator di mana saja. Anda akan melihat foto, instansi, lokasi, situs web, bio, jumlah <b>peta</b>, <b>pengikut</b>, <b>mengikuti</b>, <b>suka</b>, dan semua peta yang ia posting (klik untuk membuka).</p>
+      <ul class="l"><li><span class="k">Ikuti</span>: mengikuti kreator (berubah menjadi <span class="k">Mengikuti</span>; klik lagi untuk berhenti). Perlu login.</li><li>Klik angka <b>pengikut</b> atau <b>mengikuti</b> untuk melihat daftar namanya.</li></ul>
+      <h3>Mengubah profil Anda</h3>
+      <ol class="steps">
+        <li>Klik foto/nama Anda di pojok kanan atas (atau menu <b>Profil</b>), lalu klik <span class="k">Edit Profil</span>.</li>
+        <li><b>Ganti foto</b>: klik <span class="k">Ganti foto</span> dan pilih gambar (JPG, PNG, atau WebP; maks. 8 MB). Jendela <b>Atur Foto Profil</b> terbuka: <b>seret</b> gambar untuk memosisikan, geser <b>slider</b> atau gunakan roda mouse untuk zoom. Bagian di dalam lingkaran adalah yang akan tampil. Klik <span class="k">Terapkan</span>.</li>
+        <li>Isi <b>Nama lengkap</b>, <b>Instansi / organisasi / profesi</b>, <b>Lokasi</b>, <b>Situs web</b> (otomatis diberi https:// bila belum ada), dan <b>Deskripsi singkat</b> (maks. 200 karakter). Email hanya terbaca dan tidak ditampilkan ke publik.</li>
+        <li>Klik <span class="k">Simpan</span>. Untuk menghapus foto, klik <span class="k">Hapus foto</span> lalu <span class="k">Simpan</span>.</li>
+      </ol>
+      <h3>Tab di profil Anda</h3>
+      <ul class="l"><li><span class="k">Peta Saya</span>: peta Anda yang sudah diposting (draf tidak tampil di sini).</li><li><span class="k">Tersimpan</span>: peta yang Anda simpan dari Beranda atau halaman detail. Bersifat pribadi.</li></ul>
+    </section>
+
+    <section id="studio" class="sec">
+      <h2><i data-lucide="layers" class="w-6 h-6 text-primary"></i>7. Studio: membuat postingan pertama</h2>
+      <h3>Sebelum mulai: siapkan data</h3>
+      <ul class="l"><li><b>Format yang diterima:</b> GeoJSON (<code>.geojson</code>/<code>.json</code>), KML, atau Shapefile (berkas <code>.zip</code>, atau berkas terpisah <code>.shp</code> + <code>.dbf</code> + <code>.shx</code>, dan <code>.cpg</code> bila ada).</li><li><b>Ukuran:</b> maksimal <b>5 MB per layer</b>.</li><li><b>Sistem koordinat:</b> data harus <b>WGS84 (EPSG:4326)</b> (lintang/bujur biasa). Cara mengubahnya ada di bagian 10.</li><li>Untuk Shapefile yang dipilih terpisah, <b>jangan sertakan berkas .prj</b>.</li></ul>
+      <h3>Langkah demi langkah</h3>
+      <ol class="steps">
+        <li>Masuk ke akun Anda, lalu klik <span class="k">Buat</span> (menu bawah) atau <span class="k">Buka Studio</span>. Layar menampilkan peta penuh dengan panel kaca di kiri.</li>
+        <li>Klik tombol besar <span class="k">Buat Postingan Baru</span> di bagian atas panel. Studio kosong untuk postingan baru dibuat (status: <b>Draf</b>).</li>
+        <li>Klik <span class="k">+ Unggah</span> di bagian <b>Layer</b>, lalu pilih berkas data Anda. Untuk Shapefile terpisah, pilih sekaligus <code>.shp</code>, <code>.dbf</code>, <code>.shx</code> (tahan Ctrl/Shift atau blok semuanya). Setelah berhasil, peta langsung zoom ke data Anda dan kartu layer muncul di daftar.</li>
+        <li><b>Periksa data:</b> klik pada poligon di peta untuk melihat atributnya.</li>
+        <li><b>Beri warna berdasarkan kolom (opsional):</b> di kartu layer, pada pilihan <span class="k">Warnai: ...</span> pilih kolom atribut (misalnya <i>Fungsi</i>). Setiap nilai unik mendapat warna sendiri. Klik kotak warna di sebelah nilai untuk mengganti warnanya.</li>
+        <li><b>Atau pakai satu warna:</b> biarkan <span class="k">Warna standar</span> dan klik kotak warna di sebelah kanan pilihan itu.</li>
+        <li><b>Atur transparansi:</b> geser slider <span class="k">Opasitas warna</span> (10% sampai 100%).</li>
+        <li><b>Punya simbologi dari QGIS?</b> Klik <span class="k">Impor simbologi SLD (QGIS)</span> pada kartu layer dan pilih berkas <code>.sld</code> (lihat bagian 10).</li>
+        <li><b>Tambah layer lain (opsional):</b> klik <span class="k">+ Unggah</span> lagi. Layer ditumpuk dalam satu postingan. Atur urutan dengan tombol ▲ ▼, dan sembunyikan sementara dengan ikon mata.</li>
+        <li>Di kartu <b>Detail Postingan</b>, isi <b>Judul</b>, <b>caption</b> (maks. 300 karakter), dan <b>Tag</b> dipisah koma (maks. 8, misalnya <i>hutan, kalimantan barat</i>).</li>
+        <li>Isi <b>Metadata Peta</b>: Kategori, Wilayah, Tahun data, Sumber, CRS, dan Format (lihat bagian 8).</li>
+        <li>Tentukan izin: centang <span class="k">Izinkan orang lain mengunduh data</span> jika Anda bersedia datanya diunduh.</li>
+        <li>Klik <span class="k">Posting ke Sosmed</span>. Tunggu pesan <i>"Peta diposting ke Sosmed"</i>. Gaya warna, urutan, dan thumbnail ikut tersimpan.</li>
+        <li>Buka <span class="k">Beranda</span> untuk melihat hasilnya. Klik postingan Anda untuk memeriksa tampilan akhir.</li>
+      </ol>
+      <div class="warn"><b>Penting:</b> perubahan warna, opasitas, urutan, dan isian baru <b>tersimpan hanya setelah Anda klik tombol Simpan</b> (<span class="k">Posting ke Sosmed</span>, <span class="k">Simpan Perubahan</span>, atau <span class="k">Simpan Draf</span>). Jika berpindah postingan lewat daftar sebelum menyimpan, perubahan itu hilang.</div>
+    </section>
+
+    <section id="menu-studio" class="sec">
+      <h2><i data-lucide="sliders-horizontal" class="w-6 h-6 text-primary"></i>8. Studio: penjelasan semua menu</h2>
+      <h3>Panel kiri</h3>
+      <table class="tb"><tr><th>Bagian</th><th>Fungsi</th></tr>
+        <tr><td><b>✕</b> (pojok panel) / <span class="k">Buka Menu</span></td><td>Menutup panel agar peta lebih luas, dan membukanya lagi. Lebar panel bisa diubah dengan menyeret tepi kanannya.</td></tr>
+        <tr><td><span class="k">Buat Postingan Baru</span></td><td>Membuat postingan baru dengan studio kosong.</td></tr>
+        <tr><td><b>Postingan Anda</b> (daftar)</td><td>Berpindah antar postingan Anda. Titik <b>hijau</b> = <i>Diposting</i> (publik), titik <b>kuning</b> = <i>Draf</i> (hanya Anda).</td></tr>
+        <tr><td><b>Judul, caption, Tag</b></td><td>Keterangan postingan yang tampil di kartu dan halaman detail.</td></tr>
+        <tr><td><b>Metadata Peta</b></td><td><b>Kategori</b> (Lingkungan, Kehutanan, Bencana, Infrastruktur, Pertanian, Perkotaan, Sosial-Ekonomi, Batas Wilayah, Lainnya), <b>Wilayah</b> (mis. Kalimantan Barat), <b>Tahun data</b>, <b>Sumber</b> (mis. BIG), <b>CRS</b> (mis. EPSG:4326), <b>Format</b> (GeoJSON/KML/Shapefile). Tampil di <i>Info peta</i> pada halaman detail.</td></tr>
+        <tr><td><span class="k">Izinkan orang lain mengunduh data</span></td><td>Jika dicentang, tombol unduh tampil untuk pengunjung.</td></tr>
+        <tr><td><span class="k">Posting ke Sosmed</span> / <span class="k">Simpan Perubahan</span></td><td>Menyimpan semuanya dan menampilkan (atau memperbarui) postingan di Beranda, termasuk thumbnail.</td></tr>
+        <tr><td><span class="k">Simpan Draf</span></td><td>Menyimpan tanpa menampilkannya di Beranda (untuk postingan yang belum diposting).</td></tr>
+        <tr><td><span class="k">Tarik ke Draf</span></td><td>Menyembunyikan postingan dari Beranda. Suka dan komentar tetap tersimpan, dan bisa diposting lagi.</td></tr>
+        <tr><td><span class="k">Hapus</span></td><td>Menghapus postingan <b>beserta semua layer, suka, dan komentarnya</b>. Tidak bisa dibatalkan.</td></tr></table>
+      <h3>Kartu setiap layer</h3>
+      <table class="tb"><tr><th>Kontrol</th><th>Fungsi</th></tr>
+        <tr><td>Nama layer</td><td>Klik untuk zoom ke layer itu.</td></tr>
+        <tr><td>Ikon mata</td><td>Menampilkan atau menyembunyikan layer (layer tersembunyi tidak ikut ditampilkan dan diunduh setelah disimpan).</td></tr>
+        <tr><td>▲ ▼</td><td>Mengubah urutan tumpukan. Layer yang <b>paling bawah di daftar</b> tampil <b>paling atas</b> di peta.</td></tr>
+        <tr><td>Ikon tong sampah</td><td>Menghapus layer dari postingan.</td></tr>
+        <tr><td><span class="k">Warnai: ...</span></td><td>Mewarnai berdasarkan kolom atribut. Pilih <i>Warna standar</i> untuk satu warna.</td></tr>
+        <tr><td>Daftar warna kategori</td><td>Mengganti warna tiap nilai unik.</td></tr>
+        <tr><td><span class="k">Impor simbologi SLD (QGIS)</span></td><td>Menerapkan warna dari berkas SLD QGIS.</td></tr>
+        <tr><td><span class="k">Opasitas warna</span></td><td>Mengatur transparansi 10% sampai 100%.</td></tr></table>
+      <h3>Tombol di kanan bawah peta</h3>
+      <table class="tb"><tr><th>Tombol</th><th>Fungsi</th></tr>
+        <tr><td>Lokasi Saya</td><td>Memindahkan peta ke posisi Anda (izinkan akses lokasi di browser).</td></tr>
+        <tr><td>Ganti Basemap</td><td>Pilihan peta dasar: <b>Peta Jalan (OSM)</b>, <b>Satelit (Esri Imagery)</b>, atau <b>Gelap (Esri Dark Gray)</b>.</td></tr>
+        <tr><td>+ / −</td><td>Memperbesar atau memperkecil peta.</td></tr></table>
+      <div class="note">Basemap yang Anda pilih di Studio hanya untuk membantu bekerja. Halaman detail postingan memakai peta jalan OpenStreetMap.</div>
+    </section>
+
+    <section id="kelola" class="sec">
+      <h2><i data-lucide="folder-cog" class="w-6 h-6 text-primary"></i>9. Mengelola postingan</h2>
+      <h3>Mengedit postingan yang sudah tampil</h3>
+      <ol class="steps"><li>Buka Studio, lalu pilih postingan di daftar <b>Postingan Anda</b>.</li><li>Ubah isian, warna, urutan, atau tambah/hapus layer.</li><li>Klik <span class="k">Simpan Perubahan</span>. Thumbnail diperbarui otomatis.</li></ol>
+      <h3>Beberapa kasus umum</h3>
+      <ul class="l"><li><b>Ingin menyembunyikan sementara?</b> Klik <span class="k">Tarik ke Draf</span>.</li><li><b>Ingin membuat peta lain?</b> Klik <span class="k">Buat Postingan Baru</span>. Studio baru kosong, layer postingan lain tidak ikut tampil.</li><li><b>Ingin menggabungkan beberapa data dalam satu peta?</b> Unggah semuanya sebagai layer dalam satu postingan.</li><li><b>Salah unggah?</b> Hapus layernya dengan ikon tong sampah, lalu klik <span class="k">Simpan Perubahan</span>.</li></ul>
+    </section>
+
+    <section id="data" class="sec">
+      <h2><i data-lucide="database" class="w-6 h-6 text-primary"></i>10. Menyiapkan data dan simbologi dari QGIS / ArcGIS</h2>
+      <h3>Mengekspor data ke WGS84 (QGIS)</h3>
+      <ol class="steps"><li>Klik kanan layer, pilih <b>Export → Save Features As...</b></li><li>Format: <b>GeoJSON</b> (paling mudah) atau <b>ESRI Shapefile</b>.</li><li>Pada <b>CRS</b>, pilih <b>EPSG:4326 - WGS 84</b>.</li><li>Simpan, lalu unggah di Studio. Jika berkas lebih dari 5 MB, sederhanakan dulu (menu <b>Vector → Geometry Tools → Simplify</b>) atau potong areanya.</li></ol>
+      <div class="note"><b>ArcGIS:</b> gunakan <i>Project</i> untuk mengubah ke WGS 1984, lalu <i>Export Features</i> ke Shapefile atau GeoJSON.</div>
+      <h3>Mengekspor simbologi (SLD) dari QGIS</h3>
+      <ol class="steps"><li>Di QGIS, buka <b>Layer Properties → Symbology</b>, pilih tipe <b>Categorized</b>, pilih kolom, lalu klik <b>Classify</b>. Atur warna per kategori.</li><li>Masih di Layer Properties, klik menu <b>Style → Save Style...</b>, pilih format <b>SLD</b>, dan simpan.</li><li>Di Studio, klik <span class="k">Impor simbologi SLD (QGIS)</span> pada kartu layer yang sama dan pilih berkas itu.</li><li>Baca ringkasan yang muncul (misalnya <i>"12 dari 14 nilai unik cocok"</i>), lalu klik <span class="k">Simpan</span>.</li></ol>
+      <table class="tb"><tr><th>Didukung</th><th>Belum didukung</th></tr><tr><td>Kategori (nilai unik) dan satu simbol; warna untuk poligon, garis, dan titik; opasitas isi; warna "lainnya".</td><td>Simbologi bertingkat (graduated/rentang angka), warna dan tebal garis tepi, pola isi, bentuk dan ukuran titik, label, aturan berdasarkan skala. Berkas <code>.sld</code> di dalam ZIP.</td></tr></table>
+    </section>
+
+    <section id="unduh" class="sec">
+      <h2><i data-lucide="download" class="w-6 h-6 text-primary"></i>11. Mengunduh data peta</h2>
+      <p>Klik ikon <b>unduh</b> pada kartu atau halaman detail (jika tersedia). Anda mendapat berkas <code>Judul.zip</code> berisi <b>Shapefile</b> dalam WGS84.</p>
+      <ul class="l"><li>Tiap layer menjadi satu set berkas: <code>.shp</code>, <code>.shx</code>, <code>.dbf</code> (tabel atribut), <code>.prj</code> (sistem koordinat), <code>.cpg</code> (penyandian teks).</li><li>Jika satu layer berisi beberapa jenis geometri, hasilnya dipisah menjadi <code>_polygon</code>, <code>_line</code>, <code>_point</code>, karena satu Shapefile hanya boleh satu jenis.</li><li>Hanya layer yang sedang ditampilkan yang ikut diunduh.</li></ul>
+      <h3>Membuka hasil unduhan</h3>
+      <ol class="steps"><li>Ekstrak berkas ZIP.</li><li><b>QGIS:</b> seret berkas <code>.shp</code> ke jendela QGIS. <b>ArcGIS:</b> <i>Add Data</i> lalu pilih <code>.shp</code>.</li></ol>
+      <div class="note">Nama kolom Shapefile dibatasi 10 karakter dan teks 254 karakter. Ini aturan format Shapefile, bukan kesalahan unduhan.</div>
+    </section>
+
+    <section id="tips" class="sec">
+      <h2><i data-lucide="lightbulb" class="w-6 h-6 text-primary"></i>12. Tips dan etika</h2>
+      <ul class="l"><li><b>Judul yang jelas</b>: sebut isi dan wilayah (mis. <i>Kawasan Hutan Kabupaten Landak 2021</i>).</li><li><b>Caption singkat</b>: jelaskan apa yang ditampilkan dan cara membacanya.</li><li><b>Tag 3-5 kata kunci</b> agar mudah dicari.</li><li><b>Isi metadata</b> (terutama sumber dan tahun) supaya data dapat dipercaya.</li><li><b>Pilih warna kontras</b> dan opasitas 60-80% agar peta dasar tetap terbaca.</li><li><b>Gunakan Draf</b> untuk menyusun dulu, posting setelah yakin.</li></ul>
+      <div class="warn"><b>Hak dan privasi data.</b> Postingan yang diposting dapat dilihat siapa saja. Unggah hanya data yang Anda berhak bagikan, dan hindari data sensitif (mis. lokasi pribadi). Centang izin unduh hanya jika Anda bersedia datanya dipakai orang lain, dan cantumkan sumber data.</div>
+    </section>
+
+    <section id="faq" class="sec">
+      <h2><i data-lucide="life-buoy" class="w-6 h-6 text-primary"></i>13. Masalah umum (FAQ)</h2>
+      <details><summary>Unggah gagal: "Ukuran berkas melebihi 5 MB"</summary><p>Sederhanakan geometri atau potong area data di QGIS (bagian 10), atau pecah menjadi beberapa layer yang masing-masing di bawah 5 MB.</p></details>
+      <details><summary>Muncul pesan "Koordinat ... bukan WGS84"</summary><p>Data Anda memakai sistem koordinat lain (mis. UTM). Ekspor ulang ke <b>EPSG:4326</b> di QGIS/ArcGIS, lalu unggah kembali tanpa berkas <code>.prj</code>.</p></details>
+      <details><summary>Shapefile tidak terbaca</summary><p>Pilih sekaligus <code>.shp</code>, <code>.dbf</code>, dan <code>.shx</code> (tanpa <code>.prj</code>), atau kemas semuanya dalam satu <code>.zip</code>. Pastikan namanya sama (mis. hutan.shp, hutan.dbf).</p></details>
+      <details><summary>Warna dari SLD tidak cocok</summary><p>Pastikan SLD dibuat dari layer yang sama dan bertipe <b>Categorized</b>. Nama kolom dan nilai harus sama dengan di data. Baca ringkasan setelah impor (jumlah nilai yang cocok). SLD bertingkat belum didukung.</p></details>
+      <details><summary>Peta saya tidak muncul di Beranda</summary><p>Periksa status di Studio. Jika titiknya kuning (<i>Draf</i>), klik <span class="k">Posting ke Sosmed</span>. Pastikan minimal satu layer ditampilkan (ikon mata terbuka).</p></details>
+      <details><summary>Thumbnail tidak berubah setelah saya mengubah warna</summary><p>Klik <span class="k">Simpan Perubahan</span> di Studio. Thumbnail dibuat ulang saat disimpan.</p></details>
+      <details><summary>Tidak bisa menyukai, berkomentar, atau menyimpan</summary><p>Fitur ini membutuhkan login. Klik <span class="k">Daftar / Masuk</span>.</p></details>
+      <details><summary>Tombol unduh tidak ada</summary><p>Kreator tidak mengizinkan unduhan untuk peta itu.</p></details>
+      <details><summary>Foto profil gagal disimpan</summary><p>Gunakan JPG, PNG, atau WebP di bawah 8 MB. Jika tetap gagal, kemungkinan penyimpanan foto belum dikonfigurasi oleh pengelola situs.</p></details>
+      <details><summary>Perubahan saya hilang</summary><p>Perubahan yang belum disimpan hilang saat berpindah postingan atau menutup halaman. Selalu klik tombol simpan sebelum berpindah.</p></details>
+      <details><summary>Apa bedanya "Tarik ke Draf" dan "Hapus"?</summary><p><b>Tarik ke Draf</b> hanya menyembunyikan dari Beranda, data dan interaksi tetap ada. <b>Hapus</b> menghilangkan postingan, layer, suka, dan komentar secara permanen.</p></details>
+      <details><summary>Saya lupa password</summary><p>Fitur reset password belum tersedia di versi ini.</p></details>
+    </section>
+
+    <section id="istilah" class="sec">
+      <h2><i data-lucide="book-open" class="w-6 h-6 text-primary"></i>14. Glosarium</h2>
+      <table class="tb"><tr><th>Istilah</th><th>Arti</th></tr>
+        <tr><td><b>Layer</b></td><td>Satu lapisan data peta. Beberapa layer bisa ditumpuk dalam satu postingan.</td></tr>
+        <tr><td><b>Poligon / Garis / Titik</b></td><td>Tiga jenis bentuk data: area (hutan, batas), garis (sungai, jalan), titik (lokasi).</td></tr>
+        <tr><td><b>Atribut</b></td><td>Data keterangan tiap bentuk (nama, luas, jenis) yang tampil di popup.</td></tr>
+        <tr><td><b>Basemap</b></td><td>Peta dasar di belakang data Anda (jalan, satelit, dll).</td></tr>
+        <tr><td><b>Legenda</b></td><td>Penjelasan arti warna di peta.</td></tr>
+        <tr><td><b>Opasitas</b></td><td>Tingkat kepekatan warna; 100% pekat penuh, rendah berarti transparan.</td></tr>
+        <tr><td><b>WGS84 / EPSG:4326</b></td><td>Sistem koordinat lintang-bujur yang dipakai GeoNusa.</td></tr>
+        <tr><td><b>GeoJSON, KML, Shapefile</b></td><td>Format berkas data peta. Shapefile terdiri dari beberapa berkas (.shp, .dbf, .shx, ...).</td></tr>
+        <tr><td><b>SLD</b></td><td>Berkas simbologi (aturan warna) yang diekspor dari QGIS.</td></tr>
+        <tr><td><b>Draf / Diposting</b></td><td>Draf hanya terlihat Anda; Diposting tampil publik di Beranda.</td></tr>
+        <tr><td><b>Tag</b></td><td>Kata kunci berawalan # untuk memudahkan pencarian.</td></tr></table>
+      <p class="mt-6 text-center text-xs text-slate-500">Siap mencoba? <a href="studio.html" class="text-primary font-bold hover:underline">Buka Studio</a> atau <a href="index.html" class="text-primary font-bold hover:underline">jelajahi Beranda</a>.</p>
+    </section>
+  </main>
+</div>
+<script>
+lucide.createIcons();
+const links = [...document.querySelectorAll('#toc a')], secs = links.map(a => document.querySelector(a.getAttribute('href')));
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + e.target.id)); }), { rootMargin: '-20% 0px -70% 0px' });
+secs.forEach(s => io.observe(s));
+</script>
+</body>
+</html>

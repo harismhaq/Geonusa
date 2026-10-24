@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><link rel="icon" type="image/png" href="iconatas.png"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Masuk — GeoNusa</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#008bb0','primary-dark':'#0b4a75',accent:'#00b0d8'}}}}</script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>body{font-family:'Inter',sans-serif}.fld{width:100%;padding:.8rem 1rem;border:1px solid #e2e8f0;border-radius:.9rem;font-size:.875rem;background:#fff;outline:none;transition:border-color .15s,box-shadow .15s}.fld:focus{border-color:#008bb0;box-shadow:0 0 0 4px rgba(0,139,176,.12)}.fld::placeholder{color:#94a3b8}</style>
+</head>
+<body class="antialiased text-slate-800 bg-white">
+<div class="min-h-screen lg:grid lg:grid-cols-[1.05fr_1fr]">
+
+  <!-- Panel merek (desktop) -->
+  <aside class="hidden lg:flex relative overflow-hidden flex-col justify-between p-12 text-white bg-gradient-to-br from-primary-dark via-primary to-accent">
+    <svg class="absolute inset-0 w-full h-full opacity-[.13]" viewBox="0 0 600 800" fill="none" stroke="#fff" stroke-width="1.2" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <path d="M-40 640C80 560 120 700 260 620S420 520 640 600"/><path d="M-40 580C90 500 140 640 270 560S440 460 640 540"/><path d="M-40 520C100 440 160 580 280 500S460 400 640 480"/>
+      <path d="M-40 460C110 380 180 520 290 440S480 340 640 420"/><path d="M-40 400C120 320 200 460 300 380S500 280 640 360"/>
+      <circle cx="430" cy="170" r="60"/><circle cx="430" cy="170" r="110"/><circle cx="430" cy="170" r="165"/><circle cx="430" cy="170" r="225"/>
+    </svg>
+    <div class="relative flex items-center gap-3">
+      <div class="w-11 h-11 rounded-2xl bg-white flex items-center justify-center p-1.5 shadow-lg overflow-hidden"><img src="logo-sidebar.png" alt="GeoNusa" class="w-full h-full object-contain"></div>
+      <span class="text-xl font-extrabold tracking-tight">GeoNusa</span>
+    </div>
+    <div class="relative max-w-md">
+      <h2 class="text-4xl font-extrabold leading-tight">Peta untuk dibagikan,<br>dijelajahi, dan dipahami.</h2>
+      <p class="mt-4 text-white/85 text-sm leading-relaxed">Platform untuk berbagi dan mengeksplorasi data spasial Nusantara. Unggah peta Anda, atur tampilannya, dan bagikan kepada komunitas.</p>
+      <ul class="mt-8 space-y-4 text-sm">
+        <li class="flex gap-3"><span class="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center shrink-0"><i data-lucide="layers" class="w-5 h-5"></i></span><div><b>Studio peta</b><p class="text-white/75 text-xs mt-0.5">Unggah GeoJSON, KML, atau Shapefile dan atur warna per atribut.</p></div></li>
+        <li class="flex gap-3"><span class="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center shrink-0"><i data-lucide="share-2" class="w-5 h-5"></i></span><div><b>Bagikan dengan satu tautan</b><p class="text-white/75 text-xs mt-0.5">Peta bisa dibuka siapa saja, tanpa perlu memasang aplikasi.</p></div></li>
+        <li class="flex gap-3"><span class="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center shrink-0"><i data-lucide="users" class="w-5 h-5"></i></span><div><b>Komunitas</b><p class="text-white/75 text-xs mt-0.5">Ikuti kreator, sukai, komentari, dan simpan peta favorit.</p></div></li>
+      </ul>
+    </div>
+    <p class="relative text-xs text-white/60">© GeoNusa. Platform social mapping.</p>
+  </aside>
+
+  <!-- Formulir -->
+  <main class="flex items-center justify-center px-5 py-10 sm:px-10">
+    <div class="w-full max-w-[26rem]">
+      <a href="index.html" class="lg:hidden flex items-center gap-2.5 mb-8"><div class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center p-1 overflow-hidden"><img src="logo-sidebar.png" alt="GeoNusa" class="w-full h-full object-contain"></div><span class="text-xl font-extrabold">Geo<span class="text-primary">Nusa</span></span></a>
+
+      <div id="vForm">
+        <h1 id="hTitle" class="text-2xl font-extrabold text-slate-900">Selamat datang kembali</h1>
+        <p id="hSub" class="text-sm text-slate-500 mt-1.5">Masuk untuk membuat, menyukai, dan menyimpan peta.</p>
+
+        <div class="mt-6 grid grid-cols-2 p-1 bg-slate-100 rounded-2xl text-sm font-bold" role="tablist">
+          <button id="tLogin" type="button" onclick="setMode('login')" role="tab" class="py-2.5 rounded-xl">Masuk</button>
+          <button id="tReg" type="button" onclick="setMode('register')" role="tab" class="py-2.5 rounded-xl">Daftar</button>
+        </div>
+
+        <button type="button" onclick="google()" class="mt-5 w-full flex items-center justify-center gap-2.5 py-3 border border-slate-200 hover:bg-slate-50 rounded-2xl text-sm font-semibold transition-colors">
+          <svg class="w-5 h-5" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z"/><path fill="#FBBC05" d="M10.5 28.7c-.5-1.4-.8-3-.8-4.7s.3-3.200.8-4.700l-7.900-6.100C.9 16.400 0 20.100 0 24s.9 7.600 2.600 10.800l7.900-6.100z"/><path fill="#34A853" d="M24 48c6.300 0 11.600-2.100 15.500-5.700l-7.500-5.800c-2.100 1.400-4.800 2.300-8 2.300-6.300 0-11.600-4.100-13.500-9.800l-7.900 6.100C6.500 42.600 14.600 48 24 48z"/></svg>
+          Lanjutkan dengan Google</button>
+        <div class="flex items-center gap-3 my-5 text-[11px] text-slate-400 font-semibold uppercase tracking-wider"><span class="h-px flex-1 bg-slate-200"></span>atau dengan email<span class="h-px flex-1 bg-slate-200"></span></div>
+
+        <form id="f" onsubmit="submitForm(event)" class="space-y-3.5" novalidate>
+          <div id="gName"><label for="iName" class="block text-xs font-bold text-slate-600 mb-1.5">Nama lengkap / instansi</label><input id="iName" class="fld" autocomplete="name" placeholder="mis. Haris Aqil" maxlength="60"></div>
+          <div><label for="iEmail" class="block text-xs font-bold text-slate-600 mb-1.5">Email</label><input id="iEmail" type="email" class="fld" autocomplete="email" placeholder="nama@email.com" required></div>
+          <div><label for="iPass" class="block text-xs font-bold text-slate-600 mb-1.5">Password</label>
+            <div class="relative"><input id="iPass" type="password" class="fld pr-12" autocomplete="current-password" placeholder="Minimal 6 karakter" required minlength="6">
+              <button id="eyeBtn" type="button" onclick="togglePw()" class="absolute right-1.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-xl text-slate-400 hover:text-slate-600 flex items-center justify-center" aria-label="Tampilkan password"><i data-lucide="eye" class="w-5 h-5"></i></button></div></div>
+          <div id="gPass2"><label for="iPass2" class="block text-xs font-bold text-slate-600 mb-1.5">Ulangi password</label><input id="iPass2" type="password" class="fld" autocomplete="new-password" placeholder="Ketik ulang password"></div>
+          <div id="msg" class="hidden text-xs rounded-xl px-3.5 py-2.5 border" role="alert" aria-live="polite"></div>
+          <button id="btn" class="w-full py-3.5 bg-primary hover:bg-primary-dark disabled:opacity-60 text-white font-bold text-sm rounded-2xl shadow-sm shadow-primary/30 transition-colors flex items-center justify-center gap-2"><span id="btnT">Masuk</span></button>
+        </form>
+        <p class="mt-6 text-center text-xs text-slate-500">Dengan melanjutkan, Anda menyetujui bahwa data yang Anda unggah dan posting dapat dilihat publik.</p>
+        <p class="mt-4 text-center text-xs"><a href="index.html" class="text-slate-500 hover:text-primary font-semibold">← Lihat Beranda tanpa masuk</a><span class="text-slate-300 mx-2">|</span><a href="panduan.html" class="text-slate-500 hover:text-primary font-semibold">Panduan</a></p>
+      </div>
+
+      <div id="vSent" class="hidden text-center py-6">
+        <div class="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto"><i data-lucide="mail-check" class="w-8 h-8"></i></div>
+        <h1 class="text-2xl font-extrabold mt-5">Cek email Anda</h1>
+        <p class="text-sm text-slate-500 mt-2">Kami mengirim tautan konfirmasi ke <b id="sentTo" class="text-slate-700"></b>. Klik tautan itu untuk mengaktifkan akun, lalu masuk.</p>
+        <p class="text-xs text-slate-400 mt-3">Tidak menemukannya? Periksa folder spam.</p>
+        <button onclick="setMode('login');show('vForm')" class="mt-6 px-6 py-3 bg-slate-100 hover:bg-slate-200 rounded-2xl text-sm font-bold">Kembali ke halaman masuk</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="supabase-config.js"></script>
+<script>
+const $ = id => document.getElementById(id), qs = new URLSearchParams(location.search);
+const sb = supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+let mode = 'login';
+const nextUrl = () => {   // hanya halaman di situs ini (cegah pengalihan ke situs lain)
+  try { const u = new URL(qs.get('next') || 'index.html', location.href); if (u.origin !== location.origin) return 'index.html'; return (u.pathname.split('/').pop() || 'index.html') + u.search + u.hash; } catch { return 'index.html'; }
+};
+const go = () => location.replace(nextUrl());
+const show = id => ['vForm', 'vSent'].forEach(v => $(v).classList.toggle('hidden', v !== id));
+function msg(t, ok) { const m = $('msg'); m.className = 'text-xs rounded-xl px-3.5 py-2.5 border ' + (ok ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-rose-50 border-rose-200 text-rose-700'); m.textContent = t; }
+const clearMsg = () => $('msg').classList.add('hidden');
+const showMsg = (t, ok) => { msg(t, ok); $('msg').classList.remove('hidden'); };
+function setMode(m) {
+  mode = m; const r = m === 'register', on = 'py-2.5 rounded-xl bg-white text-primary shadow-sm', off = 'py-2.5 rounded-xl text-slate-500 hover:text-slate-700';
+  $('tLogin').className = r ? off : on; $('tReg').className = r ? on : off;
+  $('gName').classList.toggle('hidden', !r); $('gPass2').classList.toggle('hidden', !r);
+  $('hTitle').textContent = r ? 'Buat akun GeoNusa' : 'Selamat datang kembali';
+  $('hSub').textContent = r ? 'Gratis. Mulai membagikan peta Anda dalam hitungan menit.' : 'Masuk untuk membuat, menyukai, dan menyimpan peta.';
+  $('btnT').textContent = r ? 'Buat Akun' : 'Masuk'; $('iPass').autocomplete = r ? 'new-password' : 'current-password'; clearMsg();
+}
+function togglePw() { const p = $('iPass'), s = p.type === 'password'; p.type = s ? 'text' : 'password'; $('iPass2').type = p.type; $('eyeBtn').innerHTML = `<i data-lucide="${s ? 'eye-off' : 'eye'}" class="w-5 h-5"></i>`; lucide.createIcons(); }
+const ERR = { 'Invalid login credentials': 'Email atau password salah.', 'Email not confirmed': 'Email belum dikonfirmasi. Cek kotak masuk Anda.', 'User already registered': 'Email sudah terdaftar. Silakan masuk.' };
+const errText = e => ERR[e.message] || (/rate limit|too many/i.test(e.message) ? 'Terlalu banyak percobaan. Coba lagi beberapa menit lagi.' : /password/i.test(e.message) && /least|short|weak/i.test(e.message) ? 'Password terlalu pendek (minimal 6 karakter).' : e.message);
+function busy(b) { $('btn').disabled = b; $('btnT').textContent = b ? 'Memproses…' : (mode === 'register' ? 'Buat Akun' : 'Masuk'); }
+async function submitForm(e) {
+  e.preventDefault(); clearMsg();
+  const email = $('iEmail').value.trim(), password = $('iPass').value, name = $('iName').value.trim();
+  if (!/^\S+@\S+\.\S+$/.test(email)) return showMsg('Masukkan alamat email yang valid.');
+  if (password.length < 6) return showMsg('Password minimal 6 karakter.');
+  if (mode === 'register') { if (name.length < 2) return showMsg('Isi nama lengkap atau instansi Anda.'); if (password !== $('iPass2').value) return showMsg('Password dan pengulangannya tidak sama.'); }
+  busy(true);
+  try {
+    if (mode === 'register') {
+      const back = new URL('login.html?next=' + encodeURIComponent(nextUrl()), location.href).href;
+      const { data, error } = await sb.auth.signUp({ email, password, options: { data: { full_name: name }, emailRedirectTo: back } });
+      if (error) throw error;
+      if (data.user && data.user.identities && data.user.identities.length === 0) throw new Error('User already registered');
+      if (data.session) return go();
+      $('sentTo').textContent = email; show('vSent');
+    } else {
+      const { error } = await sb.auth.signInWithPassword({ email, password }); if (error) throw error; go();
+    }
+  } catch (err) { showMsg(errText(err)); } finally { busy(false); }
+}
+async function google() { const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.href } }); if (error) showMsg(/provider/i.test(error.message) ? 'Masuk dengan Google belum diaktifkan.' : error.message); }
+
+lucide.createIcons(); setMode(qs.get('mode') === 'register' ? 'register' : 'login');
+sb.auth.getSession().then(({ data: { session } }) => { if (session) go(); });   // sudah masuk → langsung kembali
+</script>
+</body>
+</html>

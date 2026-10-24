@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeoNusa — Profil Kreator</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#008bb0','primary-dark':'#0b4a75',accent:'#00b0d8'}}}}</script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 antialiased">
+<header class="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-slate-200">
+  <div class="max-w-3xl mx-auto h-14 px-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-2.5">
+      <div class="w-9 h-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center p-1 overflow-hidden"><img src="logo-sidebar.png" alt="GeoNusa" class="w-full h-full object-contain"></div>
+      <span class="text-lg font-extrabold tracking-tight">Geo<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-600">Nusa</span></span>
+    </a>
+    <div id="userPill"></div>
+  </div>
+</header>
+<main class="max-w-3xl mx-auto px-4 py-6 space-y-5">
+  <section id="head" class="bg-white border border-slate-200 rounded-3xl p-5"><p class="text-xs text-slate-400 text-center">Memuat profil...</p></section>
+  <div id="tabs" class="hidden flex gap-1 bg-white border border-slate-200 rounded-2xl p-1 text-xs font-bold">
+    <button id="tMaps" onclick="tab('maps')">Peta Saya</button><button id="tSaved" onclick="tab('saved')">Tersimpan</button>
+  </div>
+  <div id="grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+</main>
+<div id="listModal" class="fixed inset-0 z-[1200] hidden items-center justify-center bg-black/50 p-4"><div class="bg-white rounded-3xl w-full max-w-sm max-h-[70vh] flex flex-col overflow-hidden">
+  <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100"><h3 id="lTitle" class="font-extrabold text-sm"></h3><button onclick="$('listModal').classList.replace('flex','hidden')" class="text-slate-400">✕</button></div>
+  <div id="lBody" class="overflow-y-auto p-3"></div></div></div>
+<script src="supabase-config.js"></script>
+<script src="common.js"></script>
+<script>
+const uid = new URLSearchParams(location.search).get('u');
+let data = { maps: [], saved: [] }, cur = new URLSearchParams(location.search).get('tab') === 'saved' ? 'saved' : 'maps'; const tiles = new Map();
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { io.unobserve(e.target); mini(e.target); } }), { rootMargin: '300px' });
+const btn = a => `flex-1 py-2 rounded-xl ${a ? 'bg-primary text-white' : 'text-slate-600 hover:bg-slate-50'}`;
+
+async function mini(el) {
+  const d = tiles.get(el.dataset.mini); if (!d) return; let pv;
+  try { pv = await getPreview(d); } catch (e) { console.error(e); }
+  if (!pv) return;
+  try {
+    const m = L.map(el, { zoomControl: false, attributionControl: false, dragging: false, scrollWheelZoom: false, doubleClickZoom: false, touchZoom: false, boxZoom: false, keyboard: false });
+    L.tileLayer(BASES.street[0], { maxZoom: 19 }).addTo(m); L.imageOverlay(pv.img, pv.bounds, { interactive: false }).addTo(m); m.fitBounds(pv.bounds, { padding: [14, 14], maxZoom: 15 });
+  } catch (e) { console.error(e); }
+}
+const tile = p => `<a href="post.html?id=${p.id}" class="block bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-primary transition-colors">
+  <div data-mini="${p.id}" class="aspect-square bg-slate-100 pointer-events-none"></div>
+  <div class="p-2.5"><p class="text-xs font-bold truncate">${esc(p.title)}</p><p class="text-[10px] text-slate-500">♥ ${p.likes?.[0]?.count || 0} suka</p></div></a>`;
+function drawGrid() {
+  const list = data[cur]; list.forEach(p => tiles.set(p.id, p));
+  $('grid').innerHTML = list.length ? list.map(tile).join('') : `<p class="col-span-full p-8 text-center text-xs text-slate-500">${cur === 'maps' ? 'Belum ada peta.' : 'Belum ada peta tersimpan.'}</p>`;
+  document.querySelectorAll('[data-mini]').forEach(el => io.observe(el));
+}
+function tab(t) { cur = t; $('tMaps').className = btn(t === 'maps'); $('tSaved').className = btn(t === 'saved'); drawGrid(); }
+
+let pid = null, pr = null, own = false, isF = false, fc = 0, gc = 0;
+function renderHead() {
+  const name = pr.full_name || 'Kreator Spasial', likes = data.maps.reduce((a, p) => a + (p.likes?.[0]?.count || 0), 0);
+  document.title = `${name} — GeoNusa`;
+  $('head').className = 'bg-white border border-slate-200 rounded-3xl p-5 flex flex-col sm:flex-row gap-5 items-center sm:items-start';
+  $('head').innerHTML = `${ringAvatar(pr.avatar_url, name, 'w-24 h-24', 'text-3xl')}
+   <div class="flex-1 text-center sm:text-left space-y-2"><div class="flex flex-wrap items-center justify-center sm:justify-start gap-3"><h1 class="text-lg font-extrabold">${esc(name)}</h1>
+    ${own ? '<button onclick="openProfile()" class="px-4 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs font-bold">Edit Profil</button>'
+      : `<button onclick="toggleFollow()" class="px-4 py-1.5 rounded-xl text-xs font-bold ${isF ? 'bg-slate-100 hover:bg-slate-200 text-slate-700' : 'bg-primary hover:bg-primary-dark text-white'}">${isF ? 'Mengikuti' : 'Ikuti'}</button>`}</div>
+    ${pr.organization ? `<p class="text-xs font-semibold text-slate-700">${esc(pr.organization)}</p>` : ''}
+    <div class="flex flex-wrap justify-center sm:justify-start gap-x-3 text-[11px] text-slate-500">${pr.location ? `<span>📍 ${esc(pr.location)}</span>` : ''}${okUrl(pr.website) ? `<a href="${esc(pr.website)}" target="_blank" rel="noopener noreferrer nofollow" class="text-primary hover:underline">🔗 ${esc(pr.website.replace(/^https?:\/\//, ''))}</a>` : ''}</div>
+    <p class="text-xs text-slate-600 whitespace-pre-line">${esc(pr.bio || (own ? 'Belum ada deskripsi. Klik "Edit Profil" untuk menambahkan.' : ''))}</p>
+    <div class="flex flex-wrap justify-center sm:justify-start gap-x-5 gap-y-1 text-xs"><div><b class="text-base">${data.maps.length}</b> <span class="text-slate-500">peta</span></div>
+     <button onclick="showList('followers')" class="hover:underline"><b class="text-base">${fc}</b> <span class="text-slate-500">pengikut</span></button>
+     <button onclick="showList('following')" class="hover:underline"><b class="text-base">${gc}</b> <span class="text-slate-500">mengikuti</span></button>
+     <div><b class="text-base">${likes}</b> <span class="text-slate-500">suka</span></div></div></div>`;
+}
+async function toggleFollow() {
+  if (!user) return openAuth();
+  const was = isF; isF = !was; fc += was ? -1 : 1; renderHead();
+  const { error } = was ? await sb.from('follows').delete().eq('follower_id', user.id).eq('following_id', pid) : await sb.from('follows').insert({ following_id: pid });
+  if (error) { isF = was; fc += was ? 1 : -1; renderHead(); toast(error.message, 'error'); }
+}
+async function showList(kind) {
+  const [a, b] = kind === 'followers' ? ['follower_id', 'following_id'] : ['following_id', 'follower_id'];
+  const { data: rows } = await sb.from('follows').select(a).eq(b, pid).order('created_at', { ascending: false }).limit(100);
+  const ids = (rows || []).map(x => x[a]); let people = [];
+  if (ids.length) { const { data: pp } = await sb.from('public_profiles').select('id,full_name,avatar_url').in('id', ids); people = pp || []; }
+  $('lTitle').textContent = kind === 'followers' ? 'Pengikut' : 'Mengikuti';
+  $('lBody').innerHTML = people.length ? people.map(p => `<a href="profile.html?u=${p.id}" class="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50">${avatarHTML(p.avatar_url, p.full_name, 'w-9 h-9 text-xs')}<span class="text-xs font-bold">${esc(p.full_name || 'Kreator Spasial')}</span></a>`).join('') : '<p class="p-6 text-center text-xs text-slate-500">Belum ada.</p>';
+  $('listModal').classList.replace('hidden', 'flex');
+}
+async function loadProfile() {
+  pid = uid || user?.id;
+  if (!pid) { $('head').innerHTML = '<p class="text-xs text-slate-500 text-center p-4">Masuk untuk melihat profil Anda.</p>'; $('grid').innerHTML = ''; $('tabs').classList.add('hidden'); return; }
+  own = user?.id === pid; const F = 'id,user_id,title,preview_img,preview_bounds,likes(count)';
+  const cq = col => sb.from('follows').select('*', { count: 'exact', head: true }).eq(col, pid);
+  const [{ data: p1 }, { data: ps }, sv, c1, c2, mine] = await Promise.all([
+    sb.from('public_profiles').select('id,full_name,bio,avatar_url,organization,location,website').eq('id', pid).maybeSingle(),
+    sb.from('posts').select(F).eq('user_id', pid).eq('published', true).order('created_at', { ascending: false }),
+    own ? sb.from('bookmarks').select(`created_at,posts(${F})`).eq('user_id', pid).order('created_at', { ascending: false }) : { data: [] },
+    cq('following_id'), cq('follower_id'),
+    user && !own ? sb.from('follows').select('follower_id').eq('follower_id', user.id).eq('following_id', pid).maybeSingle() : { data: null }
+  ]);
+  pr = p1; if (!pr) { $('head').innerHTML = '<p class="text-xs text-slate-500 text-center p-4">Kreator tidak ditemukan.</p>'; $('grid').innerHTML = ''; return; }
+  data.maps = ps || []; data.saved = (sv.data || []).map(b => b.posts).filter(Boolean);
+  fc = c1.count || 0; gc = c2.count || 0; isF = !!mine.data;
+  renderHead(); $('tabs').classList.toggle('hidden', !own); tab(own ? cur : 'maps'); icons();
+}
+window.onProfileSaved = () => loadProfile();
+onAuth(loadProfile);
+mountNav(uid ? '' : (cur === 'saved' ? 'saved' : 'me'));
+(async () => { icons(); await bootAuth(); })();
+</script>
+</body>
+</html>
