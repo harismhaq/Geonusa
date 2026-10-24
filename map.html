@@ -269,7 +269,7 @@
                     <!-- BARIS PALING ATAS: RADAR CMAX BMKG -->
             <label class="flex items-center gap-2.5 py-2 px-1 hover:bg-white/30 rounded-lg cursor-pointer transition-all">
               <input type="checkbox" id="toggleBmkgRadarCmax" class="accent-sky-600 w-4 h-4 rounded cursor-pointer" onchange="toggleBmkgRadarCmax(this.checked)" />
-              <span class="text-xs font-bold text-slate-700">Radar Cuaca BMKG</span>
+              <span class="text-xs font-bold text-slate-700">Radar CMax BMKG (Reflektifitas)</span>
             </label>
 
             <label class="flex items-center gap-2.5 py-2 px-1 hover:bg-white/30 rounded-lg cursor-pointer transition-all">
@@ -607,6 +607,7 @@
   <script src="hotspot.js"></script>
   <script src="airvisual-layer.js"></script>
   <script src="bmkg-radar.js"></script>
+  <script src="meteo.js"></script>
   <script>
     // Skrip Interaktif Tarik Resizer Sidebar (Support Mouse & Touch HP) [cite: 3]
 document.addEventListener('DOMContentLoaded', () => {
