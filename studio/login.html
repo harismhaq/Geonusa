@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><link rel="icon" type="image/png" href="iconatas.png"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Masuk — GeoNusa</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>tailwind.config={theme:{extend:{colors:{primary:'#008bb0','primary-dark':'#0b4a75',accent:'#00b0d8'}}}}</script>
@@ -86,7 +86,7 @@ const $ = id => document.getElementById(id), qs = new URLSearchParams(location.s
 const sb = supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
 let mode = 'login';
 const nextUrl = () => {   // hanya halaman di situs ini (cegah pengalihan ke situs lain)
-  try { const u = new URL(qs.get('next') || 'index.html', location.href); if (u.origin !== location.origin) return 'index.html'; return (u.pathname.split('/').pop() || 'index.html') + u.search + u.hash; } catch { return 'index.html'; }
+  try { const u = new URL(qs.get('next') || 'index.html', location.href); if (u.origin !== location.origin) return 'index.html'; return u.pathname + u.search + u.hash; } catch { return 'index.html'; }
 };
 const go = () => location.replace(nextUrl());
 const show = id => ['vForm', 'vSent'].forEach(v => $(v).classList.toggle('hidden', v !== id));

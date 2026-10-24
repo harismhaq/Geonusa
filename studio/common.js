@@ -67,7 +67,7 @@ document.body.insertAdjacentHTML('beforeend', `<div id="toasts" class="fixed bot
   <button id="pSave" class="w-full py-3.5 bg-primary hover:bg-primary-dark text-white font-bold text-xs rounded-2xl">Simpan</button></form></div></div>`);
 
 /* ---- Auth & profil ---- */
-const openAuth = () => { location.href = 'login.html?next=' + encodeURIComponent((location.pathname.split('/').pop() || 'index.html') + location.search); }, closeAuth = () =>$('authModal').classList.replace('flex', 'hidden');
+const openAuth = () => { location.href = 'login.html?next=' + encodeURIComponent(location.pathname + location.search); }, closeAuth = () =>$('authModal').classList.replace('flex', 'hidden');
 const closeProfile = () => $('profileModal').classList.replace('flex', 'hidden');
 function toggleAuthMode() {
   authMode = authMode === 'login' ? 'register' : 'login'; const r = authMode === 'register';
@@ -136,7 +136,7 @@ async function saveProfile(e) {
   } catch (err) { toast(err.message || 'Gagal menyimpan profil.', 'error'); } finally { $('pSave').disabled = false; }
 }
 function renderUser() {
-  const isStudio = location.pathname.includes('studio');
+  const isStudio = document.body.dataset.page === 'studio';
   const href = isStudio ? 'index.html' : 'studio.html';
   const lbl = isStudio ? 'Beranda' : 'Studio';
   const n = profile?.full_name || user?.email || '';
